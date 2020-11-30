@@ -6,36 +6,26 @@ export const MainNav = [
     },
 ];
 
-export const DatasetNav = [ 
-    {
-        icon: 'fa fa-upload',
-        label: 'Upload new dataset',
-        // content: [
-        //     {
-        //         label: ''
-        //     }
-        // ]
-    },
-
-    {
-        icon: 'fa fa-table',
-        label: 'Current datasets',
-        content: [
-            {
-                label: 'Irish flower'
-            },
-            {
-                label: 'Cars'
-            },
-            {
-                label: 'Seattle weather'
-            },
-            {
-                label: 'Netflix movies'
-            },
-        ]
-    }
-]
+// export const DatasetNav = [ 
+//     {
+//         icon: 'fa fa-table',
+//         label: 'Current datasets',
+//         content: [
+//             {
+//                 label: 'Irish flower'
+//             },
+//             {
+//                 label: 'Cars'
+//             },
+//             {
+//                 label: 'Seattle weather'
+//             },
+//             {
+//                 label: 'Netflix movies'
+//             },
+//         ]
+//     }
+// ]
 
 export const DomainNav = [
     {

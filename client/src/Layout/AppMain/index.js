@@ -1,10 +1,14 @@
-import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
+import {
+    useLocation, 
+    BrowserRouter as Router, 
+    Route, 
+    Redirect
+} from 'react-router-dom';
 import React, {Suspense, lazy, Fragment} from 'react';
 
 import {
     ToastContainer,
 } from 'react-toastify';
-import { addDataset } from '../../redux/ActionCreators';
 
 const Dashboards = lazy(() => import('../../DemoPages/Dashboards'));
 
@@ -15,8 +19,11 @@ const Charts = lazy(() => import('../../DemoPages/Charts'));
 const Forms = lazy(() => import('../../DemoPages/Forms'));
 const Tables = lazy(() => import('../../DemoPages/Tables'));
 
-const AppMain = ({addDataset}) => {
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
 
+const AppMain = ({addDataset, datasets}) => {
     return (
         <Fragment>
 
@@ -116,7 +123,11 @@ const AppMain = ({addDataset}) => {
                     </div>
                 </div>
             }>
-                <Route path="/data" component={() => <Dashboards addDataset={addDataset}/>}/>
+                <Route path="/data" component={() => <Dashboards 
+                                                        addDataset={addDataset} 
+                                                        datasets={datasets}
+                                                        dataView={useQuery().get("dataView")}
+                                                    />}/>
             </Suspense>
 
             <Route exact path="/" render={() => (

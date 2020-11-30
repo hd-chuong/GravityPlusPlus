@@ -46,7 +46,7 @@ class Main extends React.Component {
                     {'closed-sidebar-mobile': closedSmallerSidebar || width < 1250},
                     {'sidebar-mobile-open': enableMobileMenu},
                 )}>
-                    <AppMain addDataset={this.props.addDataset}/>
+                    <AppMain addDataset={this.props.addDataset} datasets={this.props.datasets}/>
                     <ResizeDetector handleWidth onResize={this.onResize} />
                 </div>
             </Fragment>
