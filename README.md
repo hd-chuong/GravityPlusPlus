@@ -2,9 +2,13 @@
 A Graph-based Visualisation Software for Interactive Visualisation Design
 
 
-To run both the client, server and database:
+Build the docker container.
 
-    docker-compose up --build
+    docker-compose build
+    
+Run the React client, Node server and Neo4J database.
+
+    docker-compose up
 
 Access the client side from a browser:
 
