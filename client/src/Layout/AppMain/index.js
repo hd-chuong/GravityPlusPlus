@@ -4,6 +4,7 @@ import React, {Suspense, lazy, Fragment} from 'react';
 import {
     ToastContainer,
 } from 'react-toastify';
+import { addDataset } from '../../redux/ActionCreators';
 
 const Dashboards = lazy(() => import('../../DemoPages/Dashboards'));
 
@@ -14,7 +15,7 @@ const Charts = lazy(() => import('../../DemoPages/Charts'));
 const Forms = lazy(() => import('../../DemoPages/Forms'));
 const Tables = lazy(() => import('../../DemoPages/Tables'));
 
-const AppMain = () => {
+const AppMain = ({addDataset}) => {
 
     return (
         <Fragment>
@@ -25,8 +26,8 @@ const AppMain = () => {
                 <div className="loader-container">
                     <div className="loader-container-inner">
                         <h6 className="mt-5">
-                            Please wait while we load all the Components examples
-                            <small>Because this is a demonstration we load at once all the Components examples. This wouldn't happen in a real live app!</small>
+                            Loading
+
                         </h6>
                     </div>
                 </div>
@@ -40,8 +41,7 @@ const AppMain = () => {
                 <div className="loader-container">
                     <div className="loader-container-inner">
                         <h6 className="mt-5">
-                            Please wait while we load all the Forms examples
-                            <small>Because this is a demonstration we load at once all the Forms examples. This wouldn't happen in a real live app!</small>
+                            Loading
                         </h6>
                     </div>
                 </div>
@@ -55,8 +55,7 @@ const AppMain = () => {
                 <div className="loader-container">
                     <div className="loader-container-inner">
                         <h6 className="mt-3">
-                            Please wait while we load all the Charts examples
-                            <small>Because this is a demonstration we load at once all the Charts examples. This wouldn't happen in a real live app!</small>
+                            Loading
                         </h6>
                     </div>
                 </div>
@@ -70,8 +69,7 @@ const AppMain = () => {
                 <div className="loader-container">
                     <div className="loader-container-inner">
                         <h6 className="mt-5">
-                            Please wait while we load all the Tables examples
-                            <small>Because this is a demonstration we load at once all the Tables examples. This wouldn't happen in a real live app!</small>
+                            Loading
                         </h6>
                     </div>
                 </div>
@@ -85,9 +83,8 @@ const AppMain = () => {
                 <div className="loader-container">
                     <div className="loader-container-inner">
                         <h6 className="mt-3">
-                            Please wait while we load all the Elements examples
-                            <small>Because this is a demonstration we load at once all the Elements examples. This wouldn't happen in a real live app!</small>
-                        </h6>
+                            Loading
+                         </h6>
                     </div>
                 </div>
             }>
@@ -100,8 +97,7 @@ const AppMain = () => {
                 <div className="loader-container">
                     <div className="loader-container-inner">
                         <h6 className="mt-3">
-                            Please wait while we load all the Dashboard Widgets examples
-                            <small>Because this is a demonstration we load at once all the Dashboard Widgets examples. This wouldn't happen in a real live app!</small>
+                            Loading
                         </h6>
                     </div>
                 </div>
@@ -115,17 +111,16 @@ const AppMain = () => {
                 <div className="loader-container">
                     <div className="loader-container-inner">
                         <h6 className="mt-3">
-                            Please wait while we load all the Dashboards examples
-                            <small>Because this is a demonstration, we load at once all the Dashboards examples. This wouldn't happen in a real live app!</small>
+                            Loading
                         </h6>
                     </div>
                 </div>
             }>
-                <Route path="/dashboards" component={Dashboards}/>
+                <Route path="/data" component={() => <Dashboards addDataset={addDataset}/>}/>
             </Suspense>
 
             <Route exact path="/" render={() => (
-                <Redirect to="/dashboards/basic"/>
+                <Redirect to="/data"/>
             )}/>
             <ToastContainer/>
         </Fragment>

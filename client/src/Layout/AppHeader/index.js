@@ -30,15 +30,13 @@ class Header extends React.Component {
 
                     <HeaderLogo/>
 
-                    <div className={cx(
+                    {/* <div className={cx(
                         "app-header__content",
                         {'header-mobile-open': enableMobileMenuSmall},
                     )}>
-                    </div>
-                    
-                    <div className="app-header-left">
-                        {/* <SearchBox/> */}
-                        <Navbar dark expand="md">
+                     */}
+                    {/* <div className="app-header-left"> */}
+                        <Navbar dark expand="sm">
                             <Nav navbar>
                                 <NavItem className="metismenu-item mr-3">
                                     <NavLink className="nav-link" to="#">
@@ -64,11 +62,12 @@ class Header extends React.Component {
                             </Nav>
                         </Navbar>
 
-        
-                    {/* <div className="app-header-right">
-                        <UserBox/>
-                    </div> */}
-                    </div>
+                    {/* </div> */}
+                    {/* <div className="app-header-right"> */}
+                        {/* <UserBox/> */}
+                  
+                    {/* </div> */}
+                    {/* </div> */}
                 </ReactCSSTransitionGroup>
             </Fragment>
         );

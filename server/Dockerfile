@@ -1,4 +1,4 @@
-FROM node:current-alpine3.10
+FROM node:current
 
 # Create app directory and use as the shared working directory for both server and server side
 RUN mkdir -p /srv/app/server
