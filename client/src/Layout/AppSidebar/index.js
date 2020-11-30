@@ -15,8 +15,12 @@ import {
 
 class AppSidebar extends Component {
 
-    state = {};
+    constructor(props)
+    {
+        super(props);
+    }
 
+    state = {};
     toggleMobileSidebar = () => {
         let {enableMobileMenu, setEnableMobileMenu} = this.props;
         setEnableMobileMenu(!enableMobileMenu);
@@ -42,10 +46,10 @@ class AppSidebar extends Component {
                     transitionAppearTimeout={1500}
                     transitionEnter={false}
                     transitionLeave={false}>
-                    <HeaderLogo/>
+                    {/* <HeaderLogo/> */}
                     <PerfectScrollbar>
                         <div className="app-sidebar__inner">
-                            <Nav/>
+                            <Nav addDataset={this.props.addDataset} datasets={this.props.datasets}/>
                         </div>
                     </PerfectScrollbar>
                     <div

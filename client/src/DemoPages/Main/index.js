@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import ResizeDetector from 'react-resize-detector';
 
 import AppMain from '../../Layout/AppMain';
+import { addDataset } from '../../redux/ActionCreators';
 
 class Main extends React.Component {
     constructor(props) {
@@ -20,6 +21,7 @@ class Main extends React.Component {
     onResize = (width) => this.setState({ width });
 
     render() {
+        
         const { width } = this.state;
 
         let {
@@ -44,7 +46,7 @@ class Main extends React.Component {
                     {'closed-sidebar-mobile': closedSmallerSidebar || width < 1250},
                     {'sidebar-mobile-open': enableMobileMenu},
                 )}>
-                    <AppMain/>
+                    <AppMain addDataset={this.props.addDataset} datasets={this.props.datasets}/>
                     <ResizeDetector handleWidth onResize={this.onResize} />
                 </div>
             </Fragment>
@@ -60,7 +62,12 @@ const mapStateToProp = state => ({
     enableFixedSidebar: state.ThemeOptions.enableFixedSidebar,
     enableClosedSidebar: state.ThemeOptions.enableClosedSidebar,
     enablePageTabsAlt: state.ThemeOptions.enablePageTabsAlt,
-
+    datasets: state.datasets
 });
 
-export default withRouter(connect(mapStateToProp)(Main));
+const mapDispatchToProp = dispatch => ({
+    addDataset: (dataset) => dispatch(addDataset(dataset)),
+  });
+  
+
+export default withRouter(connect(mapStateToProp, mapDispatchToProp)(Main));

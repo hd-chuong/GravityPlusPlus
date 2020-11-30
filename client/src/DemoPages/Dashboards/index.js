@@ -9,18 +9,19 @@ import BasicDashboard from './Basic/';
 
 import AppHeader from '../../Layout/AppHeader/';
 import AppSidebar from '../../Layout/AppSidebar/';
-import AppFooter from '../../Layout/AppFooter/';
+// import AppFooter from '../../Layout/AppFooter/';
 
-const Dashboards = ({match}) => (
+const Dashboards = ({match, addDataset, datasets, tableData}) => (
     <Fragment>
         <AppHeader/>
         <div className="app-main">
-            <AppSidebar/>
+            <AppSidebar addDataset={addDataset} datasets={datasets}/>
             <div className="app-main__outer">
                 <div className="app-main__inner">
-                    <Route path={`${match.url}/basic`} component={BasicDashboard}/>
+                    <BasicDashboard datasets={datasets} tableData={tableData}/>
+                    {/* <Route path={'/data/'} component={BasicDashboard}/> */}
                 </div>
-                <AppFooter/>
+                {/* <AppFooter/> */}
             </div>
         </div>
     </Fragment>
