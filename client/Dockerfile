@@ -7,7 +7,7 @@ WORKDIR /srv/app/client
 COPY package.json /srv/app/client
 COPY package-lock.json /srv/app/client
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 COPY . /srv/app/client
 
