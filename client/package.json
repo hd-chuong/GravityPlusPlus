@@ -84,7 +84,7 @@
     "react-redux-form": "^1.16.12",
     "react-resizable": "^1.11.0",
     "react-responsive-tabs": "^3.0.0",
-    "react-router-dom": "^4.4.0-beta.6",
+    "react-router-dom": "^5.2.0",
     "react-scroll": "^1.7.10",
     "react-scrollspy": "^3.3.5",
     "react-simple-maps": "^0.12.1",

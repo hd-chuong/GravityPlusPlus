@@ -72,7 +72,6 @@ export default class BasicDashboard extends Component {
     }
 
     render() {
-        console.log(window.location.href);
         return (
             <Fragment>
                 <ReactCSSTransitionGroup
@@ -85,7 +84,7 @@ export default class BasicDashboard extends Component {
                     <div>
                         <Row>
                             <Col md="6" >
-                                <DataTable/>
+                                <DataTable tableData={this.props.tableData}/>
                             </Col>
                         </Row>
                     </div>

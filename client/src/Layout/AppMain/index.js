@@ -123,11 +123,12 @@ const AppMain = ({addDataset, datasets}) => {
                     </div>
                 </div>
             }>
-                <Route path="/data" component={() => <Dashboards 
-                                                        addDataset={addDataset} 
-                                                        datasets={datasets}
-                                                        dataView={useQuery().get("dataView")}
-                                                    />}/>
+
+            <Route path="/data" component={() => <Dashboards 
+                                                    addDataset={addDataset} 
+                                                    datasets={datasets}
+                                                    tableData={datasets.datasets.filter((dataset) => dataset.filename === useQuery().get("dataView"))[0]}
+                                                />}/>
             </Suspense>
 
             <Route exact path="/" render={() => (
