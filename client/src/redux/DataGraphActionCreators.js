@@ -13,7 +13,7 @@ export const addDataNode = ({name, type}) => ({
 export const addDataEdge = ({source, target, type, data}) => ({
     type: ActionTypes.ADD_DATA_EDGE,
     payload: {
-        id: `${source}-${target}`,
+        id: `${source}->${target}`,
         source,
         target,
         type,

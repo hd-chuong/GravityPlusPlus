@@ -29,13 +29,26 @@ export const DataGraph = (state = {errMess: null,
 
         case ActionTypes.ADD_DATA_EDGE:
 
-            
+            var edgeType = action.payload.type;
+
+            var style = null;
+
+            if (edgeType === "join")
+            {
+                style = {stroke: "red", strokeDasharray: "2,2"}
+            }
+            else if (edgeType === "transform")
+            {
+                style = {stroke: "blue"}
+            }
+
             var newDataEdge = {
                 id: action.payload.id,
                 source: action.payload.source,
                 target: action.payload.target,
                 arrowHeadType: 'arrowclosed',
-                data: action.payload.data
+                data: action.payload.data,
+                style
             }
             return {...state, datagraph: {edges: [...state.datagraph.edges, newDataEdge], nodes: state.datagraph.nodes}};
 
