@@ -119,9 +119,6 @@ class ModalExample extends React.Component {
                                     <Row className="form-group">
                                         <Label for="joinDataset" md={3}>Select at least two</Label>
                                         <Col md={4}>
-                                        {/* <Input type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                                            {this.props.datasets.datasets.map((dataset) => (<option key={dataset.filename}>{dataset.filename}</option>))}
-                                        </Input> */}
                                             <Select 
                                                 isMulti options={
                                                     this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.data.label, label: dataset.data.label}) ) 
@@ -147,7 +144,39 @@ class ModalExample extends React.Component {
                                 </Form>
                             </TabPane>
                             <TabPane tabId="3">
-                                <p>Apply a transformation to a data node</p>
+                                <small>Apply a transformation to a data node</small>
+                                <Form>
+                                    <Row className="form-group">
+                                        <Label for="transformDataset" md={3}>Select a node</Label>
+                                        <Col md={5}>
+                                            <Select 
+                                                options={
+                                                    this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.data.label, label: dataset.data.label}) ) 
+                                                }    
+                                            />
+                                        </Col>
+                                        
+                                        <Label for="rawNodeType" md={2}>Node type</Label>
+                                        <Col md={2}>
+                                            <Input type="select" name="transformNodeType" id="transformNodeType" disabled innerRef={(input) => this.transformNodeType = input}>
+                                                <option>transform</option>
+                                            </Input>
+                                        </Col>
+                                    </Row>
+
+                                    <Row className="form-group">
+                                        <Label for="nodeid" md={2}>Node name</Label>
+                                        <Col md={9}>
+                                            <Input type="text" name="transformNodeName" id="transformNodeName" innerRef={(input) => this.transformNodeName = input}
+                                                    placeholder="Enter the node name"></Input>
+                                        </Col>
+                                    </Row>
+                                    <Row className="form-group">
+                                        <Input type="textarea" rows={8} name="text" id="exampleText" placeholder="Vega specification"/>
+                                    </Row>
+                                    <Button color="primary" className="mr-auto" onClick={null}>Add Node</Button>{' '}  
+                                </Form>
+                            
                             </TabPane>
                         </TabContent>
                     </ModalBody>
