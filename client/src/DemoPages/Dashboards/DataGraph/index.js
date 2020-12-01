@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactFlow, {Controls} from 'react-flow-renderer';
+import ReactFlow, {Controls, Background} from 'react-flow-renderer';
 import {Card} from 'reactstrap';
 // const elements = [
 //   {
@@ -49,7 +49,8 @@ export default class DataGraph extends Component {
                 </div>
                 <div style={{ height: 400 }}> 
                     <ReactFlow elements={elements} >
-                        <Controls />   
+                        <Controls />  
+                        <Background color="#aaa" gap={16} /> 
                     </ReactFlow>
                 </div>
             </Card>

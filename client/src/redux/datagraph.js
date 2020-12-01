@@ -2,6 +2,7 @@ import * as ActionTypes from './DataGraphActionTypes';
 
 export const DataGraph = (state = {errMess: null,
                                 datagraph: {nodes: [], edges: []}}, action) => {
+    
     switch (action.type) {
         case ActionTypes.ADD_DATA_NODE:
             var x = Math.random() * 100;
@@ -34,6 +35,7 @@ export const DataGraph = (state = {errMess: null,
                 source: action.payload.source,
                 target: action.payload.target,
                 arrowHeadType: 'arrowclosed',
+                data: action.payload.data
             }
             return {...state, datagraph: {edges: [...state.datagraph.edges, newDataEdge], nodes: state.datagraph.nodes}};
 
