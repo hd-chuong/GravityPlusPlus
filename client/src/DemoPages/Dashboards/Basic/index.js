@@ -36,12 +36,8 @@ import {
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-import avatar1 from '../../../assets/utils/images/avatars/1.jpg';
-import avatar2 from '../../../assets/utils/images/avatars/2.jpg';
-import avatar3 from '../../../assets/utils/images/avatars/3.jpg';
-import avatar4 from '../../../assets/utils/images/avatars/4.jpg';
 import DataTable from '../DataTable';
-
+import DataGraph from '../DataGraph';
 
 export default class BasicDashboard extends Component {
     constructor(props) {
@@ -83,8 +79,29 @@ export default class BasicDashboard extends Component {
                     transitionLeave={false}>
                     <div>
                         <Row>
+                            <Col>
+                                <ReactCSSTransitionGroup
+                                component="div"
+                                transitionName="TabsAnimation"
+                                transitionAppear={true}
+                                transitionAppearTimeout={0}
+                                transitionEnter={false}
+                                transitionLeave={false}>
+                                    <DataGraph datagraph={this.props.datagraph}/>
+                                </ReactCSSTransitionGroup>
+                            </Col>
+                        </Row>                       
+                        <Row>
                             <Col md="6" >
-                                <DataTable tableData={this.props.tableData}/>
+                                <ReactCSSTransitionGroup
+                                component="div"
+                                transitionName="TabsAnimation"
+                                transitionAppear={true}
+                                transitionAppearTimeout={0}
+                                transitionEnter={false}
+                                transitionLeave={false}>
+                                    <DataTable tableData={this.props.tableData}/>
+                                </ReactCSSTransitionGroup>
                             </Col>
                         </Row>
                     </div>

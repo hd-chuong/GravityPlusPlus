@@ -63,9 +63,9 @@ export const DomainNav = [
         // ],
     },
 
-    {
-        icon: 'fa fa-link',
-        label: 'Add an edge',
+    // {
+    //     icon: 'fa fa-link',
+    //     label: 'Add an edge',
         // content: [
         //     {
         //         label: 'Standard Buttons',
@@ -100,7 +100,7 @@ export const DomainNav = [
         //         to: '#/elements/utilities',
         //     },
         // ],
-    },
+    // },
 
     // {
     //     icon: 'fa fa-hand-pointer-o',

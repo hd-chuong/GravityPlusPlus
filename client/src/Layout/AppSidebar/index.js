@@ -49,7 +49,7 @@ class AppSidebar extends Component {
                     {/* <HeaderLogo/> */}
                     <PerfectScrollbar>
                         <div className="app-sidebar__inner">
-                            <Nav addDataset={this.props.addDataset} datasets={this.props.datasets}/>
+                            <Nav addDataset={this.props.addDataset} datasets={this.props.datasets} toggleNewNodeModal={this.props.toggleNewNodeModal}/>
                         </div>
                     </PerfectScrollbar>
                     <div

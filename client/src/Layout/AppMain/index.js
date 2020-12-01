@@ -23,7 +23,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
 
-const AppMain = ({addDataset, datasets}) => {
+const AppMain = ({datasets, datagraph, addDataset, addDataNode, addDataEdge}) => {
     return (
         <Fragment>
 
@@ -125,9 +125,13 @@ const AppMain = ({addDataset, datasets}) => {
             }>
 
             <Route path="/data" component={() => <Dashboards 
-                                                    addDataset={addDataset} 
                                                     datasets={datasets}
+                                                    datagraph={datagraph}
                                                     tableData={datasets.datasets.filter((dataset) => dataset.filename === useQuery().get("dataView"))[0]}
+                                                    
+                                                    addDataset={addDataset} 
+                                                    addDataNode={addDataNode}
+                                                    addDataEdge={addDataEdge}
                                                 />}/>
             </Suspense>
 

@@ -51,7 +51,17 @@ class Nav extends Component {
                 ]} active className="vertical-nav-menu" iconNamePrefix=""/>
 
                 <h5 className="app-sidebar__heading">Toolbox</h5>
-                <MetisMenu  content={DomainNav} activeLinkFromLocation className="vertical-nav-menu" iconNamePrefix=""/>
+                <div className="metismenu vertical-nav-menu">
+                    <ul className="metismenu-container">
+                        <li className="metismenu-item" onClick={this.props.toggleNewNodeModal}>                            
+                            <a className="metismenu-link" target="_blank">
+                                <i className="metismenu-icon fa fa-asterisk fa-lg"></i> Add new Node
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* <MetisMenu  content={DomainNav} activeLinkFromLocation className="vertical-nav-menu" iconNamePrefix=""/> */}
                 </ResizableBox>
             </Fragment>
         );
