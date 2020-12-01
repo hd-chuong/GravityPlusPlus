@@ -61,30 +61,20 @@ export default class DataTable extends Component {
         const data = this.state.dataset.dataset.slice(0, Math.min(MAX_ROWS_DISPLAYED, this.state.dataset.dataset.length));
         
         return (
-            <Fragment>
-                <ReactCSSTransitionGroup
-                    component="div"
-                    transitionName="TabsAnimation"
-                    transitionAppear={true}
-                    transitionAppearTimeout={0}
-                    transitionEnter={false}
-                    transitionLeave={false}>
-                    <Card className="main-card mb-3">
-                            <div className="card-header">{this.state.dataset.filename}
-                            </div>
-                            <div className="table-responsive">
-                                <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-                                    <thead>
-                                    <tr>{headers.map((key) => (<th key={key} className="text-center">{key}</th>))}</tr>
-                                    </thead>
-                                    <tbody>
-                                        {data.map(datum =>(<tr>{headers.map(key => (<td key={key} className="text-center">{datum[key]}</td>))}</tr>))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </Card>
-                </ReactCSSTransitionGroup>
-            </Fragment>
+            <Card className="main-card mb-3">
+                    <div className="card-header">{this.state.dataset.filename}
+                    </div>
+                    <div className="table-responsive">
+                        <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                            <thead>
+                            <tr>{headers.map((key) => (<th key={key} className="text-center">{key}</th>))}</tr>
+                            </thead>
+                            <tbody>
+                                {data.map(datum =>(<tr>{headers.map(key => (<td key={key} className="text-center">{datum[key]}</td>))}</tr>))}
+                            </tbody>
+                        </table>
+                    </div>
+            </Card>
         )
     }
 }

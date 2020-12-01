@@ -1,4 +1,4 @@
-import * as ActionTypes from './ActionTypes';
+import * as ActionTypes from './DatasetActionTypes';
 
 export const Datasets = (state = {errMess: null,
                                 datasets: []}, action) => {

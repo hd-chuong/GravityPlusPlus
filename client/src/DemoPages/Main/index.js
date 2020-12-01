@@ -6,7 +6,8 @@ import {withRouter} from 'react-router-dom';
 import ResizeDetector from 'react-resize-detector';
 
 import AppMain from '../../Layout/AppMain';
-import { addDataset } from '../../redux/ActionCreators';
+import { addDataset } from '../../redux/DatasetActionCreators';
+import { addRawDataNode } from '../../redux/DataGraphActionCreators';
 
 class Main extends React.Component {
     constructor(props) {
@@ -46,7 +47,13 @@ class Main extends React.Component {
                     {'closed-sidebar-mobile': closedSmallerSidebar || width < 1250},
                     {'sidebar-mobile-open': enableMobileMenu},
                 )}>
-                    <AppMain addDataset={this.props.addDataset} datasets={this.props.datasets}/>
+                    <AppMain 
+                        datasets={this.props.datasets}
+                        datagraph={this.props.datagraph}
+
+                        addDataset={this.props.addDataset}
+                        addRawDataNode={this.props.addRawDataNode} 
+                    />
                     <ResizeDetector handleWidth onResize={this.onResize} />
                 </div>
             </Fragment>
@@ -62,11 +69,13 @@ const mapStateToProp = state => ({
     enableFixedSidebar: state.ThemeOptions.enableFixedSidebar,
     enableClosedSidebar: state.ThemeOptions.enableClosedSidebar,
     enablePageTabsAlt: state.ThemeOptions.enablePageTabsAlt,
-    datasets: state.datasets
+    datasets: state.datasets,
+    datagraph: state.datagraph
 });
 
 const mapDispatchToProp = dispatch => ({
     addDataset: (dataset) => dispatch(addDataset(dataset)),
+    addRawDataNode: (name) => dispatch(addRawDataNode({name}))
   });
   
 
