@@ -7,7 +7,7 @@ import ResizeDetector from 'react-resize-detector';
 
 import AppMain from '../../Layout/AppMain';
 import { addDataset } from '../../redux/DatasetActionCreators';
-import { addRawDataNode } from '../../redux/DataGraphActionCreators';
+import { addDataEdge, addDataNode } from '../../redux/DataGraphActionCreators';
 
 class Main extends React.Component {
     constructor(props) {
@@ -52,7 +52,8 @@ class Main extends React.Component {
                         datagraph={this.props.datagraph}
 
                         addDataset={this.props.addDataset}
-                        addRawDataNode={this.props.addRawDataNode} 
+                        addDataNode={this.props.addDataNode} 
+                        addDataEdge={this.props.addDataEdge}
                     />
                     <ResizeDetector handleWidth onResize={this.onResize} />
                 </div>
@@ -75,7 +76,8 @@ const mapStateToProp = state => ({
 
 const mapDispatchToProp = dispatch => ({
     addDataset: (dataset) => dispatch(addDataset(dataset)),
-    addRawDataNode: (name) => dispatch(addRawDataNode({name}))
+    addDataNode: (name, type) => dispatch(addDataNode({name, type})),
+    addDataEdge: (source, target, type, data) => dispatch(addDataEdge({source, target, type, data}))
   });
   
 

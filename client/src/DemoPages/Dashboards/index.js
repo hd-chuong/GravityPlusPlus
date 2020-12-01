@@ -46,7 +46,10 @@ class Dashboards extends Component{
                             datasets={this.props.datasets} 
                             isOpen={this.state.isNewNodeModalOpen} 
                             toggle={this.toggleNewNodeModal}
-                            addRawDataNode={this.props.addRawDataNode}/>
+                            addDataNode={this.props.addDataNode}
+                            addDataEdge={this.props.addDataEdge}
+                            datagraph={this.props.datagraph}
+                        />
                         {/* <Route path={'/data/'} component={BasicDashboard}/> */}
                     </div>
                     {/* <AppFooter/> */}

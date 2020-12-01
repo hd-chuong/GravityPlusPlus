@@ -1,14 +1,15 @@
 import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
 import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
-
+import Select from 'react-select';
 
 import classnames from 'classnames';
 class ModalExample extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeTab: '1'
+            activeTab: '1',
+            joinDatasets: []
         }
 
         // this.props.toggle = this.props.toggle.bind(this);
@@ -22,10 +23,24 @@ class ModalExample extends React.Component {
         }
     }
 
-    handleSubmit()
+    handleSubmitRaw()
     {
-        this.props.addRawDataNode(name = this.id.value);
+        this.props.addDataNode(this.rawNodeName.value, "raw");
         this.props.toggle();
+    }
+
+    handleJoinDatasets(curOptions) 
+    {
+        this.setState({joinDatasets: curOptions});
+        console.log(this.state.joinDatasets);
+    }
+
+    handleSubmitJoin()
+    {
+        this.props.addDataNode(this.joinNodeName.value, "joined");
+        this.state.joinDatasets.forEach((joinData) => {
+            this.props.addDataEdge(joinData.value, this.joinNodeName.value, "join", null);
+        });
     }
 
     render() {
@@ -71,35 +86,65 @@ class ModalExample extends React.Component {
 
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
-                                <p>Import a raw dataset into the data graph</p>
+                                <small>Import a raw dataset into the data graph</small>
                                 <Form>
                                     <Row className="form-group">
-                                        <Label for="dataset" md={3}>Select dataset</Label>
+                                        <Label for="rawDataset" md={3}>Select dataset</Label>
                                         <Col md={5}>
-                                            <Input type="select" name="dataset" id="dataset" innerRef={(input) => this.dataset = input}>
+                                            <Input type="select" name="rawDataset" id="rawDataset" innerRef={(input) => this.rawDataset = input}>
                                                 {this.props.datasets.datasets.map((dataset) => (<option key={dataset.filename}>{dataset.filename}</option>))}
                                             </Input>
                                         </Col>
                                         
-                                        <Label for="nodeType" md={2}>Node type</Label>
+                                        <Label for="rawNodeType" md={2}>Node type</Label>
                                         <Col md={2}>
-                                            <Input type="select" name="nodeType" id="nodeType" disabled innerRef={(input) => this.nodeType = input}>
+                                            <Input type="select" name="rawNodeType" id="rawNodeType" disabled innerRef={(input) => this.rawNodeType = input}>
                                                 <option>raw</option>
                                             </Input>
                                         </Col>
                                     </Row>
 
                                     <FormGroup>
-                                        <Label for="id"></Label>
-                                        <Input type="text" name="id" id="id" innerRef={(input) => this.id = input}
-                                                placeholder="Enter the node name"/>
+                                        <Label for="nodeid">Node name</Label>
+                                        <Input type="text" name="rawNodeName" id="rawNodeName" innerRef={(input) => this.rawNodeName = input}
+                                                placeholder="Enter the node name"></Input>
                                     </FormGroup>
 
-                                    <Button color="primary" className="mr-auto" onClick={this.handleSubmit.bind(this)}>Add Node</Button>{' '}  
+                                    <Button color="primary" className="mr-auto" onClick={this.handleSubmitRaw.bind(this)}>Add Node</Button>{' '}  
                                 </Form>
                             </TabPane>
                             <TabPane tabId="2">
                                 <p>Join two or more datasets.</p>
+                                <Form>
+                                    <Row className="form-group">
+                                        <Label for="joinDataset" md={3}>Select at least two</Label>
+                                        <Col md={4}>
+                                        {/* <Input type="select" name="selectMulti" id="exampleSelectMulti" multiple>
+                                            {this.props.datasets.datasets.map((dataset) => (<option key={dataset.filename}>{dataset.filename}</option>))}
+                                        </Input> */}
+                                            <Select 
+                                                isMulti options={
+                                                    this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.data.label, label: dataset.data.label}) ) 
+                                                }
+                                                onChange={this.handleJoinDatasets.bind(this)}
+                                            />
+                                        </Col>
+                                        <Label for="joinNodeType" md={2}>Node type</Label>
+                                        <Col md={2}>
+                                            <Input type="select" name="joinNodeType" id="joinNodeType" disabled innerRef={(input) => this.joinNodeType = input}>
+                                                <option>join</option>
+                                            </Input>
+                                        </Col>
+                                    </Row>
+
+                                    <FormGroup>
+                                        <Label for="joinNodeName"></Label>
+                                        <Input type="text" name="joinNodeName" id="joinNodeName" innerRef={(input) => this.joinNodeName = input}
+                                                placeholder="Enter the node name"/>
+                                    </FormGroup>
+
+                                    <Button color="primary" className="mr-auto" onClick={this.handleSubmitJoin.bind(this)}>Add Node</Button>{' '}  
+                                </Form>
                             </TabPane>
                             <TabPane tabId="3">
                                 <p>Apply a transformation to a data node</p>

@@ -23,7 +23,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
 
-const AppMain = ({datasets, datagraph, addDataset, addRawDataNode}) => {
+const AppMain = ({datasets, datagraph, addDataset, addDataNode, addDataEdge}) => {
     return (
         <Fragment>
 
@@ -130,7 +130,8 @@ const AppMain = ({datasets, datagraph, addDataset, addRawDataNode}) => {
                                                     tableData={datasets.datasets.filter((dataset) => dataset.filename === useQuery().get("dataView"))[0]}
                                                     
                                                     addDataset={addDataset} 
-                                                    addRawDataNode={addRawDataNode}
+                                                    addDataNode={addDataNode}
+                                                    addDataEdge={addDataEdge}
                                                 />}/>
             </Suspense>
 
