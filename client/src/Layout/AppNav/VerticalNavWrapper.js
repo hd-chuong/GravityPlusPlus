@@ -45,13 +45,15 @@ class Nav extends Component {
                     {
                         icon: 'fa fa-table',
                         label: 'Current datasets',
-                        content: this.props.datasets.datasets.map((record) => ({label: record.filename, to: `#data?dataView=${record.filename}`})),
-                        
+                        content: this.props.datasets.datasets.map((record) => ({
+                                                                                label: record.filename, 
+                                                                                // to: `#/data?dataView=${record.filename}`
+                                                                            })),
                     }
                 ]} active className="vertical-nav-menu" iconNamePrefix=""/>
 
                 <h5 className="app-sidebar__heading">Toolbox</h5>
-                <div className="metismenu vertical-nav-menu">
+                <div className="metismenu vertical-nav-menu" active>
                     <ul className="metismenu-container">
                         <li className="metismenu-item" onClick={this.props.toggleNewNodeModal}>                            
                             <a className="metismenu-link" target="_blank">
