@@ -60,10 +60,7 @@ class ModalExample extends React.Component {
             return;
         }
         this.props.addDataNode(this.transformNodeName.value, "transformed");
-        console.log(JSON.parse(this.transformSpecs.value));
-        console.log("dataset ", this.transformDataset.value);
-        console.log("name ", this.transformNodeName.value);
-        this.props.addDataEdge(this.transformDataset.value, this.transformNodeName.value, "transform", JSON.parse(this.transformSpecs.value));
+        this.props.addDataEdge(this.transformDataset.value, this.transformNodeName.value, "transform", this.transformSpecs.value !== "" ? JSON.parse(this.transformSpecs.value) : {});
     }
 
     render() {
