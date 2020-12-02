@@ -20,10 +20,10 @@ module.exports = class DataGraph {
         `;
         const params = {name, type};
 
-        session.writeTransaction( tx => tx.run(cypher, params))
+        return session.writeTransaction( tx => tx.run(cypher, params))
         .then(res => {
             session.close();
-            return res;
+            return res.records;
         })
         .catch(e => {console.log(e)});
     }
@@ -42,11 +42,11 @@ module.exports = class DataGraph {
         
         const params = {id};
 
-        session.readTransaction( tx => tx.run(cypher, params))
+        return session.readTransaction( tx => tx.run(cypher, params))
         .then(res => {
-            console.log(res);
+
             session.close();
-            return res;
+            return res.records;
         })
         .catch(e => {console.log(e)});
     }
@@ -72,10 +72,10 @@ module.exports = class DataGraph {
                 operation: JSON.stringify(operation) 
             };
 
-        session.writeTransaction( tx => tx.run(cypher, params))
+        return session.writeTransaction( tx => tx.run(cypher, params))
         .then(res => {
             session.close();
-            return res;
+            return res.records;
         })
         .catch(e => {console.log(e)});
     }
@@ -99,11 +99,11 @@ module.exports = class DataGraph {
                 target, 
             };
 
-        session.readTransaction( tx => tx.run(cypher, params))
+        return session.readTransaction( tx => tx.run(cypher, params))
         .then(res => {
             console.log(res.records);
             session.close();
-            return res;
+            return res.records;
         })
         .catch(e => {console.log(e)});
     }
@@ -119,11 +119,10 @@ module.exports = class DataGraph {
                 n
         `;
 
-        session.readTransaction( tx => tx.run(cypher))
+        return session.readTransaction( tx => tx.run(cypher))
         .then(res => {
-            console.log(res.records);
             session.close();
-            return res;
+            return res.records;
         })
         .catch(e => {console.log(e)});
     }
@@ -139,11 +138,11 @@ module.exports = class DataGraph {
                     r
             `;
 
-        session.readTransaction( tx => tx.run(cypher))
+        return session.readTransaction( tx => tx.run(cypher))
         .then(res => {
-            console.log(res);
+            // console.log(res.records);
             session.close();
-            return res;
+            return res.records;
         })
         .catch(e => {console.log(e)});
     }

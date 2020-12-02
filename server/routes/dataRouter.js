@@ -17,22 +17,48 @@ datagraph.useDriver(driver);
 
 router.route('/')
 .get((req,res,next) => {
-    datagraph.getGraph();
+    result = {nodes: [], edges: []}
+    datagraph
+    .getAllNodes()
+    .then(allNodes => {
+        result.nodes = allNodes;
+        return datagraph.getAllEdges()
+    })
+    .then(allEdges => {
+        result.edges = allEdges;
+        res.json(result);
+    }, err => next(err))
+    .catch(err => next(err));
 });
 
 router.route('/nodes')
 .get((req,res,next) => {
-    datagraph.getAllNodes();
+    datagraph
+    .getAllNodes()
+    .then(result => {
+            res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
 });
 
 router.route('/nodes/:nodeID')
 .get((req,res,next) => {
-    datagraph.getNode(parseInt(req.params.nodeID));
+    datagraph
+    .getNode(parseInt(req.params.nodeID))
+    .then(result => {
+        res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
 });
 
 router.route('/edges')
 .get((req,res,next) => {
-    datagraph.getAllEdges();
+    datagraph
+    .getAllEdges()
+    .then(result => {
+        res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
 });
 
 router.route('/edges/:source/:target')
@@ -40,7 +66,11 @@ router.route('/edges/:source/:target')
     datagraph.getEdge(
         parseInt(req.params.source), 
         parseInt(req.params.target)
-    );
+    )
+    .then(result => {
+        res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
 });
 
 module.exports = router;
