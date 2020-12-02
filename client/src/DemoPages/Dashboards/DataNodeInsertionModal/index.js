@@ -23,18 +23,29 @@ class ModalExample extends React.Component {
 
     handleSubmitRaw()
     {
+        if (this.rawNodeName.value === "") 
+        {
+            alert("You must provide a node name");
+            return;
+        }
         this.props.addDataNode(this.rawNodeName.value, "raw");
         this.props.toggle();
     }
 
     handleMultipleDatasets(curOptions) 
     {
+       
         this.setState({joinDatasets: curOptions});
         console.log(this.state.joinDatasets);
     }
 
     handleSubmitJoin()
     {
+        if (this.joinNodeName.value === "") 
+        {
+            alert("You must provide a node name");
+            return;
+        }
         this.props.addDataNode(this.joinNodeName.value, "joined");
         this.state.joinDatasets.forEach((joinData) => {
             this.props.addDataEdge(joinData.value, this.joinNodeName.value, "join", null);
@@ -43,6 +54,11 @@ class ModalExample extends React.Component {
 
     handleSubmitTransform()
     {
+        if (this.transformNodeName.value === "") 
+        {
+            alert("You must provide a node name");
+            return;
+        }
         this.props.addDataNode(this.transformNodeName.value, "transformed");
         console.log(JSON.parse(this.transformSpecs.value));
         console.log("dataset ", this.transformDataset.value);
