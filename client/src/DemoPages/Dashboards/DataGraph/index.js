@@ -41,7 +41,6 @@ export default class DataGraph extends Component {
     }
     render() 
     {
-        console.log(this.props.datagraph.datagraph);
         const elements = [...this.props.datagraph.datagraph.nodes, ...this.props.datagraph.datagraph.edges];
         return (
             <Card className="main-card mb-3">

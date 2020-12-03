@@ -34,33 +34,46 @@ class ModalExample extends React.Component {
 
     handleMultipleDatasets(curOptions) 
     {
-       
         this.setState({joinDatasets: curOptions});
-        console.log(this.state.joinDatasets);
     }
 
-    handleSubmitJoin()
+    async handleSubmitJoin()
     {
         if (this.joinNodeName.value === "") 
         {
             alert("You must provide a node name");
             return;
         }
-        this.props.addDataNode(this.joinNodeName.value, "joined");
+
+        
+        let newNodeId= await this.props.addDataNode(this.joinNodeName.value, "joined");
+
         this.state.joinDatasets.forEach((joinData) => {
-            this.props.addDataEdge(joinData.value, this.joinNodeName.value, "join", null);
+            console.log(joinData);
+            this.props.addDataEdge(joinData.value, newNodeId, "join", null);
         });
     }
 
-    handleSubmitTransform()
+    async handleSubmitTransform()
     {
-        if (this.transformNodeName.value === "") 
+        if (this.sourceNode.value === "") 
         {
             alert("You must provide a node name");
             return;
         }
-        this.props.addDataNode(this.transformNodeName.value, "transformed");
-        this.props.addDataEdge(this.transformDataset.value, this.transformNodeName.value, "transform", this.transformSpecs.value !== "" ? JSON.parse(this.transformSpecs.value) : {});
+        var specs = this.transformSpecs.value;
+        var sourceNode = this.sourceNode.value;
+        
+        console.log("XXXXXXXXXXXXXXXXXXXXX ", this.transformNodeName.value);
+        
+        let newNodeId = await this.props.addDataNode(this.transformNodeName.value, "transformed")
+        this.props.addDataEdge(
+            sourceNode, 
+            newNodeId, 
+            "transform", 
+            specs !== "" ? JSON.parse(specs) : {}
+        );
+
     }
 
     render() {
@@ -144,7 +157,7 @@ class ModalExample extends React.Component {
                                         <Col md={4}>
                                             <Select 
                                                 isMulti options={
-                                                    this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.data.label, label: dataset.data.label}) ) 
+                                                    this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.id, label: dataset.data.label}) ) 
                                                 }
                                                 onChange={this.handleMultipleDatasets.bind(this)}
                                             />
@@ -173,15 +186,15 @@ class ModalExample extends React.Component {
                                 <small>Apply a transformation to a data node</small>
                                 <Form>
                                     <Row className="form-group">
-                                        <Label for="transformDataset" md={3}>Select a node</Label>
+                                        <Label for="sourceNode" md={3}>Select a node</Label>
                                         <Col md={5}>
                                             <Input 
                                                 type="select" 
-                                                name="transformDataset" 
-                                                id="transformDataset" 
-                                                innerRef={(input) => this.transformDataset = input}
+                                                name="sourceNode" 
+                                                id="sourceNode" 
+                                                innerRef={(input) => this.sourceNode = input}
                                             >
-                                                {this.props.datagraph.datagraph.nodes.map((dataset) => (<option key={dataset.id}>{dataset.id}</option>))}
+                                                {this.props.datagraph.datagraph.nodes.map((dataset) => (<option key={dataset.id} value={dataset.id}>{dataset.data.label}</option>))}
                                             </Input>
                                         </Col>
                                         

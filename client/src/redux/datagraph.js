@@ -2,7 +2,7 @@ import * as ActionTypes from './DataGraphActionTypes';
 
 export const DataGraph = (state = {errMess: null,
                                 datagraph: {nodes: [], edges: []}}, action) => {
-    
+
     switch (action.type) {
         case ActionTypes.ADD_DATA_NODE:
             var x = Math.random() * 100;
