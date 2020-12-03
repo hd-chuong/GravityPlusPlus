@@ -46,10 +46,10 @@ class ModalExample extends React.Component {
         }
 
         
-        let newNodeId= await this.props.addDataNode(this.joinNodeName.value, "joined");
+        let newNodeId= await this.props.addDataNode(this.joinNodeName.value, "JOINED");
 
         this.state.joinDatasets.forEach((joinData) => {
-            this.props.addDataEdge(joinData.value, newNodeId, "join", null);
+            this.props.addDataEdge(joinData.value, newNodeId, "JOIN", null);
         });
     }
 
@@ -63,11 +63,11 @@ class ModalExample extends React.Component {
         var specs = this.transformSpecs.value;
         var sourceNode = this.sourceNode.value;
         
-        let newNodeId = await this.props.addDataNode(this.transformNodeName.value, "transformed")
+        let newNodeId = await this.props.addDataNode(this.transformNodeName.value, "TRANSFORMED")
         this.props.addDataEdge(
             sourceNode, 
             newNodeId, 
-            "transform", 
+            "TRANSFORM", 
             specs !== "" ? JSON.parse(specs) : {}
         );
 
@@ -129,7 +129,7 @@ class ModalExample extends React.Component {
                                         <Label for="rawNodeType" md={2}>Node type</Label>
                                         <Col md={2}>
                                             <Input type="select" name="rawNodeType" id="rawNodeType" disabled innerRef={(input) => this.rawNodeType = input}>
-                                                <option>raw</option>
+                                                <option>RAW</option>
                                             </Input>
                                         </Col>
                                     </Row>
@@ -162,7 +162,7 @@ class ModalExample extends React.Component {
                                         <Label for="joinNodeType" md={2}>Node type</Label>
                                         <Col md={2}>
                                             <Input type="select" name="joinNodeType" id="joinNodeType" disabled innerRef={(input) => this.joinNodeType = input}>
-                                                <option>join</option>
+                                                <option>JOIN</option>
                                             </Input>
                                         </Col>
                                     </Row>
@@ -204,7 +204,7 @@ class ModalExample extends React.Component {
                                                 disabled 
                                                 innerRef={(input) => this.transformNodeType = input}
                                             >
-                                                <option>transform</option>
+                                                <option>TRANSFORM</option>
                                             </Input>
                                         </Col>
                                     </Row>

@@ -33,11 +33,11 @@ export const DataGraph = (state = {errMess: null,
             var edgeType = action.payload.type;
             var style = null;
             
-            if (edgeType === "join")
+            if (edgeType === "JOIN")
             {
                 style = {stroke: "red", strokeDasharray: "2,2"}
             }
-            else if (edgeType === "transform")
+            else if (edgeType === "TRANSFORM")
             {
                 style = {stroke: "blue"}
             }
