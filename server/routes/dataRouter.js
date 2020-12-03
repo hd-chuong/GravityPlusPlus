@@ -1,9 +1,12 @@
 // API layer
-
 const express = require('express');
 const bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver');
 var Datagraph = require('../models/data');
+
+// cors.cors for all GET methods
+// cors.corsWithOptions for all other
+const cors = require('./cors');
 
 const router = express.Router();
 
@@ -18,7 +21,8 @@ var datagraph = new Datagraph();
 datagraph.useDriver(driver);
 
 router.route('/')
-.get((req,res,next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req,res,next) => {
     result = {nodes: [], edges: []}
     datagraph
     .getAllNodes()
@@ -34,7 +38,8 @@ router.route('/')
 });
 
 router.route('/nodes')
-.get((req,res,next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req,res,next) => {
     datagraph
     .getAllNodes()
     .then(result => {
@@ -42,7 +47,7 @@ router.route('/nodes')
     }, err => next(err))
     .catch(err => next(err));
 })
-.post((req,res,next) => {
+.post(cors.corsWithOptions, (req,res,next) => {
     datagraph
     .addNode(req.body.name, req.body.type)
     .then(result => {
@@ -52,7 +57,8 @@ router.route('/nodes')
 });
 
 router.route('/nodes/:nodeID')
-.get((req,res,next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req,res,next) => {
     datagraph
     .getNode(parseInt(req.params.nodeID))
     .then(result => {
@@ -62,7 +68,8 @@ router.route('/nodes/:nodeID')
 });
 
 router.route('/edges')
-.get((req,res,next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req,res,next) => {
     datagraph
     .getAllEdges()
     .then(result => {
@@ -70,7 +77,7 @@ router.route('/edges')
     }, err => next(err))
     .catch(err => next(err));
 })
-.post((req,res,next) => {
+.post(cors.corsWithOptions, (req,res,next) => {
     datagraph
     .addEdge(
         req.body.source, 
@@ -83,7 +90,8 @@ router.route('/edges')
 )});
 
 router.route('/edges/:source/:target')
-.get((req,res,next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req,res,next) => {
     datagraph
     .getEdge(
         parseInt(req.params.source), 

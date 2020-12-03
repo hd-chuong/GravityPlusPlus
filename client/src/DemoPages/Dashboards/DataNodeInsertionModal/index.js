@@ -28,7 +28,7 @@ class ModalExample extends React.Component {
             alert("You must provide a node name");
             return;
         }
-        this.props.addDataNode(this.rawNodeName.value, "raw");
+        this.props.addDataNode(this.rawNodeName.value, "RAW");
         this.props.toggle();
     }
 
