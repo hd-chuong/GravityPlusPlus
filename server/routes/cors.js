@@ -4,26 +4,23 @@ const cors = require("cors");
 const app = express();
 
 const whitelist = [
-    "http://localhost:7472",
+  "http://localhost:7472",
 ]
 
 var corsOptionsDelegate = (req, callback) => {
-    var corsOptions;
-    console.log(req.header('Origin'));
+  var corsOptions;
+  console.log(req.header('Origin'));
 
-    if (whitelist.indexOf(req.header('Origin')) !== -1)
-    {
-        corsOptions = {
-            origin: true // it is okay for the client side to receive the response from the server
-        }
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = {
+      origin: true // it is okay for the client side to receive the response from the server
     }
-    else 
-    {
-        corsOptions = {
-            origin: false
-        };
-    }
-    callback(null, corsOptions);
+  } else {
+    corsOptions = {
+      origin: false
+    };
+  }
+  callback(null, corsOptions);
 }
 
 exports.cors = cors();

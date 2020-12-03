@@ -1,0 +1,31 @@
+{
+  "name": "gravity",
+  "version": "1.0.0",
+  "description": "Graph-based visualisation",
+  "main": "index.js",
+  "dependencies": {
+    "glob": "^7.1.6",
+    "js-beautify": "^1.13.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "node ./scripts/format.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hd-chuong/GravityPlusPlus.git"
+  },
+  "keywords": [
+    "Visualisation",
+    "Interactive",
+    "Graph",
+    "Theory"
+  ],
+  "author": "Humphrey Obie, Chuong Ho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hd-chuong/GravityPlusPlus/issues"
+  },
+  "homepage": "https://github.com/hd-chuong/GravityPlusPlus#readme"
+}

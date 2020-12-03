@@ -13,95 +13,100 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 driver = neo4j.driver(
-    "bolt://gravity-neo4j", 
-    neo4j.auth.basic("neo4j", "test")
+  "bolt://gravity-neo4j",
+  neo4j.auth.basic("neo4j", "test")
 );
 
 var datagraph = new Datagraph();
 datagraph.useDriver(driver);
 
 router.route('/')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req,res,next) => {
-    result = {nodes: [], edges: []}
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
+    result = {
+      nodes: [],
+      edges: []
+    }
     datagraph
-    .getAllNodes()
-    .then(allNodes => {
+      .getAllNodes()
+      .then(allNodes => {
         result.nodes = allNodes;
         return datagraph.getAllEdges()
-    })
-    .then(allEdges => {
+      })
+      .then(allEdges => {
         result.edges = allEdges;
         res.json(result);
-    }, err => next(err))
-    .catch(err => next(err));
-});
+      }, err => next(err))
+      .catch(err => next(err));
+  });
 
 router.route('/nodes')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req,res,next) => {
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
     datagraph
-    .getAllNodes()
-    .then(result => {
+      .getAllNodes()
+      .then(result => {
         res.json(result)
-    }, err => next(err))
-    .catch(err => next(err));
-})
-.post(cors.corsWithOptions, (req,res,next) => {
+      }, err => next(err))
+      .catch(err => next(err));
+  })
+  .post(cors.corsWithOptions, (req, res, next) => {
     datagraph
-    .addNode(req.body.name, req.body.type)
-    .then(result => {
+      .addNode(req.body.name, req.body.type)
+      .then(result => {
         res.json(result)
-    }, err => next(err))
-    .catch(err => next(err));
-});
+      }, err => next(err))
+      .catch(err => next(err));
+  });
 
 router.route('/nodes/:nodeID')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req,res,next) => {
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
     datagraph
-    .getNode(req.params.nodeID)
-    .then(result => {
+      .getNode(req.params.nodeID)
+      .then(result => {
         res.json(result)
-    }, err => next(err))
-    .catch(err => next(err));
-});
+      }, err => next(err))
+      .catch(err => next(err));
+  });
 
 router.route('/edges')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req,res,next) => {
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
     datagraph
-    .getAllEdges()
-    .then(result => {
+      .getAllEdges()
+      .then(result => {
         res.json(result)
-    }, err => next(err))
-    .catch(err => next(err));
-})
-.post(cors.corsWithOptions, (req,res,next) => {
+      }, err => next(err))
+      .catch(err => next(err));
+  })
+  .post(cors.corsWithOptions, (req, res, next) => {
     datagraph
-    .addEdge(
-        req.body.source, 
-        req.body.target, 
+      .addEdge(
+        req.body.source,
+        req.body.target,
         req.body.type,
         req.body.operation
-    )
-    .then((newEdge) => {res.json(newEdge)},
-    err => next(err))
-    .catch(err => next(err)
-)});
+      )
+      .then((newEdge) => {
+          res.json(newEdge)
+        },
+        err => next(err))
+      .catch(err => next(err))
+  });
 
 router.route('/edges/:source/:target')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req,res,next) => {
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
     datagraph
-    .getEdge(
+      .getEdge(
         req.params.source, req.params.target
-    )
-    .then(result => {
+      )
+      .then(result => {
         res.json(result)
-    }, err => next(err))
-    .catch(err => next(err));
-});
+      }, err => next(err))
+      .catch(err => next(err));
+  });
 
 
 module.exports = router;
