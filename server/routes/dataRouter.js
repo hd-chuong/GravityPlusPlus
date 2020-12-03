@@ -1,3 +1,5 @@
+// API layer
+
 const express = require('express');
 const bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver');
@@ -36,9 +38,14 @@ router.route('/nodes')
     datagraph
     .getAllNodes()
     .then(result => {
-            res.json(result)
+        res.json(result)
     }, err => next(err))
     .catch(err => next(err));
+})
+.post((req,res,next) => {
+    datagraph
+    .addNode(req.body.name, req.body.type)
+    .then((newNode) => {console.log(newNode)});
 });
 
 router.route('/nodes/:nodeID')
@@ -59,11 +66,23 @@ router.route('/edges')
         res.json(result)
     }, err => next(err))
     .catch(err => next(err));
-});
+})
+.post((req,res,next) => {
+    datagraph
+    .addEdge(
+        req.body.source, 
+        req.body.target, 
+        req.body.operation
+    )
+    .then((newEdge) => {res.json(newEdge)},
+    err => next(err))
+    .catch(err => next(err)
+)});
 
 router.route('/edges/:source/:target')
 .get((req,res,next) => {
-    datagraph.getEdge(
+    datagraph
+    .getEdge(
         parseInt(req.params.source), 
         parseInt(req.params.target)
     )
@@ -72,5 +91,6 @@ router.route('/edges/:source/:target')
     }, err => next(err))
     .catch(err => next(err));
 });
+
 
 module.exports = router;

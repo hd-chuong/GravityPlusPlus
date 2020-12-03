@@ -1,3 +1,7 @@
+// business logic layer
+
+// var neo4j = require('neo4j-driver');
+
 module.exports = class DataGraph { 
     constructor()
     {
@@ -16,14 +20,14 @@ module.exports = class DataGraph {
             CREATE 
                 (node:DATA_NODE:${type} { name: $name}) 
             RETURN 
-                id(node) as id
+                toInteger(ID(node)) as id
         `;
         const params = {name, type};
 
         return session.writeTransaction( tx => tx.run(cypher, params))
         .then(res => {
             session.close();
-            return res.records;
+            return res.records[0]["_fields"][0].toNumber();
         })
         .catch(e => {console.log(e)});
     }
@@ -37,73 +41,27 @@ module.exports = class DataGraph {
                 (node:DATA_NODE) 
             WHERE 
                 id(node) = $id 
-            RETURN id(node)
+            RETURN node
         `;
         
         const params = {id};
 
         return session.readTransaction( tx => tx.run(cypher, params))
         .then(res => {
-
             session.close();
-            return res.records;
-        })
-        .catch(e => {console.log(e)});
-    }
-
-    addEdge(source, target, type, operation)
-    {
-        const session = this.neo4jDriver.session();
-        const cypher = `
-            MATCH (a:DATA_NODE),(b:DATA_NODE)
-            WHERE 
-                id(a) = $source 
-            AND 
-                id(b) = $target
-            CREATE 
-                (a)-[r:DATA_EDGE:${type} { operation: $operation}]->(b)
-            RETURN 
-                type(r) as type, r.operation as operation
-        `;
-
-        const params = {
-                source, 
-                target, 
-                operation: JSON.stringify(operation) 
-            };
-
-        return session.writeTransaction( tx => tx.run(cypher, params))
-        .then(res => {
-            session.close();
-            return res.records;
-        })
-        .catch(e => {console.log(e)});
-    }
-
-    getEdge(source, target)
-    {
-        const session = this.neo4jDriver.session();
-
-        const cypher = `
-            MATCH 
-                (a:DATA_NODE)-[r:DATA_EDGE]->(b:DATA_NODE)
-            WHERE
-                id(a) = $source
-            AND 
-                id(b) = $target
-            RETURN type(r) as type, r.operation as operation 
-        `;
-        
-        const params = {
-                source, 
-                target, 
-            };
-
-        return session.readTransaction( tx => tx.run(cypher, params))
-        .then(res => {
-            console.log(res.records);
-            session.close();
-            return res.records;
+            if (res.records.length === 0)
+            {
+                return null;
+            }
+            else 
+            {
+                let record = res.records[0]["_fields"][0];
+                return {
+                    id: record["identity"].toNumber(),
+                    types: record["labels"],
+                    props: record["properties"]
+                };
+            }
         })
         .catch(e => {console.log(e)});
     }
@@ -118,11 +76,101 @@ module.exports = class DataGraph {
             RETURN 
                 n
         `;
-
         return session.readTransaction( tx => tx.run(cypher))
         .then(res => {
             session.close();
-            return res.records;
+            return res.records.map(rec => {
+                var record = rec["_fields"][0];
+                return {
+                    id: record["identity"].toNumber(),
+                    types: record["labels"],
+                    props: record["properties"]
+                }
+            });
+        })
+        .catch(e => {console.log(e)});
+    }
+    addEdge(source, target, operation)
+    {
+        const session = this.neo4jDriver.session();
+        const cypher = `
+            MATCH (a:DATA_NODE),(b:DATA_NODE)
+            WHERE 
+                id(a) = $source 
+            AND 
+                id(b) = $target
+            CREATE 
+                (a)-[r:DATA_EDGE { operation: $operation}]->(b)
+            RETURN 
+                r
+        `;
+
+        const params = {
+                source, 
+                target, 
+                operation: JSON.stringify(operation) 
+            };
+
+        return session.writeTransaction( tx => tx.run(cypher, params))
+        .then(res => {
+            session.close();
+            if (res.records.length === 0)
+            {
+                return null;
+            }
+            else 
+            {
+                let record = res.records[0]["_fields"][0];
+                return {
+                    id: record["identity"].toNumber(),
+                    source: record["start"].toNumber(),
+                    target: record["end"].toNumber(),
+                    types: record["type"],
+                    props: record["properties"]
+                };
+            }
+        })
+        .catch(e => {console.log(e)});
+    }
+
+    getEdge(source, target)
+    {
+        // only return one directed edge now
+        const session = this.neo4jDriver.session();
+
+        const cypher = `
+            MATCH 
+                (a:DATA_NODE)-[r:DATA_EDGE]->(b:DATA_NODE)
+            WHERE
+                id(a) = $source
+            AND 
+                id(b) = $target
+            RETURN r 
+        `;
+        
+        const params = {
+                source, 
+                target, 
+            };
+
+        return session.readTransaction( tx => tx.run(cypher, params))
+        .then(res => {
+            session.close();
+            if (res.records.length === 0)
+            {
+                return null;
+            }
+            else 
+            {
+                let record = res.records[0]["_fields"][0];
+                return {
+                    id: record["identity"].toNumber(),
+                    source: record["start"].toNumber(),
+                    target: record["end"].toNumber(),
+                    types: record["type"],
+                    props: record["properties"]
+                };
+            }
         })
         .catch(e => {console.log(e)});
     }
@@ -142,7 +190,16 @@ module.exports = class DataGraph {
         .then(res => {
             // console.log(res.records);
             session.close();
-            return res.records;
+            return res.records.map(rec => {
+                var record = rec["_fields"][0];
+                return {
+                    id: record["identity"].toNumber(),
+                    source: record["start"].toNumber(),
+                    target: record["end"].toNumber(),
+                    types: record["type"],
+                    props: record["properties"]
+                }
+            });
         })
         .catch(e => {console.log(e)});
     }
