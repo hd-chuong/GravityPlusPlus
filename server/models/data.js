@@ -1,6 +1,8 @@
 // business logic layer
+const { v4: uuidv4 } = require('uuid');
 
-module.exports = class DataGraph { 
+module.exports = class DataGraph 
+{ 
     constructor()
     {
         this.neo4jDriver = null;
@@ -16,13 +18,14 @@ module.exports = class DataGraph {
         const session = this.neo4jDriver.session();
         const cypher = `
             CREATE 
-                (node:DATA_NODE:${type} { name: $name}) 
+                (node:DATA_NODE:${type} { id: $id, name: $name }) 
             RETURN 
                 node
         `;
-        const params = {name, type};
+        const params = {name, type, id: uuidv4()};
 
-        return session.writeTransaction( tx => tx.run(cypher, params))
+        return session
+        .writeTransaction( tx => tx.run(cypher, params))
         .then(res => {
             if (res.records.length === 0)
             {
@@ -31,11 +34,12 @@ module.exports = class DataGraph {
             else 
             {
                 let record = res.records[0]["_fields"][0];
-                return {
-                    id: record["identity"].toNumber(),
+                let result =  {
+                    id: record["properties"]["id"],
                     types: record["labels"],
                     props: record["properties"]
-                };
+                }
+                return result;
             }
         })
         .catch(e => {console.log(e)});
@@ -49,7 +53,7 @@ module.exports = class DataGraph {
             MATCH 
                 (node:DATA_NODE) 
             WHERE 
-                id(node) = $id 
+                node.id = $id 
             RETURN node
         `;
         
@@ -66,7 +70,7 @@ module.exports = class DataGraph {
             {
                 let record = res.records[0]["_fields"][0];
                 return {
-                    id: record["identity"].toNumber(),
+                    id: record["properties"]["id"],
                     types: record["labels"],
                     props: record["properties"]
                 };
@@ -91,7 +95,7 @@ module.exports = class DataGraph {
             return res.records.map(rec => {
                 var record = rec["_fields"][0];
                 return {
-                    id: record["identity"].toNumber(),
+                    id: record["properties"]["id"],
                     types: record["labels"],
                     props: record["properties"]
                 }
@@ -99,44 +103,50 @@ module.exports = class DataGraph {
         })
         .catch(e => {console.log(e)});
     }
-    addEdge(source, target, operation)
-    {
-        const session = this.neo4jDriver.session();
-        const cypher = `
-            MATCH (a:DATA_NODE),(b:DATA_NODE)
-            WHERE 
-                id(a) = $source 
-            AND 
-                id(b) = $target
-            CREATE 
-                (a)-[r:DATA_EDGE { operation: $operation}]->(b)
-            RETURN 
-                r
-        `;
 
+    addEdge(source, target, type, operation)
+    {
+        const id = uuidv4();
         const params = {
                 source, 
                 target, 
+                id,
+                type,
                 operation: JSON.stringify(operation) 
             };
+        
+        const cypher = `
+            MATCH (a:DATA_NODE),(b:DATA_NODE)
+            WHERE 
+                a.id = $source 
+            AND 
+                b.id = $target
+            CREATE 
+                (a)-[r:DATA_EDGE {id: $id, type: $type, operation: $operation}]->(b)
+            RETURN 
+                r, a.id as source_id, b.id as target_id
+        `;
+        
+        const session = this.neo4jDriver.session();
 
         return session.writeTransaction( tx => tx.run(cypher, params))
         .then(res => {
             session.close();
             if (res.records.length === 0)
             {
+                console.log("unfix problem");
                 return null;
-            }
+            } 
             else 
             {
-                let record = res.records[0]["_fields"][0];
-                return {
-                    id: record["identity"].toNumber(),
-                    source: record["start"].toNumber(),
-                    target: record["end"].toNumber(),
-                    types: record["type"],
-                    props: record["properties"]
-                };
+                let record = res.records[0]["_fields"];
+                let result = {
+                    id: record[0].properties.id,
+                    source: record[1],
+                    target: record[2],
+                }
+                console.log(result); 
+                return result;
             }
         })
         .catch(e => {console.log(e)});
@@ -151,9 +161,9 @@ module.exports = class DataGraph {
             MATCH 
                 (a:DATA_NODE)-[r:DATA_EDGE]->(b:DATA_NODE)
             WHERE
-                id(a) = $source
+                a.id = $source
             AND 
-                id(b) = $target
+                b.id = $target
             RETURN r 
         `;
         
@@ -192,25 +202,23 @@ module.exports = class DataGraph {
                 MATCH 
                     (a:DATA_NODE)-[r:DATA_EDGE]->(b:DATA_NODE)
                 RETURN 
-                    r
+                    r, a.id as source, b.id as target
             `;
-
+        
         return session.readTransaction( tx => tx.run(cypher))
-        .then(res => {
-            // console.log(res.records);
-            session.close();
-            return res.records.map(rec => {
-                var record = rec["_fields"][0];
-                return {
-                    id: record["identity"].toNumber(),
-                    source: record["start"].toNumber(),
-                    target: record["end"].toNumber(),
-                    types: record["type"],
-                    props: record["properties"]
-                }
-            });
-        })
-        .catch(e => {console.log(e)});
+            .then(res => {
+                session.close();
+                return res.records.map(rec => {
+                    var record = rec["_fields"];
+                    return {
+                        type: record[0].type,
+                        source: record[1],
+                        target: record[2],
+                        id: record[0].properties.id,    
+                        props: record[0].properties
+                    }
+                });
+            }).catch(e => {console.log(e)});
     }
 
     getGraph()

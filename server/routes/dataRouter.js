@@ -60,7 +60,7 @@ router.route('/nodes/:nodeID')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
 .get(cors.cors, (req,res,next) => {
     datagraph
-    .getNode(parseInt(req.params.nodeID))
+    .getNode(req.params.nodeID)
     .then(result => {
         res.json(result)
     }, err => next(err))
@@ -82,6 +82,7 @@ router.route('/edges')
     .addEdge(
         req.body.source, 
         req.body.target, 
+        req.body.type,
         req.body.operation
     )
     .then((newEdge) => {res.json(newEdge)},
@@ -94,8 +95,7 @@ router.route('/edges/:source/:target')
 .get(cors.cors, (req,res,next) => {
     datagraph
     .getEdge(
-        parseInt(req.params.source), 
-        parseInt(req.params.target)
+        req.params.source, req.params.target
     )
     .then(result => {
         res.json(result)
