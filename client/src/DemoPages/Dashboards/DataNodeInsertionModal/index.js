@@ -28,39 +28,49 @@ class ModalExample extends React.Component {
             alert("You must provide a node name");
             return;
         }
-        this.props.addDataNode(this.rawNodeName.value, "raw");
+        this.props.addDataNode(this.rawNodeName.value, "RAW");
         this.props.toggle();
     }
 
     handleMultipleDatasets(curOptions) 
     {
-       
         this.setState({joinDatasets: curOptions});
-        console.log(this.state.joinDatasets);
     }
 
-    handleSubmitJoin()
+    async handleSubmitJoin()
     {
         if (this.joinNodeName.value === "") 
         {
             alert("You must provide a node name");
             return;
         }
-        this.props.addDataNode(this.joinNodeName.value, "joined");
+
+        
+        let newNodeId= await this.props.addDataNode(this.joinNodeName.value, "JOINED");
+
         this.state.joinDatasets.forEach((joinData) => {
-            this.props.addDataEdge(joinData.value, this.joinNodeName.value, "join", null);
+            this.props.addDataEdge(joinData.value, newNodeId, "JOIN", null);
         });
     }
 
-    handleSubmitTransform()
+    async handleSubmitTransform()
     {
-        if (this.transformNodeName.value === "") 
+        if (this.sourceNode.value === "") 
         {
             alert("You must provide a node name");
             return;
         }
-        this.props.addDataNode(this.transformNodeName.value, "transformed");
-        this.props.addDataEdge(this.transformDataset.value, this.transformNodeName.value, "transform", this.transformSpecs.value !== "" ? JSON.parse(this.transformSpecs.value) : {});
+        var specs = this.transformSpecs.value;
+        var sourceNode = this.sourceNode.value;
+        
+        let newNodeId = await this.props.addDataNode(this.transformNodeName.value, "TRANSFORMED")
+        this.props.addDataEdge(
+            sourceNode, 
+            newNodeId, 
+            "TRANSFORM", 
+            specs !== "" ? JSON.parse(specs) : {}
+        );
+
     }
 
     render() {
@@ -119,7 +129,7 @@ class ModalExample extends React.Component {
                                         <Label for="rawNodeType" md={2}>Node type</Label>
                                         <Col md={2}>
                                             <Input type="select" name="rawNodeType" id="rawNodeType" disabled innerRef={(input) => this.rawNodeType = input}>
-                                                <option>raw</option>
+                                                <option>RAW</option>
                                             </Input>
                                         </Col>
                                     </Row>
@@ -144,7 +154,7 @@ class ModalExample extends React.Component {
                                         <Col md={4}>
                                             <Select 
                                                 isMulti options={
-                                                    this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.data.label, label: dataset.data.label}) ) 
+                                                    this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.id, label: dataset.data.label}) ) 
                                                 }
                                                 onChange={this.handleMultipleDatasets.bind(this)}
                                             />
@@ -152,7 +162,7 @@ class ModalExample extends React.Component {
                                         <Label for="joinNodeType" md={2}>Node type</Label>
                                         <Col md={2}>
                                             <Input type="select" name="joinNodeType" id="joinNodeType" disabled innerRef={(input) => this.joinNodeType = input}>
-                                                <option>join</option>
+                                                <option>JOIN</option>
                                             </Input>
                                         </Col>
                                     </Row>
@@ -173,15 +183,15 @@ class ModalExample extends React.Component {
                                 <small>Apply a transformation to a data node</small>
                                 <Form>
                                     <Row className="form-group">
-                                        <Label for="transformDataset" md={3}>Select a node</Label>
+                                        <Label for="sourceNode" md={3}>Select a node</Label>
                                         <Col md={5}>
                                             <Input 
                                                 type="select" 
-                                                name="transformDataset" 
-                                                id="transformDataset" 
-                                                innerRef={(input) => this.transformDataset = input}
+                                                name="sourceNode" 
+                                                id="sourceNode" 
+                                                innerRef={(input) => this.sourceNode = input}
                                             >
-                                                {this.props.datagraph.datagraph.nodes.map((dataset) => (<option key={dataset.id}>{dataset.id}</option>))}
+                                                {this.props.datagraph.datagraph.nodes.map((dataset) => (<option key={dataset.id} value={dataset.id}>{dataset.data.label}</option>))}
                                             </Input>
                                         </Col>
                                         
@@ -194,7 +204,7 @@ class ModalExample extends React.Component {
                                                 disabled 
                                                 innerRef={(input) => this.transformNodeType = input}
                                             >
-                                                <option>transform</option>
+                                                <option>TRANSFORM</option>
                                             </Input>
                                         </Col>
                                     </Row>

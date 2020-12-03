@@ -2,7 +2,7 @@ import * as ActionTypes from './DataGraphActionTypes';
 
 export const DataGraph = (state = {errMess: null,
                                 datagraph: {nodes: [], edges: []}}, action) => {
-    
+
     switch (action.type) {
         case ActionTypes.ADD_DATA_NODE:
             var x = Math.random() * 100;
@@ -10,7 +10,8 @@ export const DataGraph = (state = {errMess: null,
 
             var nodeType = action.payload.type;
             var uiType;
-            if (nodeType === "raw") 
+            
+            if (nodeType === "RAW") 
             {
                 uiType = "input";
             }
@@ -30,14 +31,13 @@ export const DataGraph = (state = {errMess: null,
         case ActionTypes.ADD_DATA_EDGE:
 
             var edgeType = action.payload.type;
-
             var style = null;
-
-            if (edgeType === "join")
+            
+            if (edgeType === "JOIN")
             {
                 style = {stroke: "red", strokeDasharray: "2,2"}
             }
-            else if (edgeType === "transform")
+            else if (edgeType === "TRANSFORM")
             {
                 style = {stroke: "blue"}
             }
