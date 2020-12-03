@@ -45,7 +45,10 @@ router.route('/nodes')
 .post((req,res,next) => {
     datagraph
     .addNode(req.body.name, req.body.type)
-    .then((newNode) => {console.log(newNode)});
+    .then(result => {
+        res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
 });
 
 router.route('/nodes/:nodeID')

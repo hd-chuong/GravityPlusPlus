@@ -1,7 +1,5 @@
 // business logic layer
 
-// var neo4j = require('neo4j-driver');
-
 module.exports = class DataGraph { 
     constructor()
     {
@@ -20,14 +18,25 @@ module.exports = class DataGraph {
             CREATE 
                 (node:DATA_NODE:${type} { name: $name}) 
             RETURN 
-                toInteger(ID(node)) as id
+                node
         `;
         const params = {name, type};
 
         return session.writeTransaction( tx => tx.run(cypher, params))
         .then(res => {
-            session.close();
-            return res.records[0]["_fields"][0].toNumber();
+            if (res.records.length === 0)
+            {
+                return null;
+            }
+            else 
+            {
+                let record = res.records[0]["_fields"][0];
+                return {
+                    id: record["identity"].toNumber(),
+                    types: record["labels"],
+                    props: record["properties"]
+                };
+            }
         })
         .catch(e => {console.log(e)});
     }
