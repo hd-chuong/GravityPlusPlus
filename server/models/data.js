@@ -134,7 +134,6 @@ module.exports = class DataGraph
             session.close();
             if (res.records.length === 0)
             {
-                console.log("unfix problem");
                 return null;
             } 
             else 

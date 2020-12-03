@@ -33,7 +33,6 @@ export const addDataNode = ({name, type}) => (dispatch) => {
         
         var name = data.props.name;
 
-        console.log("inside thunk: ", id, name);
         // Check if the data is raw
         var type = data.types.filter((item) => item !== "DATA_NODE");
         if (type.indexOf("RAW") !== -1)
@@ -42,7 +41,6 @@ export const addDataNode = ({name, type}) => (dispatch) => {
         }
         dispatch(saveDataNode({id, name, type}));
         
-        console.log("within thunk ", id);
         return id;
     })
     .catch(error => {
@@ -63,13 +61,11 @@ export const saveDataEdge = ({id, source, target, type, data}) => ({
 
 export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
     const newEdge = {source, target, type, operation: data};
-    console.log("newEdge", newEdge);
     return Axios({
         method: "post",
         url: "http://localhost:7473/data/edges",
         data: newEdge
     }).then(response => {
-        console.log(response);
         if (response.statusText !== "OK")
         {
             var error = new Error('Error ' + response.status + ': ' + response.statusText);

@@ -49,7 +49,6 @@ class ModalExample extends React.Component {
         let newNodeId= await this.props.addDataNode(this.joinNodeName.value, "joined");
 
         this.state.joinDatasets.forEach((joinData) => {
-            console.log(joinData);
             this.props.addDataEdge(joinData.value, newNodeId, "join", null);
         });
     }
@@ -63,8 +62,6 @@ class ModalExample extends React.Component {
         }
         var specs = this.transformSpecs.value;
         var sourceNode = this.sourceNode.value;
-        
-        console.log("XXXXXXXXXXXXXXXXXXXXX ", this.transformNodeName.value);
         
         let newNodeId = await this.props.addDataNode(this.transformNodeName.value, "transformed")
         this.props.addDataEdge(
