@@ -1,6 +1,5 @@
 # GravityPlusPlus
-A Graph-based Visualisation Software for Interactive Visualisation Design
-
+A Graph-based Visualisation Software for Interactive Visualisation Design.
 
 Build the docker container.
 
@@ -16,9 +15,9 @@ Access the client side from a browser:
 
 API Server
 
-    http://localhost:7473
+    http://localhost:7473/
 
 Neo4J Browser access
 
-    http://localhost:7474
+    http://localhost:7474/
 
