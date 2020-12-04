@@ -108,5 +108,14 @@ router.route('/edges/:source/:target')
       .catch(err => next(err));
   });
 
-
+router.route('/subgraph/:target')
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
+  datagraph
+    .getSubgraphTo(req.params.target)
+    .then(result => {
+      res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
+});
 module.exports = router;

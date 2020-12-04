@@ -223,4 +223,32 @@ module.exports = class DataGraph {
     this.getAllEdges();
     this.getAllNodes();
   }
+
+  getSubgraphTo(target) {
+    const params = {id : target}
+    
+    const cypher = `
+        MATCH (p:DATA_NODE {id: $id})
+        CALL apoc.path.subgraphNodes(p, {
+          relationshipFilter: "DATA_EDGE",
+            minLevel: 0
+        })
+        yield node
+        with node 
+        OPTIONAL MATCH (node)<-[r]-(x)
+        RETURN node, collect(r) as edge;
+      `;
+    const session = this.neo4jDriver.session();
+    
+    return session.readTransaction(tx => tx.run(cypher, params))
+      .then(res => {
+        session.close();
+        return res.records.map(record => (
+          {
+            node: record["_fields"][0].properties, 
+            edges: record["_fields"][1].map(record => record.properties)}));
+      }).catch(e => {
+        console.log(e)
+      });    
+  } 
 }
