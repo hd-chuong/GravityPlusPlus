@@ -39,6 +39,7 @@ export default class DataGraph extends Component {
     {
         super(props);
     }
+
     render() 
     {
         const elements = [...this.props.datagraph.datagraph.nodes, ...this.props.datagraph.datagraph.edges];
@@ -47,7 +48,7 @@ export default class DataGraph extends Component {
                 <div className="card-header"> Data graph
                 </div>
                 <div style={{ height: 400 }}> 
-                    <ReactFlow elements={elements} >
+                    <ReactFlow elements={elements} onElementClick={(event, element) => {console.log(element)}}>
                         <Controls />  
                         <Background color="#aaa" gap={16} /> 
                     </ReactFlow>

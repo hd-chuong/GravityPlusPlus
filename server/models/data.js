@@ -243,9 +243,15 @@ module.exports = class DataGraph {
     return session.readTransaction(tx => tx.run(cypher, params))
       .then(res => {
         session.close();
+        console.log(res.records[0]["_fields"]);
         return res.records.map(record => (
           {
-            node: record["_fields"][0].properties, 
+            node: {
+              id: record["_fields"][0].properties.id,
+              props: record["_fields"][0].properties,
+              types: record["_fields"][0].labels,
+            }, 
+            // exposing id, type and operations
             edges: record["_fields"][1].map(record => record.properties)}));
       }).catch(e => {
         console.log(e)
