@@ -21,7 +21,9 @@ services:
       - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
 
     volumes:
-      - ./server:/srv/app/server
+      - ./server/routes:/srv/app/server/routes
+      - ./server/models:/srv/app/server/models
+      - ./server/app.js:/srv/app/server/app.js
     
     networks:
       - db-server
@@ -40,7 +42,7 @@ services:
     environment:
       - NEO4J_BROWSER_PORT=${NEO4J_BROWSER_PORT}
       - NEO4J_SERVER_PORT=${NEO4J_SERVER_PORT}
-      - NEO4J_AUTH=neo4j/test  
+      - NEO4J_AUTH=none
       - NEO4J_dbms_logs_query_enabled=INFO
       - NEO4J_dbms_directories_import=import
       - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes    
