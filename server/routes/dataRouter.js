@@ -52,7 +52,7 @@ router.route('/nodes')
   })
   .post(cors.corsWithOptions, (req, res, next) => {
     datagraph
-      .addNode(req.body.name, req.body.type)
+      .addNode(req.body.name, req.body.type, req.body.source)
       .then(result => {
         res.json(result)
       }, err => next(err))
