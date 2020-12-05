@@ -20,6 +20,7 @@ class Dashboards extends Component{
             isNewNodeModalOpen: false
         }
         this.toggleNewNodeModal = this.toggleNewNodeModal.bind(this);
+        console.log("re constructor");
     }
 
     toggleNewNodeModal()
@@ -39,7 +40,6 @@ class Dashboards extends Component{
                     <div className="app-main__inner">
                         <DataDashboard 
                             datasets={this.props.datasets} 
-                            tableData={this.props.tableData}
                             datagraph={this.props.datagraph}
 
                             toggleNewNodeModal={this.toggleNewNodeModal}

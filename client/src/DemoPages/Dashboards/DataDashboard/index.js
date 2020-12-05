@@ -4,6 +4,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 // import classnames from 'classnames';
 import {DataSpecsBuilder} from '../../../utils/VegaSpecsBuilder';
 import {View, parse} from 'vega';
+import {cloneDeep} from 'lodash'
 import {
     Row, Col,
     // Button,
@@ -50,6 +51,7 @@ export default class DataDashboard extends Component {
         this.state = {
             currentData: null
         };
+        this.updateCurrentData = this.updateCurrentData.bind(this);
     }
 
     updateCurrentData(dataNodeId)
@@ -69,15 +71,16 @@ export default class DataDashboard extends Component {
             }
         })
         .then(data => {
-
             // resort to Vega to automatically return the data
             // Vega data is based on a dataflow graph
-
             const specs = DataSpecsBuilder(data, this.props.datasets.datasets);
             const view = new View(parse(specs)).renderer("none").initialize();
             view.toSVG();
-            this.setState({currentData: view.data(dataNodeId)});
-            console.log(this.state.currentData)
+            return view.data(dataNodeId);
+        })
+        .then(data => {
+            console.log(data);
+            this.setState({currentData: cloneDeep(data)});
         })
         .catch(error => {
             alert("Unable to view the data: " + error.message);    

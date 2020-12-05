@@ -15,6 +15,12 @@ class Nav extends Component {
     {
         super(props);
     }
+
+    shouldComponentUpdate()
+    {
+        return false;
+    }
+
     state = {};
 
     handleFiles(files)
@@ -34,9 +40,9 @@ class Nav extends Component {
                     <ul className="metismenu-container">
                         <li className="metismenu-item" >                            
                             <ReactFileReader handleFiles={this.handleFiles.bind(this)} fileTypes={['.csv', '.json']}>
-                                <a className="metismenu-link" target="_blank">
+                                <div className="metismenu-link" target="_blank">
                                     <i className="metismenu-icon fa fa-upload fa-lg"></i> Upload new dataset
-                                </a>
+                                </div>
                             </ReactFileReader>
                         </li>
                     </ul>
@@ -55,9 +61,9 @@ class Nav extends Component {
                 <div className="metismenu vertical-nav-menu" active>
                     <ul className="metismenu-container">
                         <li className="metismenu-item" onClick={this.props.toggleNewNodeModal}>                            
-                            <a className="metismenu-link" target="_blank">
+                            <div className="metismenu-link" target="_blank">
                                 <i className="metismenu-icon fa fa-asterisk fa-lg"></i> Add new Node
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </div>

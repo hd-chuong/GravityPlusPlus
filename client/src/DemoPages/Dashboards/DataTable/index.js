@@ -31,15 +31,14 @@ export default class DataTable extends Component {
     }
 
     render() {
-
-        if (this.props.dataset === null || this.props.dataset === undefined) return <div></div>;
-        const headers = AttributeExtracter(this.props.dataset[0]);
-        const data = this.props.dataset.slice(0, Math.min(MAX_ROWS_DISPLAYED, this.props.dataset.dataset.length));
+        if (this.props.tableData === null || this.props.tableData === undefined) return <div></div>;
+        const headers = AttributeExtracter(this.props.tableData[0]);
+        const data = this.props.tableData.slice(0, Math.min(MAX_ROWS_DISPLAYED, this.props.tableData.length));
         
         return (
             <Card className="main-card mb-3">
-                    <div className="card-header">{this.props.dataset.name}
-                    </div>
+                    {/* <div className="card-header">{this.props.tableData.name}
+                    </div> */}
                     <div className="table-responsive">
                         <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                             <thead>
