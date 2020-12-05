@@ -21,7 +21,9 @@ services:
       - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
 
     volumes:
-      - ./server:/srv/app/server
+      - ./server/routes:/srv/app/server/routes
+      - ./server/models:/srv/app/server/models
+      - ./server/app.js:/srv/app/server/app.js
     
     networks:
       - db-server
