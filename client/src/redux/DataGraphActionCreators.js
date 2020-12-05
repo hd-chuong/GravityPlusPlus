@@ -1,17 +1,19 @@
 import * as ActionTypes from './DataGraphActionTypes';
 import Axios from 'axios';
 
-export const saveDataNode = ({id, name, type}) => ({
+export const saveDataNode = ({id, name, type, source}) => ({
     type: ActionTypes.ADD_DATA_NODE,
     payload: {
         name,
         type,
-        id
+        id, 
+        source
     }
 });
 
-export const addDataNode = ({name, type}) => (dispatch) => {
-    const newNode = {name, type};
+// source: the tabular data itself
+export const addDataNode = ({name, type, source}) => (dispatch) => {
+    const newNode = {name, type, source};
 
     return Axios({
         method: "post",
@@ -39,13 +41,13 @@ export const addDataNode = ({name, type}) => (dispatch) => {
         {
             type = "RAW";
         }
-        dispatch(saveDataNode({id, name, type}));
+        dispatch(saveDataNode({id, name, type, source}));
         
         return id;
     })
     .catch(error => {
         alert("Fail to add new node: " + error.message);    
-    });;
+    });
 }
 
 export const saveDataEdge = ({id, source, target, type, data}) => ({

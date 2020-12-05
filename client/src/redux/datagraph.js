@@ -23,8 +23,8 @@ export const DataGraph = (state = {errMess: null,
             var newDataNode = {
                 id: action.payload.id,
                 type: uiType,
-                data: {label: action.payload.name, type: nodeType},
-                position: {x, y}
+                data: {label: action.payload.name, type: nodeType, source: action.payload.source},
+                position: {x, y},
             };
             return {...state, datagraph: {edges: state.datagraph.edges, nodes: [...state.datagraph.nodes, newDataNode]}};
 

@@ -127,7 +127,7 @@ const AppMain = ({datasets, datagraph, addDataset, addDataNode, addDataEdge}) =>
             <Route path="/data" component={() => <Dashboards 
                                                     datasets={datasets}
                                                     datagraph={datagraph}
-                                                    tableData={datasets.datasets.filter((dataset) => dataset.filename === useQuery().get("dataView"))[0]}
+                                                    tableData={datasets.datasets.filter((dataset) => dataset.name === useQuery().get("dataView"))[0]}
                                                     
                                                     addDataset={addDataset} 
                                                     addDataNode={addDataNode}

@@ -1,7 +1,9 @@
+import Axios from 'axios';
 import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 // import classnames from 'classnames';
-
+import {DataSpecsBuilder} from '../../../utils/VegaSpecsBuilder';
+import {View, parse} from 'vega';
 import {
     Row, Col,
     // Button,
@@ -38,36 +40,50 @@ import {
 
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
+
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 
 export default class DataDashboard extends Component {
     constructor(props) {
         super(props);
-        
-        // this.state = {
-        //     dropdownOpen: false,
-        //     activeTab1: '11',
-
-        // };
-        // this.toggle = this.toggle.bind(this);
-        // this.toggle1 = this.toggle1.bind(this);
-
+        this.state = {
+            currentData: null
+        };
     }
-    // toggle() {
-    //     this.setState(prevState => ({
-    //         dropdownOpen: !prevState.dropdownOpen
-    //     }));
-    // }
 
-    // toggle1(tab) {
-    //     if (this.state.activeTab1 !== tab) {
-    //         this.setState({
-    //             activeTab1: tab
-    //         });
-    //     }
-    // }
+    updateCurrentData(dataNodeId)
+    {
+        Axios({
+            method: "get",
+            url: `http://localhost:7473/data/subgraph/${dataNodeId}`,
+        }).then(response => {
+            if (response.statusText !== "OK")
+            {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            } 
+            else {
+                return response.data;
+            }
+        })
+        .then(data => {
 
+            // resort to Vega to automatically return the data
+            // Vega data is based on a dataflow graph
+
+            const specs = DataSpecsBuilder(data, this.props.datasets.datasets);
+            const view = new View(parse(specs)).renderer("none").initialize();
+            view.toSVG();
+            this.setState({currentData: view.data(dataNodeId)});
+            console.log(this.state.currentData)
+        })
+        .catch(error => {
+            alert("Unable to view the data: " + error.message);    
+        });
+    }
+    
     render() {
         return (
             <Fragment>
@@ -88,7 +104,7 @@ export default class DataDashboard extends Component {
                                 transitionAppearTimeout={0}
                                 transitionEnter={false}
                                 transitionLeave={false}>
-                                    <DataGraph datagraph={this.props.datagraph}/>
+                                    <DataGraph datagraph={this.props.datagraph} updateCurrentData={this.updateCurrentData.bind(this)}/>
                                 </ReactCSSTransitionGroup>
                             </Col>
                         </Row>                       
@@ -101,7 +117,7 @@ export default class DataDashboard extends Component {
                                 transitionAppearTimeout={0}
                                 transitionEnter={false}
                                 transitionLeave={false}>
-                                    <DataTable tableData={this.props.tableData}/>
+                                    <DataTable tableData={this.state.currentData}/>
                                 </ReactCSSTransitionGroup>
                             </Col>
                         </Row>

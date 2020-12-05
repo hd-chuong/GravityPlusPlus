@@ -21,7 +21,7 @@ class Nav extends Component {
     {
         const file = files[0];
         var filename = path.basename(file.name).split('.')[0];       
-        AsyncDataFileHandler(file).then((data) => {this.props.addDataset({filename, dataset: data})});
+        AsyncDataFileHandler(file).then((data) => {this.props.addDataset({name: filename, dataset: data})});
     }
 
     render() {
@@ -46,8 +46,7 @@ class Nav extends Component {
                         icon: 'fa fa-table',
                         label: 'Current datasets',
                         content: this.props.datasets.datasets.map((record) => ({
-                                                                                label: record.filename, 
-                                                                                // to: `#/data?dataView=${record.filename}`
+                                                                                label: record.name, 
                                                                             })),
                     }
                 ]} active className="vertical-nav-menu" iconNamePrefix=""/>

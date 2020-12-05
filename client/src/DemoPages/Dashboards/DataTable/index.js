@@ -15,32 +15,9 @@ import {
 
 import PageTitle from '../../../Layout/AppMain/PageTitle';
 
-import {
-    AreaChart, Area, Line,
-    ResponsiveContainer,
-    Bar,
-    BarChart,
-    ComposedChart,
-    CartesianGrid,
-    Tooltip,
-    LineChart
-} from 'recharts';
-
-import {
-    faAngleUp,
-    faArrowRight,
-    faArrowUp,
-    faArrowLeft,
-    faAngleDown
-} from '@fortawesome/free-solid-svg-icons';
-
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import AttributeExtracter from '../../../utils/AttributeExtractor';
 
-
 const MAX_ROWS_DISPLAYED = 5;
-
-
 
 export default class DataTable extends Component {
     constructor(props) {
@@ -48,21 +25,20 @@ export default class DataTable extends Component {
 
         this.state = {
             dropdownOpen: false,
-            activeTab1: '11',
-            dataset: props.tableData
+            activeTab1: '11'
         };
 
     }
 
     render() {
 
-        if (this.state.dataset === null || this.state.dataset === undefined) return <div></div>;
-        const headers = AttributeExtracter(this.state.dataset.dataset[0]);
-        const data = this.state.dataset.dataset.slice(0, Math.min(MAX_ROWS_DISPLAYED, this.state.dataset.dataset.length));
+        if (this.props.dataset === null || this.props.dataset === undefined) return <div></div>;
+        const headers = AttributeExtracter(this.props.dataset[0]);
+        const data = this.props.dataset.slice(0, Math.min(MAX_ROWS_DISPLAYED, this.props.dataset.dataset.length));
         
         return (
             <Card className="main-card mb-3">
-                    <div className="card-header">{this.state.dataset.filename}
+                    <div className="card-header">{this.props.dataset.name}
                     </div>
                     <div className="table-responsive">
                         <table className="align-middle mb-0 table table-borderless table-striped table-hover">
