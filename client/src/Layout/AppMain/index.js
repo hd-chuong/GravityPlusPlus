@@ -123,14 +123,15 @@ const AppMain = ({datasets, datagraph, addDataset, addDataNode, addDataEdge}) =>
                     </div>
                 </div>
             }>
-
-            <Route path="/data" component={() => <Dashboards 
-                                                    datasets={datasets}
-                                                    datagraph={datagraph}
-                                                    addDataset={addDataset} 
-                                                    addDataNode={addDataNode}
-                                                    addDataEdge={addDataEdge}
-                                                />}/>
+            <Route path="/data">
+                <Dashboards 
+                    datasets={datasets}
+                    datagraph={datagraph}
+                    addDataset={addDataset} 
+                    addDataNode={addDataNode}
+                    addDataEdge={addDataEdge}
+                />
+            </Route>
             </Suspense>
 
             <Route exact path="/" render={() => (

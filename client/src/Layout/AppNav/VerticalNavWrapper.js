@@ -16,11 +16,6 @@ class Nav extends Component {
         super(props);
     }
 
-    shouldComponentUpdate()
-    {
-        return false;
-    }
-
     state = {};
 
     handleFiles(files)
@@ -33,8 +28,7 @@ class Nav extends Component {
     render() {
         return (
             <Fragment>
-                <ResizableBox width={200} height={200}>
-                
+                <ResizableBox width={200} height={200}>  
                 <h5 className="app-sidebar__heading">Datasets</h5>
                 <div className="metismenu vertical-nav-menu">
                     <ul className="metismenu-container">
