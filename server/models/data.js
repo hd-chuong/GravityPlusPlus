@@ -12,18 +12,19 @@ module.exports = class DataGraph {
     this.neo4jDriver = neo4jDriver;
   }
 
-  addNode(name, type) {
+  addNode(name, type, source) {
     const session = this.neo4jDriver.session();
     const cypher = `
             CREATE 
-                (node:DATA_NODE:${type} { id: $id, name: $name }) 
+                (node:DATA_NODE:${type} { id: $id, name: $name, source: $source }) 
             RETURN 
                 node
         `;
     const params = {
       name,
       type,
-      id: uuidv4()
+      id: uuidv4(),
+      source
     };
 
     return session
@@ -223,4 +224,41 @@ module.exports = class DataGraph {
     this.getAllEdges();
     this.getAllNodes();
   }
+
+  getSubgraphTo(target) {
+    const params = {id : target}
+    
+    const cypher = `
+        MATCH (p:DATA_NODE {id: $id})
+        CALL apoc.path.subgraphNodes(p, {
+          relationshipFilter: "DATA_EDGE<",
+            minLevel: 0
+        })
+        yield node
+        with node 
+        OPTIONAL MATCH (node)<-[r]-(x)
+        RETURN node, collect(r) as edge, collect(x.id) as source_id;
+      `;
+    const session = this.neo4jDriver.session();
+    
+    return session.readTransaction(tx => tx.run(cypher, params))
+      .then(res => {
+        session.close();
+
+        let result = res.records.map(record => (
+          {
+            node: {
+              id: record["_fields"][0].properties.id,
+              props: record["_fields"][0].properties,
+              types: record["_fields"][0].labels,
+            }, 
+            // exposing id, type and operations
+            edges: record["_fields"][1].map((edge, i) => ({properties: edge.properties, source_id: record["_fields"][2][i] }) ) 
+            }
+            ));
+        return result;
+      }).catch(e => {
+        console.log(e)
+      });    
+  } 
 }

@@ -41,9 +41,9 @@ class AppSidebar extends Component {
                 <ReactCSSTransitionGroup
                     component="div"
                     className={cx("app-sidebar", backgroundColor, {'sidebar-shadow': enableSidebarShadow})}
-                    transitionName="SidebarAnimation"
-                    transitionAppear={true}
-                    transitionAppearTimeout={1500}
+                    // transitionName="SidebarAnimation"
+                    // transitionAppear={true}
+                    // transitionAppearTimeout={1500}
                     transitionEnter={false}
                     transitionLeave={false}>
                     {/* <HeaderLogo/> */}

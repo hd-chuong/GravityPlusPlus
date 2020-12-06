@@ -1,10 +1,10 @@
 import * as ActionTypes from './DatasetActionTypes';
 // import {baseUrl} from '../shared/baseUrl';
 
-export const addDataset = ({filename, dataset}) => ({
+export const addDataset = ({name, dataset}) => ({
     type: ActionTypes.ADD_DATASET,
     payload: {
-        filename,
+        name,
         dataset
     }
 });

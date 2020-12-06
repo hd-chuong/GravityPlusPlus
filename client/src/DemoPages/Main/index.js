@@ -76,7 +76,7 @@ const mapStateToProp = state => ({
 
 const mapDispatchToProp = dispatch => ({
     addDataset: (dataset) => dispatch(addDataset(dataset)),
-    addDataNode: (name, type) => dispatch(addDataNode({name, type})),
+    addDataNode: (name, type, source = null) => dispatch(addDataNode({name, type, source})),
     addDataEdge: (source, target, type, data) => dispatch(addDataEdge({source, target, type, data}))
   });
   

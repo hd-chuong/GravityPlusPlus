@@ -28,7 +28,13 @@ class ModalExample extends React.Component {
             alert("You must provide a node name");
             return;
         }
-        this.props.addDataNode(this.rawNodeName.value, "RAW");
+
+        if (this.rawDataset.value === "")
+        {
+            alert("You must select a dataset");
+            return;
+        }
+        this.props.addDataNode(this.rawNodeName.value, "RAW", this.rawDataset.value);
         this.props.toggle();
     }
 
@@ -122,7 +128,7 @@ class ModalExample extends React.Component {
                                         <Label for="rawDataset" md={3}>Select dataset</Label>
                                         <Col md={5}>
                                             <Input type="select" name="rawDataset" id="rawDataset" innerRef={(input) => this.rawDataset = input}>
-                                                {this.props.datasets.datasets.map((dataset) => (<option key={dataset.filename}>{dataset.filename}</option>))}
+                                                {this.props.datasets.datasets.map((dataset) => (<option key={dataset.name} value={dataset.name}>{dataset.name}</option>))}
                                             </Input>
                                         </Col>
                                         

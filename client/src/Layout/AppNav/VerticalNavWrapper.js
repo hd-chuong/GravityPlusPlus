@@ -15,28 +15,28 @@ class Nav extends Component {
     {
         super(props);
     }
+
     state = {};
 
     handleFiles(files)
     {
         const file = files[0];
         var filename = path.basename(file.name).split('.')[0];       
-        AsyncDataFileHandler(file).then((data) => {this.props.addDataset({filename, dataset: data})});
+        AsyncDataFileHandler(file).then((data) => {this.props.addDataset({name: filename, dataset: data})});
     }
 
     render() {
         return (
             <Fragment>
-                <ResizableBox width={200} height={200}>
-                
+                <ResizableBox width={200} height={200}>  
                 <h5 className="app-sidebar__heading">Datasets</h5>
                 <div className="metismenu vertical-nav-menu">
                     <ul className="metismenu-container">
                         <li className="metismenu-item" >                            
                             <ReactFileReader handleFiles={this.handleFiles.bind(this)} fileTypes={['.csv', '.json']}>
-                                <a className="metismenu-link" target="_blank">
+                                <div className="metismenu-link" target="_blank">
                                     <i className="metismenu-icon fa fa-upload fa-lg"></i> Upload new dataset
-                                </a>
+                                </div>
                             </ReactFileReader>
                         </li>
                     </ul>
@@ -46,8 +46,7 @@ class Nav extends Component {
                         icon: 'fa fa-table',
                         label: 'Current datasets',
                         content: this.props.datasets.datasets.map((record) => ({
-                                                                                label: record.filename, 
-                                                                                // to: `#/data?dataView=${record.filename}`
+                                                                                label: record.name, 
                                                                             })),
                     }
                 ]} active className="vertical-nav-menu" iconNamePrefix=""/>
@@ -56,9 +55,9 @@ class Nav extends Component {
                 <div className="metismenu vertical-nav-menu" active>
                     <ul className="metismenu-container">
                         <li className="metismenu-item" onClick={this.props.toggleNewNodeModal}>                            
-                            <a className="metismenu-link" target="_blank">
+                            <div className="metismenu-link" target="_blank">
                                 <i className="metismenu-icon fa fa-asterisk fa-lg"></i> Add new Node
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </div>
