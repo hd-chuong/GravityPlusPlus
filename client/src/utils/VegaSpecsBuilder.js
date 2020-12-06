@@ -1,3 +1,30 @@
+export const AggregationMethods = [
+    "count", 
+    "valid", 
+    "missing", 
+    "distinct", 
+    "sum", 
+    "product",
+    "mean",
+    "average",
+    "variance",
+    "variancep",
+    "stdev",
+    "stdevp",
+    "stderr",
+    "median",
+    "q1",
+    "q3",
+    "ci0",
+    "ci1",
+    "min",
+    "max",
+    "argmin",
+    "argmax",
+    "values"
+];
+
+
 function GetDatasetByName(datasets, filename)
 {
     // datasets as an array

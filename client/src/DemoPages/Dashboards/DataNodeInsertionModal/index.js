@@ -2,14 +2,17 @@ import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
 import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
 import Select from 'react-select';
+import VegaBuilder from './VegaBuilder';
 import classnames from 'classnames';
 
-class ModalExample extends React.Component {
-    constructor(props) {
+class DataNodeInsertionModal extends React.Component {
+    constructor(props) 
+    {
         super(props);
         this.state = {
             activeTab: '1',
-            joinDatasets: []
+            joinDatasets: [],
+            specs: ""
         }
     }
 
@@ -38,6 +41,11 @@ class ModalExample extends React.Component {
         this.props.toggle();
     }
 
+    updateVegaSpecs(newSpecs)
+    {
+        this.setState({specs: newSpecs});
+    }
+
     handleMultipleDatasets(curOptions) 
     {
         this.setState({joinDatasets: curOptions});
@@ -50,7 +58,6 @@ class ModalExample extends React.Component {
             alert("You must provide a node name");
             return;
         }
-
         
         let newNodeId= await this.props.addDataNode(this.joinNodeName.value, "JOINED");
 
@@ -66,7 +73,8 @@ class ModalExample extends React.Component {
             alert("You must provide a node name");
             return;
         }
-        var specs = this.transformSpecs.value;
+        var specs = this.state.specs;
+        console.log(specs);
         var sourceNode = this.sourceNode.value;
         
         let newNodeId = await this.props.addDataNode(this.transformNodeName.value, "TRANSFORMED")
@@ -74,9 +82,8 @@ class ModalExample extends React.Component {
             sourceNode, 
             newNodeId, 
             "TRANSFORM", 
-            specs !== "" ? JSON.parse(specs) : {}
+            specs !== "" ? specs : {}
         );
-
     }
 
     render() {
@@ -87,7 +94,7 @@ class ModalExample extends React.Component {
                         <div className="card-header-title">Add a data node</div>
                         <Nav>
                             <NavItem>
-                                <NavLink href="javascript:void(0);"
+                                <NavLink
                                             className={classnames({active: this.state.activeTab === '1'})}
                                             onClick={() => {
                                                 this.toggle('1');
@@ -97,7 +104,7 @@ class ModalExample extends React.Component {
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="javascript:void(0);"
+                                <NavLink
                                             className={classnames({active: this.state.activeTab === '2'})}
                                             onClick={() => {
                                                 this.toggle('2');
@@ -107,7 +114,7 @@ class ModalExample extends React.Component {
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="javascript:void(0);"
+                                <NavLink
                                             className={classnames({active: this.state.activeTab === '3'})}
                                             onClick={() => {
                                                 this.toggle('3');
@@ -125,8 +132,8 @@ class ModalExample extends React.Component {
                                 <small>Import a raw dataset into the data graph</small>
                                 <Form>
                                     <Row className="form-group">
-                                        <Label for="rawDataset" md={3}>Select dataset</Label>
-                                        <Col md={5}>
+                                        <Label for="rawDataset" md={2}>Select dataset</Label>
+                                        <Col md={6}>
                                             <Input type="select" name="rawDataset" id="rawDataset" innerRef={(input) => this.rawDataset = input}>
                                                 {this.props.datasets.datasets.map((dataset) => (<option key={dataset.name} value={dataset.name}>{dataset.name}</option>))}
                                             </Input>
@@ -140,24 +147,28 @@ class ModalExample extends React.Component {
                                         </Col>
                                     </Row>
 
-                                    <FormGroup>
-                                        <Label for="nodeid">Node name</Label>
-                                        <Input type="text" name="rawNodeName" id="rawNodeName" innerRef={(input) => this.rawNodeName = input}
+                                    <Row className="form-group">
+                                        <Label for="nodeid" md={2}>Node name</Label>
+                                        <Col>
+                                            <Input type="text" name="rawNodeName" id="rawNodeName" innerRef={(input) => this.rawNodeName = input}
                                                 placeholder="Enter the node name"></Input>
-                                    </FormGroup>
-
+                                        </Col>
+                                    </Row>
+                                
                                     <Button 
                                         color="primary" 
                                         className="float-right" 
-                                        onClick={this.handleSubmitRaw.bind(this)}>Add Node</Button>{' '}  
+                                        onClick={this.handleSubmitRaw.bind(this)}>
+                                            Add Node
+                                    </Button>{' '}  
                                 </Form>
                             </TabPane>
                             <TabPane tabId="2">
                                 <small>Join two or more datasets.</small>
                                 <Form>
                                     <Row className="form-group">
-                                        <Label for="joinDataset" md={3}>Select at least two</Label>
-                                        <Col md={4}>
+                                        <Label for="joinDataset" md={2}>Select nodes</Label>
+                                        <Col md={6}>
                                             <Select 
                                                 isMulti options={
                                                     this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.id, label: dataset.data.label}) ) 
@@ -173,11 +184,13 @@ class ModalExample extends React.Component {
                                         </Col>
                                     </Row>
 
-                                    <FormGroup>
-                                        <Label for="joinNodeName"></Label>
-                                        <Input type="text" name="joinNodeName" id="joinNodeName" innerRef={(input) => this.joinNodeName = input}
-                                                placeholder="Enter the node name"/>
-                                    </FormGroup>
+                                    <Row className="form-group">
+                                        <Label for="joinNodeName" md={2}>Node name</Label>
+                                        <Col>
+                                            <Input type="text" name="joinNodeName" id="joinNodeName" innerRef={(input) => this.joinNodeName = input}
+                                                    placeholder="Enter the node name"/>
+                                        </Col>
+                                    </Row>
 
                                     <Button 
                                         color="primary" 
@@ -189,14 +202,18 @@ class ModalExample extends React.Component {
                                 <small>Apply a transformation to a data node</small>
                                 <Form>
                                     <Row className="form-group">
-                                        <Label for="sourceNode" md={3}>Select a node</Label>
-                                        <Col md={5}>
+                                        <Label for="sourceNode" md={2}>Select a node</Label>
+                                        <Col md={6}>
                                             <Input 
                                                 type="select" 
                                                 name="sourceNode" 
                                                 id="sourceNode" 
-                                                innerRef={(input) => this.sourceNode = input}
+                                                innerRef={(input) => {
+                                                    this.sourceNode = input;
+                                                }}
+                                                onChange={(event) => {this.props.updateCurrentData(event.target.value)}}
                                             >
+                                                <option key={0} value={null}>Select a node</option>
                                                 {this.props.datagraph.datagraph.nodes.map((dataset) => (<option key={dataset.id} value={dataset.id}>{dataset.data.label}</option>))}
                                             </Input>
                                         </Col>
@@ -217,7 +234,7 @@ class ModalExample extends React.Component {
 
                                     <Row className="form-group">
                                         <Label for="nodeid" md={2}>Node name</Label>
-                                        <Col md={9}>
+                                        <Col>
                                             <Input 
                                                 type="text" 
                                                 name="transformNodeName" 
@@ -227,27 +244,23 @@ class ModalExample extends React.Component {
                                             </Input>
                                         </Col>
                                     </Row>
-
-                                    <Row className="form-group">
-                                        <Input 
-                                            type="textarea" 
-                                            rows={8} 
-                                            name="vega-specs" 
-                                            id="vega-specs" 
-                                            placeholder="Vega specification"
-                                            innerRef={(input) => this.transformSpecs = input}
-                                        />
-                                    </Row>
+                                    
+                                    <VegaBuilder 
+                                        currentData={this.props.currentData} 
+                                        updateVegaSpecs={this.updateVegaSpecs.bind(this)}
+                                    />
+                                    
                                     <Row className="form-group">
                                         <Col>
                                             <Button 
                                                 color="primary" 
                                                 className="float-right"
-                                                onClick={this.handleSubmitTransform.bind(this)}>Add Node</Button>{' '}  
+                                                onClick={this.handleSubmitTransform.bind(this)}>
+                                                Add Node
+                                            </Button>{' '}  
                                         </Col>
                                     </Row>
                                 </Form>
-                            
                             </TabPane>
                         </TabContent>
                     </ModalBody>
@@ -261,4 +274,4 @@ class ModalExample extends React.Component {
     }
 }
 
-export default ModalExample;
+export default DataNodeInsertionModal;

@@ -6,7 +6,7 @@ import {
     CardTitle, Button, ModalHeader, ModalBody, ModalFooter
 } from 'reactstrap';
 
-import ModalExample from './Modal';
+import DataNodeInsertionModal from './Modal';
 import ModalBackdrop from './ModalBackdrop';
 import ModalCustomCloseButton from './ModalCustomCloseButton';
 import ModalCustomCloseIcon from './ModalCustomCloseIcon';
@@ -38,7 +38,7 @@ class ModalsExample extends React.Component {
                                     <CardTitle>
                                         Bootstrap 4 Modals
                                     </CardTitle>
-                                    <ModalExample/>
+                                    <DataNodeInsertionModal/>
                                     <ModalCustomCloseButton/>
                                     <ModalCustomCloseIcon/>
                                     <ModalCustomTimeout/>

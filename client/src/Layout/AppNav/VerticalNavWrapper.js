@@ -28,15 +28,14 @@ class Nav extends Component {
     render() {
         return (
             <Fragment>
-                <ResizableBox width={200} height={200}>  
                 <h5 className="app-sidebar__heading">Datasets</h5>
                 <div className="metismenu vertical-nav-menu">
                     <ul className="metismenu-container">
                         <li className="metismenu-item" >                            
                             <ReactFileReader handleFiles={this.handleFiles.bind(this)} fileTypes={['.csv', '.json']}>
-                                <div className="metismenu-link" target="_blank">
+                                <a className="metismenu-link" target="_blank">
                                     <i className="metismenu-icon fa fa-upload fa-lg"></i> Upload new dataset
-                                </div>
+                                </a>
                             </ReactFileReader>
                         </li>
                     </ul>
@@ -63,7 +62,6 @@ class Nav extends Component {
                 </div>
 
                 {/* <MetisMenu  content={DomainNav} activeLinkFromLocation className="vertical-nav-menu" iconNamePrefix=""/> */}
-                </ResizableBox>
             </Fragment>
         );
     }
