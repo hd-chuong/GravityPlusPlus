@@ -1,4 +1,4 @@
-export default function AttributeExtracter(obj)
+export default function AttributeExtractor(obj)
 {
     var ans = [];
     for (var key in obj) {

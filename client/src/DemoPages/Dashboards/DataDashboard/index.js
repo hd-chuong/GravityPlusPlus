@@ -49,7 +49,8 @@ export default class DataDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentData: null
+            currentData: null,
+            currentDataLabel: null
         };
         this.updateCurrentData = this.updateCurrentData.bind(this);
     }
@@ -79,8 +80,13 @@ export default class DataDashboard extends Component {
             return view.data(dataNodeId);
         })
         .then(data => {
-            console.log(data);
-            this.setState({currentData: cloneDeep(data)});
+            const labels = this.props.datagraph.datagraph.nodes.filter(node => node.id === dataNodeId);
+
+            if (labels.length !== 0)
+            {
+                this.setState({currentData: data});
+                this.setState({currentDataLabel: labels[0].data.label});
+            }
         })
         .catch(error => {
             alert("Unable to view the data: " + error.message);    
@@ -120,7 +126,7 @@ export default class DataDashboard extends Component {
                                 transitionAppearTimeout={0}
                                 transitionEnter={false}
                                 transitionLeave={false}>
-                                    <DataTable tableData={this.state.currentData}/>
+                                    <DataTable label={this.state.currentDataLabel} tableData={this.state.currentData}/>
                                 </ReactCSSTransitionGroup>
                             </Col>
                         </Row>
@@ -131,6 +137,8 @@ export default class DataDashboard extends Component {
                             addDataNode={this.props.addDataNode}
                             addDataEdge={this.props.addDataEdge}
                             datagraph={this.props.datagraph}
+                            updateCurrentData={this.updateCurrentData}
+                            currentData={this.state.currentData}
                         />
                     </div>
                 </ReactCSSTransitionGroup>
