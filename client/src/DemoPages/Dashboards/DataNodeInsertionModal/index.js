@@ -64,6 +64,7 @@ class DataNodeInsertionModal extends React.Component {
         this.state.joinDatasets.forEach((joinData) => {
             this.props.addDataEdge(joinData.value, newNodeId, "JOIN", null);
         });
+        this.props.toggle();
     }
 
     async handleSubmitTransform()
@@ -74,7 +75,7 @@ class DataNodeInsertionModal extends React.Component {
             return;
         }
         var specs = this.state.specs;
-        console.log(specs);
+        
         var sourceNode = this.sourceNode.value;
         
         let newNodeId = await this.props.addDataNode(this.transformNodeName.value, "TRANSFORMED")
@@ -84,6 +85,8 @@ class DataNodeInsertionModal extends React.Component {
             "TRANSFORM", 
             specs !== "" ? specs : {}
         );
+
+        this.props.toggle();
     }
 
     render() {

@@ -19,7 +19,8 @@ export const addDataNode = ({name, type, source}) => (dispatch) => {
         method: "post",
         url: "http://localhost:7473/data/nodes",
         data: newNode
-    }).then(response => {
+    })
+    .then(response => {
         if (response.statusText !== "OK")
         {
             var error = new Error('Error ' + response.status + ': ' + response.statusText);
@@ -68,14 +69,12 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
         url: "http://localhost:7473/data/edges",
         data: newEdge
     }).then(response => {
-        if (response.statusText !== "OK")
-        {
+        if (response.statusText !== "OK") {
             var error = new Error('Error ' + response.status + ': ' + response.statusText);
             error.response = response;
             throw error;
         }   
-        else 
-        {
+        else {
             return response.data;
         }
     })
@@ -93,3 +92,64 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
         alert("Fail to add new edge: " + error.message);    
     });
 }
+
+// export const removeSubgraph = ({id}) => (dispatch) => {
+//     return Axios({
+//         method: "delete",
+//         url: `http://localhost:7473/subgraph/${id}`,
+//     }).then(response => 
+//     {
+//         if (response.statusText !== "OK")
+//         {
+//             var error = new Error('Error ' + response.status + ': ' + response.statusText);
+//             error.response = response;
+//             throw error;
+//         }   
+//         else 
+//         {
+//             return response.data;
+//         }
+//     }).then(deletedNodeArray => ({
+//         type: ActionTypes.REMOVE_SUBGRAPH_FROM_NODES,
+//         payload: deletedNodeArray
+//     })).catch(error => {
+//         alert("Fail to add new edge: " + error.message);    
+//     });   
+// }
+
+export const removeDataNode = ({id}) => (dispatch) => {
+    return Axios({
+        method: "delete",
+        url: `http://localhost:7473/data/nodes/${id}`,
+    }).then(response => {
+        if (response.statusText !== "OK")
+        {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }   
+        else 
+        {
+            return response.data;
+        }
+    }).then(() => dispatch({
+            type: ActionTypes.REMOVE_DATA_NODE,
+            payload: {id}
+        })
+    ).catch(error => {
+        alert("Fail to delete a node: " + error.message);    
+    });
+};
+
+export const setDataNode = ({id, params}) => ({
+    type: ActionTypes.SET_DATA_NODE,
+    payload: {id, params}
+});
+
+export const removeEdges = ({id, direction}) => ({
+    type: ActionTypes.REMOVE_EDGES,
+    payload: {
+        id, 
+        direction
+    }
+});
