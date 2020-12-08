@@ -23,7 +23,7 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
 
-const AppMain = ({datasets, datagraph, addDataset, addDataNode, addDataEdge}) => {
+const AppMain = ({datasets, datagraph, addDataset, removeDataset, addDataNode, removeDataNode, addDataEdge}) => {
     return (
         <Fragment>
 
@@ -128,8 +128,11 @@ const AppMain = ({datasets, datagraph, addDataset, addDataNode, addDataEdge}) =>
                     datasets={datasets}
                     datagraph={datagraph}
                     addDataset={addDataset} 
+                    removeDataset={removeDataset}
                     addDataNode={addDataNode}
                     addDataEdge={addDataEdge}
+
+                    removeDataNode={removeDataNode}
                 />
             </Route>
             </Suspense>

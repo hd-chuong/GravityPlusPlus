@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactFlow, {Controls, Background} from 'react-flow-renderer';
+import ReactFlow, {MiniMap, Controls, Background, removeElements} from 'react-flow-renderer';
 import {Card} from 'reactstrap';
 
 // examples of data to be passed into react flow 
@@ -40,6 +40,12 @@ export default class DataGraph extends Component {
     constructor(props)
     {
         super(props);
+        this.onElementsRemove = this.onElementsRemove.bind(this);
+    }
+
+    onElementsRemove(elementsToRemove)
+    {
+        console.log(elementsToRemove);
     }
 
     render() 
@@ -50,7 +56,14 @@ export default class DataGraph extends Component {
                 <div className="card-header"> Data graph
                 </div>
                 <div style={{ height: 400 }}> 
-                    <ReactFlow elements={elements} onElementClick={(event, element) => {this.props.updateCurrentData(element.id)}}>
+                    <ReactFlow elements={elements} 
+                                onElementClick={(event, element) => {this.props.updateCurrentData(element.id)}}
+                                onElementsRemove={(elements) => 
+                                    elements.map(element => element.id)
+                                    .forEach(e => this.props.deleteNode(e))    
+                                }
+                                >
+                               
                         <Controls />  
                         <Background color="#aaa" gap={16} /> 
                     </ReactFlow>

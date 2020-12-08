@@ -49,8 +49,25 @@ export const DataGraph = (state = {errMess: null,
                 arrowHeadType: 'arrowclosed',
                 data: action.payload.data,
                 style
-            }
-            return {...state, datagraph: {edges: [...state.datagraph.edges, newDataEdge], nodes: state.datagraph.nodes}};
+            };
+            
+            return {
+                ...state, 
+                datagraph: {
+                    edges: [...state.datagraph.edges, newDataEdge], 
+                    nodes: state.datagraph.nodes
+                }
+            };
+        
+        case ActionTypes.REMOVE_DATA_NODE:
+            var nodeId = action.payload.id;
+            return {
+                ...state, 
+                datagraph: {
+                    edges: state.datagraph.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
+                    nodes: state.datagraph.nodes.filter((node) => node.id !== nodeId)
+                }
+            };
 
         default:
             return state;

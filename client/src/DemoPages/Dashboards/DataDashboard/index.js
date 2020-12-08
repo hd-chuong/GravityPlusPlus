@@ -6,38 +6,9 @@ import {DataSpecsBuilder} from '../../../utils/VegaSpecsBuilder';
 import {View, parse} from 'vega';
 import {cloneDeep} from 'lodash'
 import {
-    Row, Col,
-    // Button,
-    // CardHeader,
-    // Card,
-    // CardBody,
-    // Progress,
-    // TabContent,
-    // TabPane,
+    Row, 
+    Col,
 } from 'reactstrap';
-
-// import PageTitle from '../../../Layout/AppMain/PageTitle';
-
-// import {
-//     AreaChart, Area, Line,
-//     ResponsiveContainer,
-//     Bar,
-//     BarChart,
-//     ComposedChart,
-//     CartesianGrid,
-//     Tooltip,
-//     LineChart
-// } from 'recharts';
-
-// import {
-//     faAngleUp,
-//     faArrowRight,
-//     faArrowUp,
-//     faArrowLeft,
-//     faAngleDown
-// } from '@fortawesome/free-solid-svg-icons';
-
-// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
@@ -53,11 +24,48 @@ export default class DataDashboard extends Component {
             currentDataLabel: null
         };
         this.updateCurrentData = this.updateCurrentData.bind(this);
+        this.deleteNode = this.deleteNode.bind(this);
+        this.calculateDataset = this.calculateDataset.bind(this);
     }
 
-    updateCurrentData(dataNodeId)
+    deleteNode(dataNodeId)
     {
         Axios({
+            method: "get",
+            url: `http://localhost:7473/data/nodes/${dataNodeId}/children`,
+        }).then(response => 
+        {
+            if (response.statusText !== "OK")
+            {
+                var error = new Error('Error ' + response.status + ': ' + response.statusText);
+                error.response = response;
+                throw error;
+            } 
+            else 
+            {
+                return response.data;
+            }
+        })
+        .then(children => 
+        {
+            children.forEach(child => {
+                let childData = this.calculateDataset(child.id)
+                                    .then(data => {
+                                        this.props.addDataset({name: child.name, dataset: data}
+                                    )});
+            });
+        })
+        .then(() => {
+            this.props.removeDataNode(dataNodeId);
+        })
+        .catch(error => {
+            alert("Unable to view the data: " + error.message);    
+        });
+    }
+
+    calculateDataset(dataNodeId)
+    {
+        return Axios({
             method: "get",
             url: `http://localhost:7473/data/subgraph/${dataNodeId}`,
         }).then(response => {
@@ -79,6 +87,14 @@ export default class DataDashboard extends Component {
             view.toSVG();
             return view.data(dataNodeId);
         })
+        .catch(error => {
+            alert("Unable to generate data: " + error.message);    
+        });
+    }
+
+    updateCurrentData(dataNodeId)
+    {
+        this.calculateDataset(dataNodeId)
         .then(data => {
             const labels = this.props.datagraph.datagraph.nodes.filter(node => node.id === dataNodeId);
 
@@ -113,7 +129,11 @@ export default class DataDashboard extends Component {
                                 transitionAppearTimeout={0}
                                 transitionEnter={false}
                                 transitionLeave={false}>
-                                    <DataGraph datagraph={this.props.datagraph} updateCurrentData={this.updateCurrentData.bind(this)}/>
+                                    <DataGraph 
+                                        datagraph={this.props.datagraph} 
+                                        updateCurrentData={this.updateCurrentData.bind(this)}
+                                        deleteNode={this.deleteNode}
+                                    />                                    
                                 </ReactCSSTransitionGroup>
                             </Col>
                         </Row>                       
@@ -136,9 +156,12 @@ export default class DataDashboard extends Component {
                             toggle={this.props.toggleNewNodeModal}
                             addDataNode={this.props.addDataNode}
                             addDataEdge={this.props.addDataEdge}
+
+                            removeDataNode={this.props.removeDataNode}
+
                             datagraph={this.props.datagraph}
                             updateCurrentData={this.updateCurrentData}
-                            currentData={this.state.currentData}
+                            currentData={this.state.currentData}                            
                         />
                     </div>
                 </ReactCSSTransitionGroup>

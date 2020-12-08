@@ -68,6 +68,13 @@ router.route('/nodes/:nodeID')
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
+  })
+  .delete(cors.corsWithOptions,(req, res, next) => {
+    datagraph.removeNode(req.params.nodeID)
+    .then(result => {
+      res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
   });
 
 router.route('/edges')
@@ -117,5 +124,25 @@ router.route('/subgraph/:target')
       res.json(result)
     }, err => next(err))
     .catch(err => next(err));
+})
+// .delete(cors.cors, (req, res, next) => {
+//   datagraph
+//     .deleteSubgraphFrom(req.params.target)
+//     .then(result => {
+//       res.json(result)
+//     }, err => next(err))
+//     .catch(err => next(err));
+// });
+
+router.route("/nodes/:nodeId/children")
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
+  datagraph
+    .getChildren(req.params.nodeId)
+    .then(result => {
+      res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
 });
+
 module.exports = router;

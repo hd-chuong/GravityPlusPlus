@@ -81,6 +81,39 @@ module.exports = class DataGraph {
       });
   }
 
+  removeNode(id)
+  {
+    const params = {id};
+    
+    const cypher = `
+    MATCH (n: DATA_NODE {id: $id})
+    OPTIONAL MATCH(n)-[r]->(children:DATA_NODE)
+    DETACH delete n
+
+    WITH children, r
+    REMOVE children:JOINED:TRANSFORMED
+    SET children:DATA_NODE:RAW, children.source = children.name
+    DELETE r
+    
+    WITH children
+    OPTIONAL MATCH (parent:DATA_NODE)-[r: DATA_EDGE]->(children)
+    DELETE r
+    
+    RETURN children  
+    `;
+    
+    const session = this.neo4jDriver.session();
+    
+    return session.writeTransaction(tx => tx.run(cypher, params))
+    .then(() => {
+      session.close();  
+      return 0;
+    })
+    .catch(e => {
+      console.log(e)
+    });
+  }
+
   getAllNodes() {
     const session = this.neo4jDriver.session();
 
@@ -261,4 +294,71 @@ module.exports = class DataGraph {
         console.log(e)
       });    
   } 
+
+  getChildren(nodeId)
+  {
+    const params = {id: nodeId};
+    const cypher = `
+    MATCH 
+      (p:DATA_NODE {id: $id})-[r:DATA_EDGE]->(dest:DATA_NODE)
+      return dest.id as id, dest.name as name
+    `;
+    const session = this.neo4jDriver.session();
+    return session.readTransaction(tx => tx.run(cypher, params))
+      .then(res => {
+        console.log(res.records);
+        let result = res.records.map(record => ({
+              id: record["_fields"][0],
+              name: record["_fields"][1]
+            }));
+        return result;
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+  
+  deleteSubgraphFrom(target) {
+    const params = {id : target}
+    
+    const fetchIdCypher = `
+        MATCH (p:DATA_NODE {id: $id})
+        CALL apoc.path.subgraphNodes(p, {
+          relationshipFilter: "DATA_EDGE>",
+            minLevel: 0
+        })
+        yield node 
+        with node
+        RETURN node.id as id;
+      `;
+
+    const deleteIdCypher = `
+        MATCH (p:DATA_NODE {id: $id})
+        CALL apoc.path.subgraphNodes(p, {
+          relationshipFilter: "DATA_EDGE>",
+            minLevel: 0
+        })
+        yield node 
+        with node
+        DETACH DELETE node;
+    `;
+    const session = this.neo4jDriver.session();
+    
+    return session.readTransaction(tx => tx.run(fetchIdCypher, params))
+      .then(res => {
+        console.log(res.records);
+        let result = res.records.map(record => (
+              record["_fields"][0]
+          ));
+        return result;
+      })
+      .then(res => {
+        session.writeTransaction(tx => tx.run(deleteIdCypher, params))
+        return res;
+      })
+      .catch(e => {
+        console.log(e)
+      });    
+  }
+
 }

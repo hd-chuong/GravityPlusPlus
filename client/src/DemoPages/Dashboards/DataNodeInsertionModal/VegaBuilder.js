@@ -38,6 +38,7 @@ class VegaBuilder extends React.Component {
                                     isMulti options={
                                         AggregationMethods.map((method) => ({value: method, label: method})) 
                                     }
+                                    hideSelectedOptions={false}
                                     onChange={(newMethods) => this.buildVega({ops: newMethods.map(item=> item.value)}) }
                                 />
                             </Col>
@@ -50,6 +51,7 @@ class VegaBuilder extends React.Component {
                                     isMulti options={
                                         this.props.currentData && AttributeExtractor(this.props.currentData[0]).map((key) => ({value: key, label: key})) 
                                     }
+                                    hideSelectedOptions={false}
                                     onChange={(newFields) => this.buildVega({fields: newFields.map(item=> item.value)}) }
                                 />
                             </Col>

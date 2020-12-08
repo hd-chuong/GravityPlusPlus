@@ -27,7 +27,6 @@ export default class DataTable extends Component {
             dropdownOpen: false,
             activeTab1: '11'
         };
-
     }
 
     render() {
