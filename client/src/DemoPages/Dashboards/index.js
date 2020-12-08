@@ -45,6 +45,9 @@ class Dashboards extends Component{
                             addDataNode={this.props.addDataNode}
                             removeDataNode={this.props.removeDataNode}
                             addDataEdge={this.props.addDataEdge}
+
+                            removeEdges={this.props.removeEdges}
+                            setDataNode={this.props.setDataNode}
                         />
                         {/* <Route path={'/data/'} component={DataDashboard}/> */}
                     </div>

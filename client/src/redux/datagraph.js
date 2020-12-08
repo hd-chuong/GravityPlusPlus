@@ -68,7 +68,72 @@ export const DataGraph = (state = {errMess: null,
                     nodes: state.datagraph.nodes.filter((node) => node.id !== nodeId)
                 }
             };
+        
+        case ActionTypes.SET_DATA_NODE:
+            var nodeId = action.payload.id;
+            var params = action.payload.params;
+            
+            var uiType;
 
+            if (params.type === "RAW")
+            {
+                uiType = "input";
+            }
+            else 
+            {
+                uiType = "default";
+            }
+            
+            var newNodes = state.datagraph.nodes.map(node => {
+                if (node.id !== nodeId) return node;
+                return {...node, type: uiType, data: {...node.data, ...params}};
+            })
+
+            return {
+                ...state, 
+                datagraph: {
+                    edges: state.datagraph.edges,
+                    nodes: newNodes,
+                }
+            }
+        
+        case ActionTypes.REMOVE_EDGES:
+            var nodeId = action.payload.id;
+            var direction = action.payload.direction;
+
+            if (direction === "INCOMING")
+            {
+                return {
+                    ...state, 
+                    datagraph: {
+                        edges: state.datagraph.edges.filter((edge) => edge.target !== nodeId),
+                        nodes: state.datagraph.nodes
+                    }
+                }
+            }
+            else if (direction === "OUTGOING")
+            {
+                return {
+                    ...state, 
+                    datagraph: {
+                        edges: state.datagraph.edges.filter((edge) => edge.source !== nodeId),
+                        nodes: state.datagraph.nodes
+                    }
+                }
+            }
+            else if (direction === "ALL")
+            {
+                return {
+                    ...state, 
+                    datagraph: {
+                        edges: state.datagraph.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
+                        nodes: state.datagraph.nodes
+                    }
+                }
+            }
+            else {
+                return state;
+            }
         default:
             return state;
         }

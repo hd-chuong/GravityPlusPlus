@@ -49,10 +49,16 @@ export default class DataDashboard extends Component {
         .then(children => 
         {
             children.forEach(child => {
-                let childData = this.calculateDataset(child.id)
+                
+                // adding each child datasets to the list of all datasets
+                this.calculateDataset(child.id)
                                     .then(data => {
                                         this.props.addDataset({name: child.name, dataset: data}
                                     )});
+                
+                // removing incoming edge
+                this.props.removeEdges(child.id, "INCOMING");
+                this.props.setDataNode(child.id, {type: "RAW"});
             });
         })
         .then(() => {
@@ -161,7 +167,7 @@ export default class DataDashboard extends Component {
 
                             datagraph={this.props.datagraph}
                             updateCurrentData={this.updateCurrentData}
-                            currentData={this.state.currentData}                            
+                            currentData={this.state.currentData}              
                         />
                     </div>
                 </ReactCSSTransitionGroup>

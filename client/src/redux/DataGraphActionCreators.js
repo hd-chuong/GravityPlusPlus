@@ -140,3 +140,16 @@ export const removeDataNode = ({id}) => (dispatch) => {
         alert("Fail to delete a node: " + error.message);    
     });
 };
+
+export const setDataNode = ({id, params}) => ({
+    type: ActionTypes.SET_DATA_NODE,
+    payload: {id, params}
+});
+
+export const removeEdges = ({id, direction}) => ({
+    type: ActionTypes.REMOVE_EDGES,
+    payload: {
+        id, 
+        direction
+    }
+});
