@@ -28,8 +28,8 @@ export const AggregationMethods = [
 
 export const JoinTypes = [
     "LEFT JOIN",
-    // "RIGHT JOIN",
-    // "INNER JOIN",
+    "RIGHT JOIN",
+    "INNER JOIN",
     // "OUTER JOIN"
 ];
 
@@ -117,48 +117,58 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
                     },
                     {
                         "type": "project",
-                        "fields": [...newLeftHeaders, ...rightHeaders.map((header) => `${pseudoAttribute}.${header}`)],
-                        "as": [...newLeftHeaders, ...newRightHeaders]
+                        "fields": [...newLeftHeaders, ...rightHeaders.filter((header) => (header !== rightAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
+                        "as":     [...newLeftHeaders, ...newRightHeaders.filter((header) => (header !== `${rightDatasetName}-${rightAttribute}`))]
                     }
                 ]    
 
+        case "RIGHT JOIN":
+            return [
+                {
+                    "type": "project",
+                    "fields": rightHeaders,
+                    "as": newRightHeaders,
+                },
+                {
+                    "type": "lookup",
+                    "key": leftAttribute,
+                    "from": leftId,
+                    "fields": [`${rightDatasetName}-${rightAttribute}`], 
+                    "as": [pseudoAttribute] 
+                },
+                {
+                    "type": "project",
+                    "fields": [...newRightHeaders, ...leftHeaders.filter((header) => (header !== leftAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
+                    "as": [...newRightHeaders, ...newLeftHeaders.filter((header) => (header !== `${leftDatasetName}-${leftAttribute}`))]
+                }
+            ]
+        
+        case "INNER JOIN":
+            return [
+                {
+                    "type": "project",
+                    "fields": leftHeaders,
+                    "as": newLeftHeaders,
+                },
+                {
+                    "type": "lookup",
+                    "key": rightAttribute,
+                    "from": rightId,
+                    "fields": [`${leftDatasetName}-${leftAttribute}`], 
+                    "as": [pseudoAttribute] 
+                },
+                {
+                    "type": "filter",
+                    "expr": `isValid(datum[\"${pseudoAttribute}\"])`
+                },
+                {
+                    "type": "project",
+                    "fields": [...newLeftHeaders, ...rightHeaders.filter((header) => (header !== rightAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
+                    "as":     [...newLeftHeaders, ...newRightHeaders.filter((header) => (header !== `${rightDatasetName}-${rightAttribute}`))]
+                }
+            ]
+        // case "OUTER JOIN":
         default:
             return []
-        // case "RIGHT JOIN":
-        //     return {
-        //         "transform": [
-        //             {
-        //                 "type": "lookup",
-        //                 "key": leftAttribute,
-        //                 "from": leftId,
-        //                 "fields": [rightAttribute], 
-        //                 "values": leftHeaders,
-        //                 "as": leftHeaders
-        //             }
-        //         ]
-        //     }
-        // case "INNER JOIN":
-        //     return {
-                
-        //         "transform": [
-        //             // do a left join
-        //             {
-        //                 "type": "lookup",
-        //                 "key": rightAttribute,
-        //                 "from": rightId,
-        //                 "fields": [leftAttribute], 
-        //                 "values": rightHeaders,
-        //                 "as": rightHeaders
-        //             },
-                    
-        //             // then do a filtering on the newly appended field
-        //             {
-
-        //             }
-        //         ]
-        //     }
-        // case "OUTER JOIN":
-        // default:
-
     }
 }
