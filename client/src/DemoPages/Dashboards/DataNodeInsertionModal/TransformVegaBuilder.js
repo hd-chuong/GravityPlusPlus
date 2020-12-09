@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
-import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
+import {Label, Input, Row, Col} from 'reactstrap'; 
 import Select from 'react-select';
 
-import classnames from 'classnames';
 import {AggregationMethods} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 
-class VegaBuilder extends React.Component {
+class TransformVegaBuilder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,7 +22,7 @@ class VegaBuilder extends React.Component {
 
     buildVega(newChange)
     {
-        this.setState({vega: {...this.state.vega, ...newChange}} , 
+        this.setState({vega: {...this.state.vega, ...newChange}}, 
             () => {this.props.updateVegaSpecs(this.state.vega)});
     }
     render() {
@@ -78,7 +76,6 @@ class VegaBuilder extends React.Component {
                             id="vega-specs" 
                             placeholder="Vega specification"
                             value={JSON.stringify(this.state.vega, undefined, 4)}
-
                         />
                     </Col>
                 </Row>
@@ -87,4 +84,4 @@ class VegaBuilder extends React.Component {
     }
 }
 
-export default VegaBuilder;
+export default TransformVegaBuilder;

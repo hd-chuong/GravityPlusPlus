@@ -84,7 +84,7 @@ const mapStateToProp = state => ({
 const mapDispatchToProp = dispatch => ({
     addDataset: (dataset) => dispatch(addDataset(dataset)),
     removeDataset: (name) => dispatch(removeDataset({name})),
-    addDataNode: (name, type, source = null) => dispatch(addDataNode({name, type, source})),
+    addDataNode: (name, type, source = null, transform = []) => dispatch(addDataNode({name, type, source, transform})),
     removeDataNode: (id) => dispatch(removeDataNode({id})),
     removeEdges: (id, direction = null) => dispatch(removeEdges(id, direction)),
     setDataNode: (id, params) => dispatch(setDataNode({id, params})),

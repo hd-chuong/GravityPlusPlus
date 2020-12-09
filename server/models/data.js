@@ -12,11 +12,11 @@ module.exports = class DataGraph {
     this.neo4jDriver = neo4jDriver;
   }
 
-  addNode(name, type, source) {
+  addNode(name, type, source, transform) {
     const session = this.neo4jDriver.session();
     const cypher = `
             CREATE 
-                (node:DATA_NODE:${type} { id: $id, name: $name, source: $source }) 
+                (node:DATA_NODE:${type} { id: $id, name: $name, source: $source, transform: $transform, createdAt: datetime() }) 
             RETURN 
                 node
         `;
@@ -24,7 +24,8 @@ module.exports = class DataGraph {
       name,
       type,
       id: uuidv4(),
-      source
+      source,
+      transform: JSON.stringify(transform)
     };
 
     return session
@@ -270,7 +271,7 @@ module.exports = class DataGraph {
         yield node
         with node 
         OPTIONAL MATCH (node)<-[r]-(x)
-        RETURN node, collect(r) as edge, collect(x.id) as source_id;
+        RETURN node, collect(r) as edge, collect(x.id) as source_id ORDER BY node.createdAt DESC;
       `;
     const session = this.neo4jDriver.session();
     
