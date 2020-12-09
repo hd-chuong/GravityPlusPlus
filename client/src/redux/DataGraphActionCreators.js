@@ -1,19 +1,14 @@
 import * as ActionTypes from './DataGraphActionTypes';
 import Axios from 'axios';
 
-export const saveDataNode = ({id, name, type, source}) => ({
+export const saveDataNode = (payload) => ({
     type: ActionTypes.ADD_DATA_NODE,
-    payload: {
-        name,
-        type,
-        id, 
-        source
-    }
+    payload
 });
 
 // source: the tabular data itself
-export const addDataNode = ({name, type, source}) => (dispatch) => {
-    const newNode = {name, type, source};
+export const addDataNode = ({name, type, source, transform}) => (dispatch) => {
+    const newNode = {name, type, source, transform};
 
     return Axios({
         method: "post",
@@ -42,12 +37,12 @@ export const addDataNode = ({name, type, source}) => (dispatch) => {
         {
             type = "RAW";
         }
-        dispatch(saveDataNode({id, name, type, source}));
+        dispatch(saveDataNode({id, name, type, source, transform}));
         
         return id;
     })
     .catch(error => {
-        alert("Fail to add new node: " + error.message);    
+        alert("Redux fails to add new node: " + error.message);    
     });
 }
 

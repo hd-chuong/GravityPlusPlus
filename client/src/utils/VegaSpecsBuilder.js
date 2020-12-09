@@ -1,3 +1,5 @@
+import {v4 as uuidv4} from 'uuid';
+
 export const AggregationMethods = [
     "count", 
     "valid", 
@@ -24,6 +26,12 @@ export const AggregationMethods = [
     "values"
 ];
 
+export const JoinTypes = [
+    "LEFT JOIN",
+    // "RIGHT JOIN",
+    // "INNER JOIN",
+    // "OUTER JOIN"
+];
 
 function GetDatasetByName(datasets, filename)
 {
@@ -64,8 +72,93 @@ export function DataSpecsBuilder(subgraph, datasets)
 
             case 2:
                 console.log("JOIN operations will be treated here")
+                console.log(node.props);
+                specs.data.push({
+                    "name": node.id,
+                    "source": node.props.source,
+                    "transform": JSON.parse(node.props.transform)
+                })
                 break;
         }
     }
     return specs;
+}
+
+// JOINING based on either 
+// LEFT JOIN, 
+// RIGHT JOIN, 
+// INNER JOIN, 
+// OUTER JOIN
+export function JoinSpecsBuilder(leftNode, rightNode, joinType)
+{
+    const {id: leftId, attribute: leftAttribute, headers: leftHeaders, name: leftDatasetName} = leftNode;
+    const {id: rightId, attribute: rightAttribute, headers: rightHeaders, name: rightDatasetName} = rightNode;
+    
+    var pseudoAttribute = uuidv4();
+
+    var newLeftHeaders = leftHeaders.map((header) => `${leftDatasetName}-${header}`);
+    var newRightHeaders = rightHeaders.map((header) => `${rightDatasetName}-${header}`);
+    
+    switch(joinType)
+    {
+        case "LEFT JOIN":
+            return [
+                    {
+                        "type": "project",
+                        "fields": leftHeaders,
+                        "as": newLeftHeaders,
+                    },
+                    {
+                        "type": "lookup",
+                        "key": rightAttribute,
+                        "from": rightId,
+                        "fields": [`${leftDatasetName}-${leftAttribute}`], 
+                        "as": [pseudoAttribute] 
+                    },
+                    {
+                        "type": "project",
+                        "fields": [...newLeftHeaders, ...rightHeaders.map((header) => `${pseudoAttribute}.${header}`)],
+                        "as": [...newLeftHeaders, ...newRightHeaders]
+                    }
+                ]    
+
+        default:
+            return []
+        // case "RIGHT JOIN":
+        //     return {
+        //         "transform": [
+        //             {
+        //                 "type": "lookup",
+        //                 "key": leftAttribute,
+        //                 "from": leftId,
+        //                 "fields": [rightAttribute], 
+        //                 "values": leftHeaders,
+        //                 "as": leftHeaders
+        //             }
+        //         ]
+        //     }
+        // case "INNER JOIN":
+        //     return {
+                
+        //         "transform": [
+        //             // do a left join
+        //             {
+        //                 "type": "lookup",
+        //                 "key": rightAttribute,
+        //                 "from": rightId,
+        //                 "fields": [leftAttribute], 
+        //                 "values": rightHeaders,
+        //                 "as": rightHeaders
+        //             },
+                    
+        //             // then do a filtering on the newly appended field
+        //             {
+
+        //             }
+        //         ]
+        //     }
+        // case "OUTER JOIN":
+        // default:
+
+    }
 }

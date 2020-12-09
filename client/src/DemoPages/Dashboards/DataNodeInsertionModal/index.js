@@ -2,7 +2,9 @@ import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
 import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
 import Select from 'react-select';
-import VegaBuilder from './VegaBuilder';
+import VegaBuilder from './TransformVegaBuilder';
+import JoinVegaBuilder from './JoinVegaBuilder';
+import {JoinSpecsBuilder} from '../../../utils/VegaSpecsBuilder';
 import classnames from 'classnames';
 
 class DataNodeInsertionModal extends React.Component {
@@ -51,18 +53,35 @@ class DataNodeInsertionModal extends React.Component {
         this.setState({joinDatasets: curOptions});
     }
 
-    async handleSubmitJoin()
+    handleSubmitJoin(joinNodeName, leftNode, rightNode, joinType)
     {
-        if (this.joinNodeName.value === "") 
+        const {id: id1, attribute: leftAttribute, headers: leftHeaders, name: leftDatasetName} = leftNode;
+        const {id: id2, attribute: rightAttribute, headers: rightHeaders, name: rightDatasetName} = rightNode;
+        
+        console.log(leftNode);
+        console.log(rightNode);
+
+        if (joinNodeName === "") 
         {
             alert("You must provide a node name");
             return;
         }
-        
-        let newNodeId= await this.props.addDataNode(this.joinNodeName.value, "JOINED");
 
-        this.state.joinDatasets.forEach((joinData) => {
-            this.props.addDataEdge(joinData.value, newNodeId, "JOIN", null);
+        const transform = JoinSpecsBuilder(leftNode, rightNode, joinType);
+        console.log("transform looks like: " , transform);
+        
+        var source;
+        if (joinType === "RIGHT JOIN")
+        {
+            source = id2;
+        }
+        else {
+            source = id1;
+        }
+
+        this.props.addDataNode(joinNodeName, "JOINED", source, transform).then(newNodeId => {
+            this.props.addDataEdge(id1, newNodeId, "JOIN", null);
+            this.props.addDataEdge(id2, newNodeId, "JOIN", null);
         });
         this.props.toggle();
     }
@@ -98,30 +117,30 @@ class DataNodeInsertionModal extends React.Component {
                         <Nav>
                             <NavItem>
                                 <NavLink
-                                            className={classnames({active: this.state.activeTab === '1'})}
-                                            onClick={() => {
-                                                this.toggle('1');
-                                            }}
+                                    className={classnames({active: this.state.activeTab === '1'})}
+                                    onClick={() => {
+                                        this.toggle('1');
+                                    }}
                                 >
                                     Raw data
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink
-                                            className={classnames({active: this.state.activeTab === '2'})}
-                                            onClick={() => {
-                                                this.toggle('2');
-                                            }}
+                                    className={classnames({active: this.state.activeTab === '2'})}
+                                    onClick={() => {
+                                        this.toggle('2');
+                                    }}
                                 >
                                     Join data
                                 </NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink
-                                            className={classnames({active: this.state.activeTab === '3'})}
-                                            onClick={() => {
-                                                this.toggle('3');
-                                            }}
+                                        className={classnames({active: this.state.activeTab === '3'})}
+                                        onClick={() => {
+                                            this.toggle('3');
+                                        }}
                                 >
                                     Transform data
                                 </NavLink>
@@ -129,11 +148,10 @@ class DataNodeInsertionModal extends React.Component {
                         </Nav>
                     </CardHeader>
                     <ModalBody>
-
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
                                 <small>Import a raw dataset into the data graph</small>
-                                <Form>
+                                <Form onSubmit={e => {e.preventDefault()}}>
                                     <Row className="form-group">
                                         <Label for="rawDataset" md={2}>Select dataset</Label>
                                         <Col md={6}>
@@ -142,9 +160,9 @@ class DataNodeInsertionModal extends React.Component {
                                             </Input>
                                         </Col>
                                         
-                                        <Label for="rawNodeType" md={2}>Node type</Label>
+                                        <Label for="rawNodeType" md={2} hidden>Node type</Label>
                                         <Col md={2}>
-                                            <Input type="select" name="rawNodeType" id="rawNodeType" disabled innerRef={(input) => this.rawNodeType = input}>
+                                            <Input type="select" name="rawNodeType" id="rawNodeType" disabled hidden innerRef={(input) => this.rawNodeType = input}>
                                                 <option>RAW</option>
                                             </Input>
                                         </Col>
@@ -167,43 +185,15 @@ class DataNodeInsertionModal extends React.Component {
                                 </Form>
                             </TabPane>
                             <TabPane tabId="2">
-                                <small>Join two or more datasets.</small>
-                                <Form>
-                                    <Row className="form-group">
-                                        <Label for="joinDataset" md={2}>Select nodes</Label>
-                                        <Col md={6}>
-                                            <Select 
-                                                isMulti options={
-                                                    this.props.datagraph.datagraph.nodes.map((dataset) => ({value: dataset.id, label: dataset.data.label}) ) 
-                                                }
-                                                onChange={this.handleMultipleDatasets.bind(this)}
-                                            />
-                                        </Col>
-                                        <Label for="joinNodeType" md={2}>Node type</Label>
-                                        <Col md={2}>
-                                            <Input type="select" name="joinNodeType" id="joinNodeType" disabled innerRef={(input) => this.joinNodeType = input}>
-                                                <option>JOIN</option>
-                                            </Input>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="form-group">
-                                        <Label for="joinNodeName" md={2}>Node name</Label>
-                                        <Col>
-                                            <Input type="text" name="joinNodeName" id="joinNodeName" innerRef={(input) => this.joinNodeName = input}
-                                                    placeholder="Enter the node name"/>
-                                        </Col>
-                                    </Row>
-
-                                    <Button 
-                                        color="primary" 
-                                        className="float-right" 
-                                        onClick={this.handleSubmitJoin.bind(this)}>Add Node</Button>{' '}  
-                                </Form>
+                                <JoinVegaBuilder 
+                                    datasets={this.props.datagraph.datagraph.nodes}
+                                    calculateDataset={this.props.calculateDataset}
+                                    handleSubmit={this.handleSubmitJoin.bind(this)}
+                                />
                             </TabPane>
                             <TabPane tabId="3">
                                 <small>Apply a transformation to a data node</small>
-                                <Form>
+                                <Form onSubmit={e => {e.preventDefault()}}>
                                     <Row className="form-group">
                                         <Label for="sourceNode" md={2}>Select a node</Label>
                                         <Col md={6}>
@@ -221,8 +211,8 @@ class DataNodeInsertionModal extends React.Component {
                                             </Input>
                                         </Col>
                                         
-                                        <Label for="rawNodeType" md={2}>Node type</Label>
-                                        <Col md={2}>
+                                        <Label for="rawNodeType" md={2} hidden>Node type</Label>
+                                        <Col md={2} hidden>
                                             <Input 
                                                 type="select" 
                                                 name="transformNodeType" 

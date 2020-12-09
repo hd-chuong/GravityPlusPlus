@@ -23,7 +23,14 @@ export const DataGraph = (state = {errMess: null,
             var newDataNode = {
                 id: action.payload.id,
                 type: uiType,
-                data: {label: action.payload.name, type: nodeType, source: action.payload.source},
+                data: {
+                    label: action.payload.name, 
+                    type: nodeType, 
+                    source: action.payload.source, 
+                    
+                    // transform only applies for joining dataset together
+                    transform: action.payload.transform
+                },
                 position: {x, y},
             };
             return {...state, datagraph: {edges: state.datagraph.edges, nodes: [...state.datagraph.nodes, newDataNode]}};
