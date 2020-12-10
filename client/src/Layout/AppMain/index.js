@@ -10,8 +10,10 @@ import {
     ToastContainer,
 } from 'react-toastify';
 
-const Dashboards = lazy(() => import('../../DemoPages/Dashboards'));
+import {Switch, withRouter} from 'react-router-dom';
 
+const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
+const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
 const Widgets = lazy(() => import('../../DemoPages/Widgets'));
 const Elements = lazy(() => import('../../DemoPages/Elements'));
 const Components = lazy(() => import('../../DemoPages/Components'));
@@ -30,126 +32,49 @@ const AppMain = ({datasets,
                 setDataNode}) => {
     return (
         <Fragment>
-
-            {/* Components */}
-
+            
+            {/* DataDashboard */}
             <Suspense fallback={
-                <div className="loader-container">
-                    <div className="loader-container-inner">
-                        <h6 className="mt-5">
-                            Loading
-
-                        </h6>
+                    <div className="loader-container">
+                        <div className="loader-container-inner">
+                            <h6 className="mt-3">
+                                Loading
+                            </h6>
+                        </div>
                     </div>
-                </div>
-            }>
-                <Route path="/components" component={Components}/>
-            </Suspense>
+                }>
+            <Router>
+                <Switch>
+                <Route exact path="/data">
+                    <DataDashboard 
+                        datasets={datasets}
+                        datagraph={datagraph}
+                        addDataset={addDataset} 
+                        removeDataset={removeDataset}
+                        addDataNode={addDataNode}
+                        addDataEdge={addDataEdge}
 
-            {/* Forms */}
+                        removeDataNode={removeDataNode}
 
-            <Suspense fallback={
-                <div className="loader-container">
-                    <div className="loader-container-inner">
-                        <h6 className="mt-5">
-                            Loading
-                        </h6>
-                    </div>
-                </div>
-            }>
-                <Route path="/forms" component={Forms}/>
-            </Suspense>
+                        removeEdges={removeEdges}
+                        setDataNode={setDataNode}
+                    />
+                </Route>
 
-            {/* Charts */}
 
-            <Suspense fallback={
-                <div className="loader-container">
-                    <div className="loader-container-inner">
-                        <h6 className="mt-3">
-                            Loading
-                        </h6>
-                    </div>
-                </div>
-            }>
-                <Route path="/charts" component={Charts}/>
-            </Suspense>
-
-            {/* Tables */}
-
-            <Suspense fallback={
-                <div className="loader-container">
-                    <div className="loader-container-inner">
-                        <h6 className="mt-5">
-                            Loading
-                        </h6>
-                    </div>
-                </div>
-            }>
-                <Route path="/tables" component={Tables}/>
-            </Suspense>
-
-            {/* Elements */}
-
-            <Suspense fallback={
-                <div className="loader-container">
-                    <div className="loader-container-inner">
-                        <h6 className="mt-3">
-                            Loading
-                         </h6>
-                    </div>
-                </div>
-            }>
-                <Route path="/elements" component={Elements}/>
-            </Suspense>
-
-            {/* Dashboard Widgets */}
-
-            <Suspense fallback={
-                <div className="loader-container">
-                    <div className="loader-container-inner">
-                        <h6 className="mt-3">
-                            Loading
-                        </h6>
-                    </div>
-                </div>
-            }>
-                <Route path="/widgets" component={Widgets}/>
-            </Suspense>
-
-            {/* Dashboards */}
-
-            <Suspense fallback={
-                <div className="loader-container">
-                    <div className="loader-container-inner">
-                        <h6 className="mt-3">
-                            Loading
-                        </h6>
-                    </div>
-                </div>
-            }>
-            <Route path="/data">
-                <Dashboards 
-                    datasets={datasets}
-                    datagraph={datagraph}
-                    addDataset={addDataset} 
-                    removeDataset={removeDataset}
-                    addDataNode={addDataNode}
-                    addDataEdge={addDataEdge}
-
-                    removeDataNode={removeDataNode}
-
-                    removeEdges={removeEdges}
-                    setDataNode={setDataNode}
-                />
-            </Route>
-            </Suspense>
-
-            <Route exact path="/" render={() => (
+                <Route exact path="/vis">
+                    <VisDashboard/>
+                </Route>
+                
                 <Redirect to="/data"/>
-            )}/>
-            <ToastContainer/>
+                </Switch>
+                {/* <Route path="*" render={() => <Redirect to={{pathname: "/vis"}} />} /> */}
+                
+                <ToastContainer/>
+            </Router>
+            </Suspense>
         </Fragment>
     )
 };
 
-export default AppMain;
+export default withRouter(AppMain);

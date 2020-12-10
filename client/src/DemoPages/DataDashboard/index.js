@@ -5,8 +5,8 @@ import {Route} from 'react-router-dom';
 import DataDashboard from './DataDashboard';
 
 // Layout
-import AppHeader from '../../Layout/AppHeader/';
-import AppSidebar from '../../Layout/AppSidebar/';
+import AppHeader from '../../Layout/AppHeader';
+import AppSidebar from '../../Layout/AppSidebar';
 // import AppFooter from '../../Layout/AppFooter/';
 
 

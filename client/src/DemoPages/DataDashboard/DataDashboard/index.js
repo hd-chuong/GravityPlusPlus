@@ -127,38 +127,40 @@ export default class DataDashboard extends Component {
                     transitionAppearTimeout={0}
                     transitionEnter={false}
                     transitionLeave={false}>
-                    <div>
-                        <Row>
-                            <Col>
-                                <ReactCSSTransitionGroup
-                                component="div"
-                                transitionName="TabsAnimation"
-                                transitionAppear={true}
-                                transitionAppearTimeout={0}
-                                transitionEnter={false}
-                                transitionLeave={false}>
-                                    <DataGraph 
-                                        datagraph={this.props.datagraph} 
-                                        updateCurrentData={this.updateCurrentData.bind(this)}
-                                        deleteNode={this.deleteNode}
-                                    />                                    
-                                </ReactCSSTransitionGroup>
-                            </Col>
-                        </Row>                       
-                        <Row>
-                            <Col md="6" >
-                                <ReactCSSTransitionGroup
-                                component="div"
-                                transitionName="TabsAnimation"
-                                transitionAppear={true}
-                                transitionAppearTimeout={0}
-                                transitionEnter={false}
-                                transitionLeave={false}>
-                                    <DataTable label={this.state.currentDataLabel} tableData={this.state.currentData}/>
-                                </ReactCSSTransitionGroup>
-                            </Col>
-                        </Row>
-                        <DataNodeInsertionModal 
+                    <Row>
+                        <Col md="5" >   
+                            <ReactCSSTransitionGroup
+                            component="div"
+                            transitionName="TabsAnimation"
+                            transitionAppear={true}
+                            transitionAppearTimeout={0}
+                            transitionEnter={false}
+                            transitionLeave={false}>
+                                <DataTable 
+                                    label={this.state.currentDataLabel} 
+                                    tableData={this.state.currentData}
+                                />
+                            </ReactCSSTransitionGroup>
+                        </Col>
+                        <Col>
+                            <ReactCSSTransitionGroup
+                            component="div"
+                            transitionName="TabsAnimation"
+                            transitionAppear={true}
+                            transitionAppearTimeout={0}
+                            transitionEnter={false}
+                            transitionLeave={false}>
+                                <DataGraph 
+                                    data={this.props.datagraph.datagraph} 
+                                    onElementClick={this.updateCurrentData.bind(this)}
+                                    onElementsRemove={this.deleteNode}
+                                />                                    
+                            </ReactCSSTransitionGroup>
+                        </Col>
+                    </Row>
+
+                    
+                    <DataNodeInsertionModal 
                             datasets={this.props.datasets} 
                             isOpen={this.props.isNewNodeModalOpen} 
                             toggle={this.props.toggleNewNodeModal}
@@ -172,7 +174,6 @@ export default class DataDashboard extends Component {
                             currentData={this.state.currentData}              
                             calculateDataset={this.calculateDataset}
                         />
-                    </div>
                 </ReactCSSTransitionGroup>
             </Fragment>
         )

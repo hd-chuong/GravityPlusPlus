@@ -30,7 +30,13 @@ export default class DataTable extends Component {
     }
 
     render() {
-        if (this.props.tableData === null || this.props.tableData === undefined) return <div></div>;
+        if (this.props.tableData === null || this.props.tableData === undefined) return (
+            <Card className="main-card mb-3">
+            <div className="card-header">Table View
+            </div>
+            <CardBody>Please select a data node to view the dataset</CardBody>
+            </Card>
+        );
         const headers = AttributeExtractor(this.props.tableData[0]);
         const data = this.props.tableData.slice(0, Math.min(MAX_ROWS_DISPLAYED, this.props.tableData.length));
         

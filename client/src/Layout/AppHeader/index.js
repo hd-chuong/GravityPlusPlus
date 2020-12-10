@@ -9,7 +9,9 @@ import HeaderLogo from '../AppLogo';
 
 import SearchBox from './Components/SearchBox';
 import UserBox from './Components/UserBox';
-import {Nav, NavItem, NavLink, Navbar } from 'reactstrap';
+import {withRouter} from "react-router-dom";
+import {Nav, NavItem, Navbar } from 'reactstrap';
+import {NavLink} from 'react-router-dom';
 class Header extends React.Component {
     render() {
         let {
@@ -22,9 +24,9 @@ class Header extends React.Component {
                 <ReactCSSTransitionGroup
                     component="div"
                     className={cx("app-header", headerBackgroundColor, {'header-shadow': enableHeaderShadow})}
-                    transitionName="HeaderAnimation"
-                    transitionAppear={true}
-                    transitionAppearTimeout={1500}
+                    // transitionName="HeaderAnimation"
+                    // transitionAppear={true}
+                    // transitionAppearTimeout={1500}
                     transitionEnter={false}
                     transitionLeave={false}>
 
@@ -37,25 +39,20 @@ class Header extends React.Component {
                      */}
                     {/* <div className="app-header-left"> */}
                         <Navbar dark expand="sm">
+                            
                             <Nav navbar>
                                 <NavItem className="metismenu-item mr-3">
-                                    <NavLink className="nav-link" to="#">
+                                    <NavLink className="nav-link" to="/data/">
                                         <i className="fa fa-table fa-lg mr-2"></i>Data
                                     </NavLink>
                                 </NavItem>
-                            </Nav>
-
-                            <Nav navbar>
                                 <NavItem className="metismenu-item mr-3">
-                                    <NavLink className="nav-link" to="#">
+                                    <NavLink className="nav-link" to="/vis/">
                                         <i className="fa fa-bar-chart fa-lg mr-2"></i>Visualisation
                                     </NavLink>
                                 </NavItem>
-                            </Nav>
-
-                            <Nav navbar>
                                 <NavItem className="metismenu-item mr-3">
-                                    <NavLink className="nav-link" to="#">
+                                    <NavLink className="nav-link" to="/interaction">
                                         <i className="fa fa-hand-pointer-o fa-lg mr-2"></i>Interaction
                                     </NavLink>
                                 </NavItem>
@@ -83,4 +80,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
