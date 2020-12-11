@@ -49,9 +49,8 @@ class Dashboards extends Component{
                             removeEdges={this.props.removeEdges}
                             setDataNode={this.props.setDataNode}
                         />
-                        {/* <Route path={'/data/'} component={DataDashboard}/> */}
                     </div>
-                    {/* <AppFooter/> */}
+                    
                 </div>
             </div>
         </Fragment>

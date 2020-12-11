@@ -1,5 +1,4 @@
-import {
-    useLocation, 
+import { 
     BrowserRouter as Router, 
     Route, 
     Redirect
@@ -11,15 +10,10 @@ import {
 } from 'react-toastify';
 
 import {Switch, withRouter} from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
-const Widgets = lazy(() => import('../../DemoPages/Widgets'));
-const Elements = lazy(() => import('../../DemoPages/Elements'));
-const Components = lazy(() => import('../../DemoPages/Components'));
-const Charts = lazy(() => import('../../DemoPages/Charts'));
-const Forms = lazy(() => import('../../DemoPages/Forms'));
-const Tables = lazy(() => import('../../DemoPages/Tables'));
 
 const AppMain = ({datasets, 
                 datagraph, 
@@ -37,6 +31,12 @@ const AppMain = ({datasets,
             <Suspense fallback={
                     <div className="loader-container">
                         <div className="loader-container-inner">
+                            <FontAwesomeIcon
+                                icon={['fas', 'cog']}
+                                spin
+                                fixedWidth={false}
+                                size="4x"
+                            />
                             <h6 className="mt-3">
                                 Loading
                             </h6>
@@ -63,13 +63,13 @@ const AppMain = ({datasets,
 
 
                 <Route exact path="/vis">
-                    <VisDashboard/>
+                    <VisDashboard
+                        datagraph={datagraph.datagraph}
+                    />
                 </Route>
                 
                 <Redirect to="/data"/>
                 </Switch>
-                {/* <Route path="*" render={() => <Redirect to={{pathname: "/vis"}} />} /> */}
-                
                 <ToastContainer/>
             </Router>
             </Suspense>

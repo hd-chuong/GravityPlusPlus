@@ -24,6 +24,7 @@ class JoinVegaBuilder extends React.Component {
     }
 
     render() {
+        console.log(this.props.datasets)
         return (
             <Form>
                 <small>Join two datasets.</small>
@@ -41,9 +42,8 @@ class JoinVegaBuilder extends React.Component {
                         <Select 
                             options={this.props.datasets
                                 .filter((dataset) => dataset.id !== this.state.dataset2)
-                                .map((dataset) => {
-                                return ({value: dataset.id, label: dataset.data.label})
-                            })}
+                                .map((dataset) => ({value: dataset.id, label: dataset.data.label})
+                            )}
                             placeholder="Dataset 1"
                             onChange={(newDataset) => this.setState({dataset1: newDataset.value}, () => {
                                 if (this.state.dataset1) this.props.calculateDataset(this.state.dataset1).then((data) => {
@@ -64,9 +64,8 @@ class JoinVegaBuilder extends React.Component {
                         <Select 
                             options={this.props.datasets
                                     .filter((dataset) => dataset.id !== this.state.dataset1)
-                                    .map((dataset) => {
-                                        return ({value: dataset.id, label: dataset.data.label})
-                                    })}
+                                    .map((dataset) => ({value: dataset.id, label: dataset.data.label})
+                                    )}
                             placeholder="Dataset 2"
                             onChange={(newDataset) => this.setState({dataset2: newDataset.value}, () => {
                                 if (this.state.dataset2) this.props.calculateDataset(this.state.dataset2).then((data) => {

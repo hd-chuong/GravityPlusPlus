@@ -8,7 +8,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
     setEnableMobileMenu
 } from '../../reducers/ThemeOptions';
-import VisForm from './VisForm';
 
 class VisSideBar extends Component {
 
@@ -47,7 +46,7 @@ class VisSideBar extends Component {
                         <div className="app-sidebar__inner">
                             <div className="metismenu vertical-nav-menu" active>
                                 <ul className="metismenu-container">
-                                    <li className="metismenu-item">                            
+                                    <li className="metismenu-item" onClick={this.props.toggleNewNodeModal} style={{ cursor: 'pointer' }}>                            
                                         <div className="metismenu-link" target="_blank">
                                             <i className="metismenu-icon fa fa-asterisk fa-lg"></i> Add new Node
                                         </div>
@@ -55,7 +54,7 @@ class VisSideBar extends Component {
                                 </ul>
                             </div>
 
-                            <VisForm/>
+                            {/* <VisForm/> */}
                         </div>
 
                     </PerfectScrollbar>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactFlow, {MiniMap, Controls, Background, removeElements} from 'react-flow-renderer';
-import {Card} from 'reactstrap';
+import {Card, CardBody, CardHeader} from 'reactstrap';
 
 // examples of data to be passed into react flow 
 // const elements = [
@@ -44,11 +44,23 @@ export default class DataGraph extends Component {
 
     render() 
     {
-        const elements = [...this.props.data.nodes, ...this.props.data.edges];
+        if (this.props.data === null || this.props.data === undefined) 
         return (
             <Card className="main-card mb-3">
-                <div className="card-header"> Graph view
-                </div>
+                <CardHeader>
+                    Graph view
+                </CardHeader>
+                
+                <CardBody>
+                    Create a node to view the graph
+                </CardBody>
+            </Card>
+        );
+        const elements = [...this.props.data.nodes, ...this.props.data.edges];
+
+        return (
+            <Card className="main-card mb-3">
+                <div className="card-header"> Graph view </div>
                 <div style={{ height: 600 }}> 
                     <ReactFlow elements={elements} 
                                 onElementClick={(event, element) => {this.props.onElementClick(element.id)}}
@@ -56,8 +68,7 @@ export default class DataGraph extends Component {
                                     elements.map(element => element.id)
                                     .forEach(e => this.props.onElementsRemove(e))    
                                 }
-                                >
-                               
+                                >                               
                         <Controls />  
                         <Background color="#aaa" gap={16} /> 
                     </ReactFlow>
