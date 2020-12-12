@@ -1,6 +1,3 @@
-import React from "react";
-import {Col, Card, CardImg, CardBody, CardTitle, CardText, Row, Input} from 'reactstrap';
-import Scrollbar from 'react-perfect-scrollbar';
 const charts = [
   {
     src: process.env.PUBLIC_URL + '/images/bar-chart.png',
@@ -29,26 +26,4 @@ const charts = [
   }
 ];
 
-function ChartGallery() {
-  return ( 
-    <div style={{height: "400px"}}>
-        <Scrollbar> 
-            <Row>
-                {
-                    charts.map(chart => (
-                        <Card className="mb-1 col-md-4" style={{ cursor: 'pointer' }}>
-                            <CardBody bottom>
-                                <CardTitle><Input type="radio" name="idiom" checked/>{chart.caption}</CardTitle>
-                                {/* <CardText>{chart.caption}</CardText> */}
-                            </CardBody>
-                            <CardImg className="mt-1" top src={chart.src} alt={chart.caption}/>
-                        </Card>
-                    ))
-                }
-            </Row>
-        </Scrollbar>
-    </div>
-  )
-}
-
-export default ChartGallery;
+export default charts;

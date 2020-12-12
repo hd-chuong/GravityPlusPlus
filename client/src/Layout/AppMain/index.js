@@ -10,7 +10,6 @@ import {
 } from 'react-toastify';
 
 import {Switch, withRouter} from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
@@ -31,12 +30,6 @@ const AppMain = ({datasets,
             <Suspense fallback={
                     <div className="loader-container">
                         <div className="loader-container-inner">
-                            <FontAwesomeIcon
-                                icon={['fas', 'cog']}
-                                spin
-                                fixedWidth={false}
-                                size="4x"
-                            />
                             <h6 className="mt-3">
                                 Loading
                             </h6>
@@ -64,6 +57,7 @@ const AppMain = ({datasets,
 
                 <Route exact path="/vis">
                     <VisDashboard
+                        datasets={datasets}
                         datagraph={datagraph.datagraph}
                     />
                 </Route>

@@ -4,7 +4,7 @@ import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap';
 import Select from 'react-select';
 import classnames from 'classnames';
 import VisForm from "./VisForm";
-class DataNodeInsertionModal extends React.Component {
+class VisNodeInsertionModal extends React.Component {
     constructor(props) 
     {
         super(props);
@@ -22,6 +22,7 @@ class DataNodeInsertionModal extends React.Component {
                 <ModalBody>
                     <VisForm
                         datagraph={this.props.datagraph}
+                        datasets={this.props.datasets}
                     />
                 </ModalBody>
         </Modal>
@@ -30,4 +31,4 @@ class DataNodeInsertionModal extends React.Component {
     }
 }
 
-export default DataNodeInsertionModal;
+export default VisNodeInsertionModal;

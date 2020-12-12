@@ -1,20 +1,31 @@
-import React, {useState, Component, Fragment} from 'react';
-import {Row, Col, Input, Label, Button, Progress, FormGroup} from 'reactstrap';
+import React, {useState} from 'react';
+import {Card, CardBody, CardTitle, CardImg, Row, Col, Input, Label, Button, Progress, FormGroup} from 'reactstrap';
 import Select from 'react-select';
+import Async from 'react-select/async';
+import Scrollbar from 'react-perfect-scrollbar';
+import {Field, Form, Formik } from 'formik';
+import Charts from './ChartGallery';
+import { Fragment } from 'react';
+import AttributeExtractor from '../../utils/AttributeExtractor';
+import calculateDataset from '../../utils/dataGeneration';
 
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import ChartGallery from './ChartGallery';
+const Wizard = (props) => {
+  const initialValues = {
+    useOurTemplate: true,
+    idiom: 'bar chart',
+    dataNode: null,
+    xField: null,
+    yField: null,
+  };
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-const Wizard = ({ children, initialValues, onSubmit }) => {
   const [stepNumber, setStepNumber] = useState(0);
-  const steps = React.Children.toArray(children);
   const [snapshot, setSnapshot] = useState(initialValues);
-
+  
+  const steps = [<OwnSchema/>, <VisVegaTemplateBuilder/>];
+  
   const step = steps[stepNumber];
   const totalSteps = steps.length;
-  const isLastStep = stepNumber === totalSteps - 1;
+  const isLastStep = (stepNumber === totalSteps - 1);
 
   const next = values => {
     setSnapshot(values);
@@ -47,7 +58,12 @@ const Wizard = ({ children, initialValues, onSubmit }) => {
       {formik => (
         <Form>
           <Progress value={stepNumber * 100 / totalSteps}/>
-          {step}
+          {stepNumber===0 && <OwnSchema/>}          
+          {stepNumber===1 && <VisVegaTemplateBuilder 
+                                datagraph={props.datagraph} 
+                                formik={formik} 
+                                datasets={props.datasets}
+                              />}
           <div>
             {stepNumber > 0 && (
               <Button 
@@ -59,134 +75,88 @@ const Wizard = ({ children, initialValues, onSubmit }) => {
             )}
             
             <Button 
+              type="submit"
               disabled={formik.isSubmitting} 
               color="primary" 
               className="float-right"> 
               {isLastStep ? 'Submit' : 'Next'}
             </Button>
           </div>
+        
         </Form>
       )}
     </Formik>
   );
 };
 
-const WizardStep = ({ children }) => children;
+const OwnSchema = () => {
+  return (
+    <Fragment>
+      <FormGroup>
+          <Field 
+            component="input"
+            type="radio" 
+            name="useOurTemplate" 
+            value={false}
+            disabled/> Write my own visualisation schema
+      </FormGroup>
 
-const VisForm = ({datagraph}) => (
-  <div>
-    <Wizard
-      initialValues={{
-        email: '',
-        firstName: '',
-        lastName: '',
-      }}
-      onSubmit={async values =>
-        sleep(300).then(() => console.log('Wizard submit', values))
-      }
-    >
-      <WizardStep>
-        <FormGroup check>
-            <Input type="radio" name="schema" disabled/>{' '}
-            Write my own visualisation schema
-        </FormGroup>
+      <FormGroup>
+          <Field 
+            type="radio" 
+            name="useOurTemplate" 
+            value={true}  
+          /> Use our template (recommended)
+      </FormGroup>
       
-        <FormGroup check>
-            <Input type="radio" name="schema" checked/>{' '}
-            Use our template (recommended)
-        </FormGroup>
-        <ChartGallery/>
-      </WizardStep>
-      
-      <WizardStep>
-        <Row className="form-group">
-          {/* Will connect with the data graph */}
-            <Label md={3}>Select a data node</Label>
-            <Col md={9}>
-              <Input type="select">
-                {datagraph.nodes.map((node) => (<option key={node.id} value={node.id}>{node.data.label}</option>))}
-              </Input>
-            </Col>
-        </Row>
-        <Row className="form-group">
-          <Col>
-              <Select options={[]} placeholder="Select x axis field" />
-          </Col>
-          <Col>
-              <Select options={[]} placeholder="Select y axis field" />
-          </Col>
-      </Row>
-      </WizardStep>
-    </Wizard>
-  </div>
+      <FormGroup style={{height: "400px"}}>
+        <Scrollbar> 
+            <Row>
+                {
+                  Charts.map(chart => (
+                    <Card className="mb-1 col-md-4" style={{ cursor: 'pointer' }}>
+                        <CardBody>
+                            <CardTitle>
+                            <Field 
+                              type="radio" 
+                              name="idiom" 
+                              value={chart.caption}         
+                              />{chart.caption}</CardTitle>
+                        </CardBody>
+                        <CardImg className="mt-1" top src={chart.src} alt={chart.caption}/>
+                    </Card>
+                  ))
+                }
+            </Row>
+        </Scrollbar>
+      </FormGroup>
+    </Fragment>);
+};
+
+const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => (
+  <Fragment>
+    <Row className="form-group">
+        <Label md={3}>Select a data node</Label>
+        <Col md={9}>
+          <Input type="select" onChange={formik.handleChange} name="dataNode">
+            {datagraph.nodes.map((node) => (<option key={node.id} value={node.id}>{node.data.label}</option>))}
+          </Input>
+        </Col>
+    </Row>
+
+    { formik.values.dataNode && ( 
+    <Row className="form-group">
+      <Col>
+          <Async defaultOptions loadOptions={() => calculateDataset(formik.values.dataNode, datasets.datasets
+                              ).then(data => AttributeExtractor(data[0]).map(header => ({value: header, label: header})))} placeholder="Select x axis field" />
+      </Col>
+      <Col>
+          <Async defaultOptions loadOptions={() => calculateDataset(formik.values.dataNode, datasets.datasets
+                              ).then(data => AttributeExtractor(data[0]).map(header => ({value: header, label: header})))} placeholder="Select y axis field" />
+      </Col>
+    </Row>
+    )}
+  </Fragment>
 );
 
-export default VisForm;
-
-// class VisForm extends Component {
-
-//     constructor(props)
-//     {
-//         super(props);
-//     }
-//     render() {
-//         return (
-//             <Form className="vertical-nav-menu">
-//                 <h5 className="app-sidebar__heading">Data</h5>
-//                 <Row className="form-group">                   
-//                     <Col>
-//                         <Select options={[]} placeholder="Select a data node" />
-//                     </Col>
-//                 </Row>
-//                 <h5 className="app-sidebar__heading">Idioms</h5>
-//                 <Row className="form-group">
-//                     <Col>
-//                         <Select options={[]} placeholder="Select a idiom" />
-//                     </Col>
-//                 </Row>
-//                 <h5 className="app-sidebar__heading">Encoding</h5>
-                // <Row className="form-group">
-                //     <Col>
-                //         <Select options={[]} placeholder="Select x axis field" />
-                //     </Col>
-                //     <Col>
-                //         <Select options={[]} placeholder="Select y axis field" />
-                //     </Col>
-                // </Row>
-// {/* 
-//                 <Row className="form-group">
-//                     <Col>
-//                         <Select options={[]} placeholder="Row" />
-//                     </Col>
-//                     <Col>
-//                         <Select options={[]} placeholder="Col" />
-//                     </Col>
-//                 </Row> */}
-
-//                 <h5 className="app-sidebar__heading">Mark</h5>
-//                 <Row className="form-group">
-//                     <Col>
-//                         <Select options={[]} placeholder="size" />
-//                     </Col>
-//                     <Col>
-//                         <Select options={[]} placeholder="color" />
-//                     </Col>
-//                 </Row>
-
-//                 <Row className="form-group">
-//                     <Col>
-//                         <Select options={[]} placeholder="shape" />
-//                     </Col>
-//                     <Col>
-//                         <Select options={[]} placeholder="detail" />
-//                     </Col>
-//                 </Row>
-//                 <Row className="form-group">
-//                     <Col>
-//                         <Select options={[]} placeholder="text" />
-//                     </Col>
-//                 </Row>
-//             </Form>
-//         );
-//     }
-// }
+export default Wizard;

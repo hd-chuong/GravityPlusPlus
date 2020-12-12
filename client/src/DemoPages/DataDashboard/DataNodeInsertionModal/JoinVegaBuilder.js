@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import {Label, Input, Row, Col, Form, Button} from 'reactstrap'; 
 import Select from 'react-select';
-import AsyncSelect from 'react-select/async';
 
 import {AggregationMethods, JoinTypes} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
@@ -24,7 +23,6 @@ class JoinVegaBuilder extends React.Component {
     }
 
     render() {
-        console.log(this.props.datasets)
         return (
             <Form>
                 <small>Join two datasets.</small>

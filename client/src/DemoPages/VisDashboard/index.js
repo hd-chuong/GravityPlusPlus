@@ -34,6 +34,7 @@ class Dashboard extends Component{
                 <div className="app-main__outer">
                     <div className="app-main__inner">
                         <VisDashboard
+                            datasets={this.props.datasets}
                             datagraph={this.props.datagraph}
                             toggleNewNodeModal={this.toggleNewNodeModal}
                             isNewNodeModalOpen={this.state.isNewNodeModalOpen}

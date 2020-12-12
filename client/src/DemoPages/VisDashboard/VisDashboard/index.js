@@ -10,7 +10,7 @@ import {
 
 import VisGraph from '../../DataDashboard/DataGraph';
 
-export default class DataDashboard extends Component {
+export default class VisDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -60,6 +60,7 @@ export default class DataDashboard extends Component {
                         toggle={this.props.toggleNewNodeModal}
                         isOpen={this.props.isNewNodeModalOpen}
                         datagraph={this.props.datagraph}
+                        datasets={this.props.datasets}
                     />
                 </ReactCSSTransitionGroup>
             </Fragment>
