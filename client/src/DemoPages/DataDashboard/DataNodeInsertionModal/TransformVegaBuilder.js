@@ -14,7 +14,12 @@ class TransformVegaBuilder extends React.Component {
                 fields: [],
                 ops: [],
                 groupby: []
-            }
+            },
+            vegaFilter: {
+                type: "filter",
+                expr: ""
+            },
+            type: "aggregate"
         };
         this.buildVega = this.buildVega.bind(this);
         
@@ -22,12 +27,43 @@ class TransformVegaBuilder extends React.Component {
 
     buildVega(newChange)
     {
-        this.setState({vega: {...this.state.vega, ...newChange}}, 
-            () => {this.props.updateVegaSpecs(this.state.vega)});
+        if (this.state.type === "filter")
+        {
+            this.setState({vegaFilter: {...this.state.vegaFilter, ...newChange}}, 
+                () => {this.props.updateVegaSpecs(this.state.vegaFilter)});
+        }
+        else {
+            this.setState({vega: {...this.state.vega, ...newChange}}, 
+                () => {this.props.updateVegaSpecs(this.state.vega)});
+    
+        }
     }
     render() {
+        console.log(this.state.type);
         return (<Fragment>
                 <Row className="form-group">
+                    <Label for="aggregation" md={2}>Types of transformation</Label>
+                    <Col>
+                        <Input type="select" onChange={(e) => this.setState({type: e.target.value})}>
+                            <option value="aggregate">Aggregate</option>
+                            <option value="filter">Filter</option>
+                        </Input>
+                    </Col>
+                </Row>                
+                <Row className="form-group">
+
+                    {this.state.type === "filter" && (
+                    <Col>
+                        <Row className="form-group">
+                            <Label md={4}>Expressions</Label>
+                            <Col>
+                                <Input type="text" placeholder="enter your filtering expression here" 
+                                onChange={(e) => this.buildVega({expr: e.target.value})}></Input>
+                            </Col>
+                        </Row>
+                    </Col>
+                    )}
+                    {this.state.type === "aggregate" && (
                     <Col>
                         <Row className="form-group">
                             <Label for="aggregation" md={4}>Functions</Label>
@@ -66,7 +102,7 @@ class TransformVegaBuilder extends React.Component {
                                 />
                             </Col>
                         </Row>
-                    </Col>
+                    </Col>)}
                                     
                     <Col className="form-group">
                         <Input 
@@ -75,7 +111,7 @@ class TransformVegaBuilder extends React.Component {
                             name="vega-specs" 
                             id="vega-specs" 
                             placeholder="Vega specification"
-                            value={JSON.stringify(this.state.vega, undefined, 4)}
+                            value={JSON.stringify(this.state.type === "aggregate" ? this.state.vega : this.state.vegaFilter, undefined, 4)}
                         />
                     </Col>
                 </Row>
