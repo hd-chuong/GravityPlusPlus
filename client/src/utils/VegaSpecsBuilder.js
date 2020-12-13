@@ -96,8 +96,8 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
     
     var pseudoAttribute = uuidv4();
 
-    var newLeftHeaders = leftHeaders.map((header) => `${leftDatasetName}-${header}`);
-    var newRightHeaders = rightHeaders.map((header) => `${rightDatasetName}-${header}`);
+    var newLeftHeaders = leftHeaders.map((header) => `${leftDatasetName}_${header}`);
+    var newRightHeaders = rightHeaders.map((header) => `${rightDatasetName}_${header}`);
     
     switch(joinType)
     {
@@ -112,13 +112,13 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
                         "type": "lookup",
                         "key": rightAttribute,
                         "from": rightId,
-                        "fields": [`${leftDatasetName}-${leftAttribute}`], 
+                        "fields": [`${leftDatasetName}_${leftAttribute}`], 
                         "as": [pseudoAttribute] 
                     },
                     {
                         "type": "project",
                         "fields": [...newLeftHeaders, ...rightHeaders.filter((header) => (header !== rightAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
-                        "as":     [...newLeftHeaders, ...newRightHeaders.filter((header) => (header !== `${rightDatasetName}-${rightAttribute}`))]
+                        "as":     [...newLeftHeaders, ...newRightHeaders.filter((header) => (header !== `${rightDatasetName}_${rightAttribute}`))]
                     }
                 ]    
 
@@ -133,13 +133,13 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
                     "type": "lookup",
                     "key": leftAttribute,
                     "from": leftId,
-                    "fields": [`${rightDatasetName}-${rightAttribute}`], 
+                    "fields": [`${rightDatasetName}_${rightAttribute}`], 
                     "as": [pseudoAttribute] 
                 },
                 {
                     "type": "project",
                     "fields": [...newRightHeaders, ...leftHeaders.filter((header) => (header !== leftAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
-                    "as": [...newRightHeaders, ...newLeftHeaders.filter((header) => (header !== `${leftDatasetName}-${leftAttribute}`))]
+                    "as": [...newRightHeaders, ...newLeftHeaders.filter((header) => (header !== `${leftDatasetName}_${leftAttribute}`))]
                 }
             ]
         
@@ -154,7 +154,7 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
                     "type": "lookup",
                     "key": rightAttribute,
                     "from": rightId,
-                    "fields": [`${leftDatasetName}-${leftAttribute}`], 
+                    "fields": [`${leftDatasetName}_${leftAttribute}`], 
                     "as": [pseudoAttribute] 
                 },
                 {
@@ -164,7 +164,7 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
                 {
                     "type": "project",
                     "fields": [...newLeftHeaders, ...rightHeaders.filter((header) => (header !== rightAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
-                    "as":     [...newLeftHeaders, ...newRightHeaders.filter((header) => (header !== `${rightDatasetName}-${rightAttribute}`))]
+                    "as":     [...newLeftHeaders, ...newRightHeaders.filter((header) => (header !== `${rightDatasetName}_${rightAttribute}`))]
                 }
             ]
         // case "OUTER JOIN":
