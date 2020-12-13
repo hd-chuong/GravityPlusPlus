@@ -23,8 +23,7 @@ export default class Chart extends Component {
         
         const spec = this.props.spec;
         spec.data[0].values = this.props.data;
-        
-        console.log(spec);
+        console.log(JSON.stringify(spec, null, 4));
         return (
             <Card className="main-card mb-3">
                     <CardHeader>{this.props.title}</CardHeader>

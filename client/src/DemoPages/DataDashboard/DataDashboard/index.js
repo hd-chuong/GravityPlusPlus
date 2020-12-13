@@ -95,20 +95,6 @@ export default class DataDashboard extends Component {
                     transitionEnter={false}
                     transitionLeave={false}>
                     <Row>
-                        <Col md="5" >   
-                            <ReactCSSTransitionGroup
-                            component="div"
-                            transitionName="TabsAnimation"
-                            transitionAppear={true}
-                            transitionAppearTimeout={0}
-                            transitionEnter={false}
-                            transitionLeave={false}>
-                                <DataTable 
-                                    label={this.state.currentDataLabel} 
-                                    tableData={this.state.currentData}
-                                />
-                            </ReactCSSTransitionGroup>
-                        </Col>
                         <Col>
                             <ReactCSSTransitionGroup
                             component="div"
@@ -122,6 +108,20 @@ export default class DataDashboard extends Component {
                                     onElementClick={this.updateCurrentData.bind(this)}
                                     onElementsRemove={this.deleteNode}
                                 />                                    
+                            </ReactCSSTransitionGroup>
+                        </Col>
+                        <Col md="5" >   
+                            <ReactCSSTransitionGroup
+                            component="div"
+                            transitionName="TabsAnimation"
+                            transitionAppear={true}
+                            transitionAppearTimeout={0}
+                            transitionEnter={false}
+                            transitionLeave={false}>
+                                <DataTable 
+                                    label={this.state.currentDataLabel} 
+                                    tableData={this.state.currentData}
+                                />
                             </ReactCSSTransitionGroup>
                         </Col>
                     </Row>
