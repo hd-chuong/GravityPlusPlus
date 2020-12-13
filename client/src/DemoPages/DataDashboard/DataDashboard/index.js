@@ -11,6 +11,7 @@ import {
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
 import calculateDataset from '../../../utils/dataGeneration';
+
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 
@@ -65,8 +66,6 @@ export default class DataDashboard extends Component {
             alert("Unable to view the data: " + error.message);    
         });
     }
-
-
 
     updateCurrentData(dataNodeId)
     {

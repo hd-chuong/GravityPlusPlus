@@ -25,8 +25,6 @@ const AppMain = ({datasets,
                 setDataNode}) => {
     return (
         <Fragment>
-            
-            {/* DataDashboard */}
             <Suspense fallback={
                     <div className="loader-container">
                         <div className="loader-container-inner">

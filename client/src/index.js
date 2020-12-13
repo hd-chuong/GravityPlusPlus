@@ -8,7 +8,8 @@ import './assets/base.css';
 import Main from './DemoPages/Main';
 import configureStore from './config/configureStore';
 import { Provider } from 'react-redux';
-
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 

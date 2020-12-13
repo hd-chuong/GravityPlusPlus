@@ -25,7 +25,6 @@ async function calculateDataset(dataNodeId, datasets)
         const view = new View(parse(specs)).renderer("none").initialize();
         view.toSVG();
         const result = view.data(dataNodeId); 
-        console.log(result);
         return result;
     })
     .catch(error => {
