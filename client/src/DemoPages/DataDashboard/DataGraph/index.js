@@ -36,7 +36,7 @@ import {Card, CardBody, CardHeader} from 'reactstrap';
 //   { id: 'e2-3', source: '2', target: '3' },
 // ];
 
-export default class DataGraph extends Component {
+export default class Graph extends Component {
     constructor(props)
     {
         super(props);

@@ -15,14 +15,16 @@ const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
 
 const AppMain = ({datasets, 
-                datagraph, 
+                datagraph, visgraph,
                 addDataset, 
                 removeDataset, 
                 addDataNode, 
                 removeDataNode, 
                 addDataEdge, 
                 removeEdges, 
-                setDataNode}) => {
+                setDataNode,
+                addVisNode
+            }) => {
     return (
         <Fragment>
             <Suspense fallback={
@@ -57,6 +59,8 @@ const AppMain = ({datasets,
                     <VisDashboard
                         datasets={datasets}
                         datagraph={datagraph.datagraph}
+                        visgraph={visgraph.visgraph}
+                        addVisNode={addVisNode}
                     />
                 </Route>
                 

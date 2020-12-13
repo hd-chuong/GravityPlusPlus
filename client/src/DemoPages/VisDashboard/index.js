@@ -36,8 +36,12 @@ class Dashboard extends Component{
                         <VisDashboard
                             datasets={this.props.datasets}
                             datagraph={this.props.datagraph}
+                            visgraph={this.props.visgraph}
+                            
                             toggleNewNodeModal={this.toggleNewNodeModal}
                             isNewNodeModalOpen={this.state.isNewNodeModalOpen}
+                            addVisNode={this.props.addVisNode}
+                            
                         />
                     </div>
                 </div>

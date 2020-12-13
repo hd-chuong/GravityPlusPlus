@@ -13,7 +13,6 @@ import {
     TabPane,
 } from 'reactstrap';
 
-import PageTitle from '../../../Layout/AppMain/PageTitle';
 
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 

@@ -8,6 +8,7 @@ import ResizeDetector from 'react-resize-detector';
 import AppMain from '../../Layout/AppMain';
 import { addDataset, removeDataset } from '../../redux/DatasetActionCreators';
 import { addDataEdge, addDataNode, removeDataNode, removeEdges, setDataNode } from '../../redux/DataGraphActionCreators';
+import { addVisNode } from '../../redux/VisGraphActionCreators';
 
 class Main extends React.Component {
     constructor(props) {
@@ -50,6 +51,7 @@ class Main extends React.Component {
                     <AppMain 
                         datasets={this.props.datasets}
                         datagraph={this.props.datagraph}
+                        visgraph={this.props.visgraph}
 
                         addDataset={this.props.addDataset}
                         removeDataset={this.props.removeDataset}
@@ -60,7 +62,8 @@ class Main extends React.Component {
                         removeDataNode={this.props.removeDataNode}
                         removeEdges={this.props.removeEdges}
                         setDataNode={this.props.setDataNode}
-
+                        
+                        addVisNode={this.props.addVisNode}
                     />
                     <ResizeDetector handleWidth onResize={this.onResize} />
                 </div>
@@ -78,7 +81,8 @@ const mapStateToProp = state => ({
     enableClosedSidebar: state.ThemeOptions.enableClosedSidebar,
     enablePageTabsAlt: state.ThemeOptions.enablePageTabsAlt,
     datasets: state.datasets,
-    datagraph: state.datagraph
+    datagraph: state.datagraph,
+    visgraph: state.visgraph,
 });
 
 const mapDispatchToProp = dispatch => ({
@@ -88,7 +92,8 @@ const mapDispatchToProp = dispatch => ({
     removeDataNode: (id) => dispatch(removeDataNode({id})),
     removeEdges: (id, direction = null) => dispatch(removeEdges(id, direction)),
     setDataNode: (id, params) => dispatch(setDataNode({id, params})),
-    addDataEdge: (source, target, type, data) => dispatch(addDataEdge({source, target, type, data}))
+    addDataEdge: (source, target, type, data) => dispatch(addDataEdge({source, target, type, data})),
+    addVisNode: (name, dataSource, spec) => dispatch(addVisNode({name, dataSource, spec}))
   });
   
 

@@ -41,11 +41,14 @@ const Wizard = (props) => {
   };
 
   const handleSubmit = async (values, bag) => {
+    
     if (step.props.onSubmit) {
       await step.props.onSubmit(values, bag);
     }
     if (isLastStep) {
-      return onSubmit(values, bag);
+      console.log(values);
+      props.addVisNode(values.title, values.dataNode, values.spec);
+      // return onSubmit(values, bag);
     } else {
       bag.setTouched({});
       next(values);
@@ -84,7 +87,7 @@ const Wizard = (props) => {
               disabled={formik.isSubmitting} 
               color="primary" 
               className="float-right"> 
-              {isLastStep ? 'Submit' : 'Next'}
+              {isLastStep ? 'Create node' : 'Next'}
             </Button>
           </div>
         
@@ -143,12 +146,20 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
   return (
     <Fragment>
       <Row className="form-group">
+        <Label md={3}>Enter the visualisation node</Label>
+        <Col md={9}>
+          <Input type="text" onChange={formik.handleChange} name="title"/>
+        </Col>
+      </Row>
+      
+      <Row className="form-group">
           <Label md={3}>Select a data node</Label>
           <Col md={9}>
             <Input type="select" onChange={(event) => {
                                               formik.handleChange(event);
                                               calculateDataset(event.target.value, datasets.datasets).then(dataset => {setData(dataset)}); 
                                           }} name="dataNode">
+              <option key={-1} value={""}>Select a data node</option>
               {datagraph.nodes.map((node) => (<option key={node.id} value={node.id}>{node.data.label}</option>))}
             </Input>
           </Col>
@@ -156,6 +167,7 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
 
       { formik.values.dataNode && Array.isArray(data) && ( 
       <Fragment>
+        
         <Row className="form-group">
           <Col>
               <Input 
@@ -164,6 +176,7 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
                 name="xField"
                 placeholder="Select x axis field" 
               >
+                <option key={-1} value={""}>Select an attribute</option>
                 {AttributeExtractor(data[0]).map(header => (<option key={header} value={header}>{header}</option>))}
                 </Input>
           </Col>
@@ -175,30 +188,34 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
                 name="yField"
                 placeholder="Select y axis field" 
               >
+                <option key={-1} value={""}>Select an attribute</option>
                 {AttributeExtractor(data[0]).map(header => (<option key={header} value={header}>{header}</option>))}
               </Input>
-          </Col>
-        </Row>
-        <Row className="form-group">
-          <Label md={3}>Enter the graph title</Label>
-          <Col md={9}>
-            <Input type="text" onChange={formik.handleChange} name="title"/>
           </Col>
         </Row>
       </Fragment>
       )}
       <Row className="form-group">
-        {/* {formik.values.dataNode && formik.values.xField && formik.values.yField &&  */}
-          <Vega spec={BarChart("table", "a", "b")} data={ { "table": [
-    { "a": 'A', "b": 28 },
-    { "a": 'B', "b": 55 },
-    { "a": 'C', "b": 43 }
-  ] }} />
-          {/* <Vega specs={BarChart("table", formik.values.xField, formik.values.yField)} data={ { table: data }} /> */}
-        
+      {
+        formik.values.dataNode 
+        && formik.values.xField 
+        && formik.values.yField 
+        && <Vega className="mx-auto" data={ {"table": data} } spec={BarChart("table", formik.values.xField, formik.values.yField, data)} /> 
+      }
+      {
+        formik.values.dataNode 
+        && formik.values.xField 
+        && formik.values.yField 
+        && setSpecs(formik, BarChart("table", formik.values.xField, formik.values.yField, ""))}
       </Row>
     </Fragment>
   )
+}
+
+function setSpecs(formik, specs)
+{
+  // console.log("set specs ", formik.values);
+  formik.values.spec = specs;
 }
 
 export default Wizard;

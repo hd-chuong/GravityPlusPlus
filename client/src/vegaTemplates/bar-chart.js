@@ -1,4 +1,4 @@
-function barChartSchema(name, x, y) {
+function barChartSchema(name, x, y, value) {
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A basic bar chart example, with value labels shown upon mouse hover.",
@@ -6,7 +6,7 @@ function barChartSchema(name, x, y) {
     "height": 200,
     "padding": 5,
   
-    "data": [{ "name": name }],
+    "data": [{ "name": name, "values":  value}],
   
     "signals": [
       {
@@ -37,8 +37,8 @@ function barChartSchema(name, x, y) {
     ],
   
     "axes": [
-      { "orient": "bottom", "scale": "xscale" },
-      { "orient": "left", "scale": "yscale" }
+      { "orient": "bottom", "scale": "xscale", "title": x },
+      { "orient": "left", "scale": "yscale", "title": y }
     ],
   
     "marks": [
@@ -69,9 +69,9 @@ function barChartSchema(name, x, y) {
             "fill": {"value": "#333"}
           },
           "update": {
-            "x": {"scale": "xscale", "signal": `tooltip.${x}`, "band": 0.5},
-            "y": {"scale": "yscale", "signal": `tooltip.${y}`, "offset": -2},
-            "text": {"signal": `tooltip.${y}`},
+            "x": {"scale": "xscale", "signal": "tooltip." + x, "band": 0.5},
+            "y": {"scale": "yscale", "signal": "tooltip." + y, "offset": -2},
+            "text": {"signal": "tooltip." + y},
             "fillOpacity": [
               {"test": "datum === tooltip", "value": 0},
               {"value": 1}

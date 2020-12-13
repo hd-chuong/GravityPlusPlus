@@ -23,6 +23,7 @@ class VisNodeInsertionModal extends React.Component {
                     <VisForm
                         datagraph={this.props.datagraph}
                         datasets={this.props.datasets}
+                        addVisNode={this.props.addVisNode}
                     />
                 </ModalBody>
         </Modal>
