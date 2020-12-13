@@ -2,13 +2,9 @@ import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import cx from 'classnames';
 
-import Nav from '../AppNav/VerticalNavWrapper';
-
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import HeaderLogo from '../AppLogo';
-
 import {
     setEnableMobileMenu
 } from '../../reducers/ThemeOptions';
@@ -37,7 +33,7 @@ class VisSideBar extends Component {
 
         return (
             <Fragment>
-                <div className="sidebar-mobile-overlay" onClick={this.toggleMobileSidebar}/>
+                {/* <div className="sidebar-mobile-overlay" onClick={this.toggleMobileSidebar}/> */}
                 <ReactCSSTransitionGroup
                     component="div"
                     className={cx("app-sidebar", backgroundColor)}
@@ -46,11 +42,21 @@ class VisSideBar extends Component {
                     // transitionAppearTimeout={1500}
                     transitionEnter={false}
                     transitionLeave={false}>
-                    {/* <HeaderLogo/> */}
                     <PerfectScrollbar>
                         <div className="app-sidebar__inner">
-                            <Nav addDataset={this.props.addDataset} datasets={this.props.datasets} toggleNewNodeModal={this.props.toggleNewNodeModal}/>
+                            <div className="metismenu vertical-nav-menu" active>
+                                <ul className="metismenu-container">
+                                    <li className="metismenu-item" onClick={this.props.toggleNewNodeModal} style={{ cursor: 'pointer' }}>                            
+                                        <div className="metismenu-link" target="_blank">
+                                            <i className="metismenu-icon fa fa-asterisk fa-lg"></i> Add new Node
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            {/* <VisForm/> */}
                         </div>
+
                     </PerfectScrollbar>
                 </ReactCSSTransitionGroup>
             </Fragment>

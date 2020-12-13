@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 // import registerServiceWorker from './registerServiceWorker';
 import { unregister } from './registerServiceWorker';
 
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter  } from 'react-router-dom';
 import './assets/base.css';
 import Main from './DemoPages/Main';
 import configureStore from './config/configureStore';
 import { Provider } from 'react-redux';
-
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -18,9 +19,9 @@ const rootElement = document.getElementById('root');
 const renderApp = Component => {
   ReactDOM.render(
     <Provider store={store}>
-      <HashRouter>
+      <BrowserRouter >
         <Component />
-      </HashRouter>
+      </BrowserRouter >
     </Provider>,
     rootElement
   );

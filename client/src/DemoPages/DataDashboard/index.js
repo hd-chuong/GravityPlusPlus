@@ -5,8 +5,8 @@ import {Route} from 'react-router-dom';
 import DataDashboard from './DataDashboard';
 
 // Layout
-import AppHeader from '../../Layout/AppHeader/';
-import AppSidebar from '../../Layout/AppSidebar/';
+import AppHeader from '../../Layout/AppHeader';
+import AppSidebar from '../../Layout/AppSidebar';
 // import AppFooter from '../../Layout/AppFooter/';
 
 
@@ -49,9 +49,8 @@ class Dashboards extends Component{
                             removeEdges={this.props.removeEdges}
                             setDataNode={this.props.setDataNode}
                         />
-                        {/* <Route path={'/data/'} component={DataDashboard}/> */}
                     </div>
-                    {/* <AppFooter/> */}
+                    
                 </div>
             </div>
         </Fragment>

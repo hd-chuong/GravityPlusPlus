@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactFlow, {MiniMap, Controls, Background, removeElements} from 'react-flow-renderer';
-import {Card} from 'reactstrap';
+import {Card, CardBody, CardHeader} from 'reactstrap';
 
 // examples of data to be passed into react flow 
 // const elements = [
@@ -36,34 +36,39 @@ import {Card} from 'reactstrap';
 //   { id: 'e2-3', source: '2', target: '3' },
 // ];
 
-export default class DataGraph extends Component {
+export default class Graph extends Component {
     constructor(props)
     {
         super(props);
-        this.onElementsRemove = this.onElementsRemove.bind(this);
-    }
-
-    onElementsRemove(elementsToRemove)
-    {
-        console.log(elementsToRemove);
     }
 
     render() 
     {
-        const elements = [...this.props.datagraph.datagraph.nodes, ...this.props.datagraph.datagraph.edges];
+        if (this.props.data === null || this.props.data === undefined) 
         return (
             <Card className="main-card mb-3">
-                <div className="card-header"> Data graph
-                </div>
-                <div style={{ height: 400 }}> 
+                <CardHeader>
+                    Graph view
+                </CardHeader>
+                
+                <CardBody>
+                    Create a node to view the graph
+                </CardBody>
+            </Card>
+        );
+        const elements = [...this.props.data.nodes, ...this.props.data.edges];
+
+        return (
+            <Card className="main-card mb-3">
+                <div className="card-header"> Graph view </div>
+                <div style={{ height: 600 }}> 
                     <ReactFlow elements={elements} 
-                                onElementClick={(event, element) => {this.props.updateCurrentData(element.id)}}
+                                onElementClick={(event, element) => {this.props.onElementClick(element.id)}}
                                 onElementsRemove={(elements) => 
                                     elements.map(element => element.id)
-                                    .forEach(e => this.props.deleteNode(e))    
+                                    .forEach(e => this.props.onElementsRemove(e))    
                                 }
-                                >
-                               
+                                >                               
                         <Controls />  
                         <Background color="#aaa" gap={16} /> 
                     </ReactFlow>
