@@ -8,7 +8,7 @@ import Charts from './ChartGallery';
 import { Fragment } from 'react';
 import AttributeExtractor from '../../utils/AttributeExtractor';
 import calculateDataset from '../../utils/dataGeneration';
-import Vega from 'react-vega';
+import Vega from '../Vega';
 import BarChart from "../../vegaTemplates/bar-chart";
 
 const Wizard = (props) => {
@@ -195,26 +195,28 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
         </Row>
       </Fragment>
       )}
-      <Row className="form-group">
       {
         formik.values.dataNode 
         && formik.values.xField 
         && formik.values.yField 
-        && <Vega className="mx-auto" data={ {"table": data} } spec={BarChart("table", formik.values.xField, formik.values.yField, data)} /> 
+        && <Row className="form-group"><Vega 
+              className="mx-auto" 
+              spec={BarChart("table", formik.values.xField, formik.values.yField, data)} 
+              config={{actions: {compiled: false, editor: false, source: false}}}
+        /></Row> 
       }
       {
         formik.values.dataNode 
         && formik.values.xField 
         && formik.values.yField 
         && setSpecs(formik, BarChart("table", formik.values.xField, formik.values.yField, ""))}
-      </Row>
+      
     </Fragment>
   )
 }
 
 function setSpecs(formik, specs)
 {
-  // console.log("set specs ", formik.values);
   formik.values.spec = specs;
 }
 
