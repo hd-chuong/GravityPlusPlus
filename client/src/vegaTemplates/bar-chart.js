@@ -1,10 +1,11 @@
-function barChartSchema(name, x, y, value) {
+export default function barChartSchema(name, x, y, value) {
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A basic bar chart example, with value labels shown upon mouse hover.",
     "width": 400,
     "height": 200,
     "padding": 5,
+    "autosize": "fit",
   
     "data": [{ "name": name, "values":  value}],
   
@@ -50,7 +51,8 @@ function barChartSchema(name, x, y, value) {
             "x": {"scale": "xscale", "field": x},
             "width": {"scale": "xscale", "band": 1},
             "y": {"scale": "yscale", "field": y},
-            "y2": {"scale": "yscale", "value": 0}
+            "y2": {"scale": "yscale", "value": 0},
+            "tooltip": {"signal": "datum"}
           },
           "update": {
             "fill": {"value": "steelblue"}
@@ -83,4 +85,3 @@ function barChartSchema(name, x, y, value) {
   };
 }
 
-export default barChartSchema;

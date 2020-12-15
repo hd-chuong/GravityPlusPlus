@@ -44,7 +44,7 @@ class VisSideBar extends Component {
                     transitionLeave={false}>
                     <PerfectScrollbar>
                         <div className="app-sidebar__inner">
-                            <div className="metismenu vertical-nav-menu" active>
+                            <div className="metismenu vertical-nav-menu">
                                 <ul className="metismenu-container">
                                     <li className="metismenu-item" onClick={this.props.toggleNewNodeModal} style={{ cursor: 'pointer' }}>                            
                                         <div className="metismenu-link" target="_blank">

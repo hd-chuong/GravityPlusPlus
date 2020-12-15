@@ -10,11 +10,13 @@ export default class Vega extends React.PureComponent {
     }
   }
   componentDidMount() {
-    const {spec, config} = this.props;
+    const {spec, config, data} = this.props;
+    spec.data[0].values = JSON.parse(JSON.stringify(data));
     vegaEmbed(this.refs[this.state.id], spec, config);
   }
   componentDidUpdate() {
-    const {spec, config} = this.props;
+    const {spec, config, data} = this.props;
+    spec.data[0].values = JSON.parse(JSON.stringify(data));
     vegaEmbed(this.refs[this.state.id], spec, config);
   }
   render() {

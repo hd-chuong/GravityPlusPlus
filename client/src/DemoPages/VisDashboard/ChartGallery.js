@@ -2,15 +2,17 @@ const charts = [
   {
     src: process.env.PUBLIC_URL + '/images/bar-chart.png',
     thumbnail: process.env.PUBLIC_URL + '/images/bar-chart.png',
-    tags: [{value: "Bar chart", title: "Bar chart"}],
+    tags: [{value: "BarChart", title: "Bar chart"}],
 
-    caption: "Bar chart"
+    caption: "Bar chart",
+    value: "BarChart"
   },
   {
-    src: process.env.PUBLIC_URL + '/images/donut-chart.png',
-    thumbnail: process.env.PUBLIC_URL + '/images/donut-chart.png',
-    tags: [{value: "Donut chart", title: "Donut chart"}],
-    caption: "Donut chart"
+    src: process.env.PUBLIC_URL + '/images/pie-chart.png',
+    thumbnail: process.env.PUBLIC_URL + '/images/pie-chart.png',
+    tags: [{value: "Pie chart", title: "Pie chart"}],
+    caption: "Pie chart",
+    value: "PieChart"
   },
   {
     src: process.env.PUBLIC_URL + '/images/line-chart.png',
