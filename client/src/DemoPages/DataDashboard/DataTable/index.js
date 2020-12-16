@@ -1,6 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import classnames from 'classnames';
 
 import {
     Row, Col,
@@ -13,6 +11,7 @@ import {
     TabPane,
 } from 'reactstrap';
 
+import {pretty} from 'js-object-pretty-print';
 
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 
@@ -49,7 +48,7 @@ export default class DataTable extends Component {
                             <tr>{headers.map((key) => (<th key={key} className="text-center">{key}</th>))}</tr>
                             </thead>
                             <tbody>
-                                {data.map(datum =>(<tr>{headers.map(key => (<td key={key} className="text-center">{datum[key]}</td>))}</tr>))}
+                                {data.map(datum =>(<tr>{headers.map(key => (<td key={key} className="text-center">{JSON.stringify(datum[key], replacer)}</td>))}</tr>))}
                             </tbody>
                         </table>
                     </div>
@@ -57,3 +56,24 @@ export default class DataTable extends Component {
         )
     }
 }
+
+function replacer(key, value) {
+    // Filtering out properties
+    if (Array.isArray(value))
+    {
+        return "[ ... ]";
+    }
+
+    if (typeof value === "object")
+    {
+        return "{...}";
+    }
+
+    if (typeof value === "string")
+    {
+        if (value.length > 10)
+            return value.slice(0, 10) + "...";
+        else return value;
+    }
+    return value;
+  }

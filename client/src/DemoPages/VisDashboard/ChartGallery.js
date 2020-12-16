@@ -18,7 +18,9 @@ const charts = [
     src: process.env.PUBLIC_URL + '/images/line-chart.png',
     thumbnail: process.env.PUBLIC_URL + '/images/line-chart.png',
     tags: [{value: "Line chart", title: "Line chart"}],
-    caption: "Line chart"
+    caption: "Line chart",
+    value: "LineChart"
+  
   },
   {
     src: process.env.PUBLIC_URL + '/images/area-chart.png',
