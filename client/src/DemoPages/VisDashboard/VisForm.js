@@ -4,21 +4,25 @@ import Async from 'react-select/async';
 import Select from 'react-select';
 import Scrollbar from 'react-perfect-scrollbar';
 import {Field, Form, Formik } from 'formik';
-import Charts from './ChartGallery';
+
 import { Fragment } from 'react';
 import AttributeExtractor from '../../utils/AttributeExtractor';
 import calculateDataset from '../../utils/dataGeneration';
-import Vega from 'react-vega';
-import BarChart from "../../vegaTemplates/bar-chart";
+import Vega from '../Vega';
 
+import Charts from './ChartGallery';
+import BarChart from "../../vegaTemplates/bar-chart";
+import PieChart from "../../vegaTemplates/pie-chart";
+import BarChartForm from './BarChartForm';
+import PieChartForm from './PieChartForm';
 const Wizard = (props) => {
   const initialValues = {
     useOurTemplate: true,
-    idiom: 'bar chart',
+    idiom: 'BarChart',
     dataNode: null,
     xField: null,
     yField: null,
-    title: "Title"
+    title: ""
   };
 
   const [stepNumber, setStepNumber] = useState(0);
@@ -46,7 +50,6 @@ const Wizard = (props) => {
       await step.props.onSubmit(values, bag);
     }
     if (isLastStep) {
-      console.log(values);
       props.addVisNode(values.title, values.dataNode, values.spec);
       // return onSubmit(values, bag);
     } else {
@@ -63,9 +66,9 @@ const Wizard = (props) => {
     >
       {formik => (
         <Form>
-          <Progress value={stepNumber * 100 / totalSteps}/>
+          <Progress className="mb-2" value={stepNumber * 100 / totalSteps}/>
           
-          {stepNumber===0 && <OwnSchema/>}          
+          {stepNumber===0 && <OwnSchema formik={formik}/>}          
           
           {stepNumber===1 && <VisVegaTemplateBuilder 
                                 datagraph={props.datagraph} 
@@ -97,66 +100,82 @@ const Wizard = (props) => {
   );
 };
 
-const OwnSchema = () => {
+const OwnSchema = ({formik}) => {
   return (
     <Fragment>
-      <FormGroup>
+      <Row className="form-group">
+        <Label md={3}>Enter the visualisation title</Label>
+        <Col md={9}>
+          <Input type="text" onChange={formik.handleChange} name="title"/>
+        </Col>
+      </Row>
+
+      <Row className="form-group">
           <Field 
             component="input"
             type="radio" 
             name="useOurTemplate" 
             value={false}
             disabled/> Write my own visualisation schema
-      </FormGroup>
+      </Row>
 
-      <FormGroup>
+      <Row className="form-group">
           <Field 
             type="radio" 
             name="useOurTemplate" 
             value={true}  
           /> Use our template (recommended)
-      </FormGroup>
-      
-      <FormGroup style={{height: "400px"}}>
-        <Scrollbar> 
-            <Row>
-                {
-                  Charts.map(chart => (
-                    <Card className="mb-1 col-md-4" style={{ cursor: 'pointer' }}>
-                        <CardBody>
-                            <CardTitle>
-                            <Field 
-                              type="radio" 
-                              name="idiom" 
-                              value={chart.caption}         
-                              />{chart.caption}</CardTitle>
-                        </CardBody>
-                        <CardImg className="mt-1" top src={chart.src} alt={chart.caption}/>
-                    </Card>
-                  ))
-                }
-            </Row>
-        </Scrollbar>
-      </FormGroup>
+      </Row>
     </Fragment>);
 };
 
 const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
   const [data, setData] = useState(null);
+  
+  if (formik.values.dataNode && formik.values.xField && formik.values.yField) 
+  {
+    switch(formik.values.idiom)
+    {
+      case "BarChart":
+        setSpecs(formik, BarChart("table", formik.values.xField, formik.values.yField, []));
+        break;
+      case "PieChart":
+        setSpecs(formik, PieChart("table", formik.values.xField, formik.values.yField, []));
+        break;
+      default:
+        break;  
+    }
+  }
+  console.log(data);
   return (
     <Fragment>
-      <Row className="form-group">
-        <Label md={3}>Enter the visualisation node</Label>
-        <Col md={9}>
-          <Input type="text" onChange={formik.handleChange} name="title"/>
-        </Col>
-      </Row>
-      
+      <FormGroup style={{height: "250px"}}>
+        <Scrollbar> 
+            <Row>
+              {
+                Charts.map((chart,i) => (
+                  <Card key={i} className="mb-1 col-12 col-lg-3" style={{ cursor: 'pointer' }}>
+                      <CardBody>
+                          <p>
+                          <Field 
+                            type="radio" 
+                            name="idiom" 
+                            value={chart.value}         
+                            />{chart.caption}</p>
+                      </CardBody>
+                      <CardImg className="mt-1" top src={chart.src} alt={chart.caption}/>
+                  </Card>
+                ))
+              }
+            </Row>
+        </Scrollbar>
+      </FormGroup>      
       <Row className="form-group">
           <Label md={3}>Select a data node</Label>
           <Col md={9}>
             <Input type="select" onChange={(event) => {
                                               formik.handleChange(event);
+                                              
                                               calculateDataset(event.target.value, datasets.datasets).then(dataset => {setData(dataset)}); 
                                           }} name="dataNode">
               <option key={-1} value={""}>Select a data node</option>
@@ -165,57 +184,27 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
           </Col>
       </Row>
 
-      { formik.values.dataNode && Array.isArray(data) && ( 
-      <Fragment>
-        
-        <Row className="form-group">
-          <Col>
-              <Input 
-                type="select" 
-                onChange={formik.handleChange}
-                name="xField"
-                placeholder="Select x axis field" 
-              >
-                <option key={-1} value={""}>Select an attribute</option>
-                {AttributeExtractor(data[0]).map(header => (<option key={header} value={header}>{header}</option>))}
-                </Input>
-          </Col>
-
-          <Col>
-              <Input  
-                type="select" 
-                onChange={formik.handleChange}
-                name="yField"
-                placeholder="Select y axis field" 
-              >
-                <option key={-1} value={""}>Select an attribute</option>
-                {AttributeExtractor(data[0]).map(header => (<option key={header} value={header}>{header}</option>))}
-              </Input>
-          </Col>
-        </Row>
-      </Fragment>
-      )}
-      <Row className="form-group">
+      {Array.isArray(data) && formik.values.idiom === "BarChart" && <BarChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
+      {Array.isArray(data) && formik.values.idiom === "PieChart" && <PieChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
+      
       {
-        formik.values.dataNode 
-        && formik.values.xField 
-        && formik.values.yField 
-        && <Vega className="mx-auto" data={ {"table": data} } spec={BarChart("table", formik.values.xField, formik.values.yField, data)} /> 
+        formik.values.dataNode && formik.values.xField && formik.values.yField 
+        && <Row className="form-group"><Vega 
+              className="mx-auto" 
+              spec={formik.values.spec} 
+              data={data}
+              config={vegaConfig}
+        /></Row> 
       }
-      {
-        formik.values.dataNode 
-        && formik.values.xField 
-        && formik.values.yField 
-        && setSpecs(formik, BarChart("table", formik.values.xField, formik.values.yField, ""))}
-      </Row>
     </Fragment>
   )
 }
 
-function setSpecs(formik, specs)
+function setSpecs(formik, spec)
 {
-  // console.log("set specs ", formik.values);
-  formik.values.spec = specs;
+  formik.values.spec = spec;
 }
+
+const vegaConfig = {actions: {compiled: false, editor: false, source: false}};
 
 export default Wizard;

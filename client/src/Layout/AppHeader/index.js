@@ -22,13 +22,15 @@ class Header extends React.Component {
         return (
             <Fragment>
                 <ReactCSSTransitionGroup
+                    name="app-header"
                     component="div"
                     className={cx("app-header", headerBackgroundColor, {'header-shadow': enableHeaderShadow})}
                     // transitionName="HeaderAnimation"
                     // transitionAppear={true}
                     // transitionAppearTimeout={1500}
-                    transitionEnter={false}
-                    transitionLeave={false}>
+                    // transitionEnter={false}
+                    // transitionLeave={false}
+                    >
 
                     <HeaderLogo/>
 
