@@ -29,7 +29,8 @@ export const DataGraph = (state = {errMess: null,
                     source: action.payload.source, 
                     
                     // transform only applies for joining dataset together
-                    transform: action.payload.transform
+                    transform: action.payload.transform,
+                    format: action.payload.format
                 },
                 position: {x, y},
             };

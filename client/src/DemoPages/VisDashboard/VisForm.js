@@ -13,8 +13,11 @@ import Vega from '../Vega';
 import Charts from './ChartGallery';
 import BarChart from "../../vegaTemplates/bar-chart";
 import PieChart from "../../vegaTemplates/pie-chart";
+import LineChart from "../../vegaTemplates/line-chart";
+
 import BarChartForm from './BarChartForm';
 import PieChartForm from './PieChartForm';
+import LineChartForm from './LineChartForm';
 const Wizard = (props) => {
   const initialValues = {
     useOurTemplate: true,
@@ -22,6 +25,7 @@ const Wizard = (props) => {
     dataNode: null,
     xField: null,
     yField: null,
+    categoryField: null,
     title: ""
   };
 
@@ -139,14 +143,20 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
       case "BarChart":
         setSpecs(formik, BarChart("table", formik.values.xField, formik.values.yField, []));
         break;
-      case "PieChart":
+      
+        case "PieChart":
         setSpecs(formik, PieChart("table", formik.values.xField, formik.values.yField, []));
         break;
-      default:
+
+      case "LineChart":
+        setSpecs(formik, LineChart("table", formik.values.xField, formik.values.yField, formik.values.categoryField, []));
+        break;
+      
+        default:
         break;  
     }
   }
-  console.log(data);
+
   return (
     <Fragment>
       <FormGroup style={{height: "250px"}}>
@@ -175,7 +185,7 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
           <Col md={9}>
             <Input type="select" onChange={(event) => {
                                               formik.handleChange(event);
-                                              
+
                                               calculateDataset(event.target.value, datasets.datasets).then(dataset => {setData(dataset)}); 
                                           }} name="dataNode">
               <option key={-1} value={""}>Select a data node</option>
@@ -186,7 +196,8 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
 
       {Array.isArray(data) && formik.values.idiom === "BarChart" && <BarChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
       {Array.isArray(data) && formik.values.idiom === "PieChart" && <PieChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
-      
+      {Array.isArray(data) && formik.values.idiom === "LineChart" && <LineChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
+  
       {
         formik.values.dataNode && formik.values.xField && formik.values.yField 
         && <Row className="form-group"><Vega 

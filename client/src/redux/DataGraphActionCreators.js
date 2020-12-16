@@ -7,8 +7,10 @@ export const saveDataNode = (payload) => ({
 });
 
 // source: the tabular data itself
-export const addDataNode = ({name, type, source, transform}) => (dispatch) => {
-    const newNode = {name, type, source, transform};
+export const addDataNode = ({name, type, source, transform, format}) => (dispatch) => {
+    const newNode = {name, type, source, transform, format};
+    
+    console.log("in redux", newNode);
 
     return Axios({
         method: "post",
@@ -37,7 +39,7 @@ export const addDataNode = ({name, type, source, transform}) => (dispatch) => {
         {
             type = "RAW";
         }
-        dispatch(saveDataNode({id, name, type, source, transform}));
+        dispatch(saveDataNode({id, name, type, source, transform, format}));
         
         return id;
     })

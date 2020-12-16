@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
 import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
 import Select from 'react-select';
@@ -7,6 +7,7 @@ import JoinVegaBuilder from './JoinVegaBuilder';
 import {JoinSpecsBuilder} from '../../../utils/VegaSpecsBuilder';
 import classnames from 'classnames';
 import calculateDataset from '../../../utils/dataGeneration';
+import AttributeExtractor from '../../../utils/AttributeExtractor';
 class DataNodeInsertionModal extends React.Component {
     constructor(props) 
     {
@@ -14,7 +15,9 @@ class DataNodeInsertionModal extends React.Component {
         this.state = {
             activeTab: '1',
             joinDatasets: [],
-            specs: ""
+            specs: "",
+            format: "json",
+            rawDataset: null
         }
     }
 
@@ -39,7 +42,29 @@ class DataNodeInsertionModal extends React.Component {
             alert("You must select a dataset");
             return;
         }
-        this.props.addDataNode(this.rawNodeName.value, "RAW", this.rawDataset.value);
+        let format = {"type": "json"}
+        
+
+        if (this.state.format !== "json" && !(this.property && this.property.value))
+        {
+            alert("You must select an attribute to parse value");
+            return;
+        }
+        console.log(this.property)
+        if (this.state.format === "geojson")
+        {
+            format.property = this.property.value;
+        }
+
+        if (this.state.format === "typojson")
+        {
+            format.type = "typojson";
+            format.feature = this.property.value;
+        }
+        this.props.addDataNode(this.rawNodeName.value, "RAW", this.rawDataset.value, [], format);
+        
+        this.setState({format: "json"});
+        
         this.props.toggle();
     }
 
@@ -57,9 +82,7 @@ class DataNodeInsertionModal extends React.Component {
     {
         const {id: id1, attribute: leftAttribute, headers: leftHeaders, name: leftDatasetName} = leftNode;
         const {id: id2, attribute: rightAttribute, headers: rightHeaders, name: rightDatasetName} = rightNode;
-        
-        console.log(leftNode);
-        console.log(rightNode);
+    
 
         if (joinNodeName === "") 
         {
@@ -68,8 +91,7 @@ class DataNodeInsertionModal extends React.Component {
         }
 
         const transform = JoinSpecsBuilder(leftNode, rightNode, joinType);
-        console.log("transform looks like: " , transform);
-        
+
         var source;
         if (joinType === "RIGHT JOIN")
         {
@@ -155,7 +177,9 @@ class DataNodeInsertionModal extends React.Component {
                                 <Row className="form-group">
                                     <Label for="rawDataset" md={2}>Select dataset</Label>
                                     <Col md={6}>
-                                        <Input type="select" name="rawDataset" id="rawDataset" innerRef={(input) => this.rawDataset = input}>
+                                        <Input type="select" name="rawDataset" id="rawDataset" innerRef={(input) => this.rawDataset = input}
+                                            onChange={(e) => this.setState({rawDataset: e.target.value})}
+                                        >
                                             {this.props.datasets.datasets.map((dataset) => (<option key={dataset.name} value={dataset.name}>{dataset.name}</option>))}
                                         </Input>
                                     </Col>
@@ -175,7 +199,38 @@ class DataNodeInsertionModal extends React.Component {
                                             placeholder="Enter the node name"></Input>
                                     </Col>
                                 </Row>
-                            
+                                
+                                <Row className="form-group">
+                                    <Label for="nodeid" md={2}>Parse option</Label>
+                                    <Col>
+                                        <Input type="select" 
+                                        name="format" id="format" 
+                                        onChange={(e) => {this.setState({format: e.target.value})}}
+                                        placeholder="Select the format">
+                                                <option value="json">json</option>
+                                                <option value="geojson">geojson</option>
+                                                <option value="topojson">topojson</option>
+                                        </Input>
+                                    </Col>
+                                    {(this.state.format === "geojson" || this.state.format === "topojson") && (
+                                    <Fragment>
+                                        <Label for="nodeid" md={2}>Property</Label>
+                                        <Col>
+                                            <Input type="select" name="feature" id="feature" innerRef={(input) => this.feature = input}
+                                                placeholder="Select the extracted field"
+                                                onChange={(e) => this.setState({property: e.target.value})}    
+                                                innerRef={(input) => this.property = input}
+                                            >
+                                                <option value={""}>Select an attribute</option>
+                                                {
+                                                    this.state.rawDataset && AttributeExtractor(this.props.datasets.datasets.filter(dataset => dataset.name === this.state.rawDataset)[0].dataset)
+                                                    .map((attr,i) => <option key={i} value={attr}>{attr}</option>)
+                                                }
+                                            </Input>
+                                        </Col>
+                                    </Fragment>)}
+                                </Row>
+                                
                                 <Button 
                                     color="primary" 
                                     className="float-right" 

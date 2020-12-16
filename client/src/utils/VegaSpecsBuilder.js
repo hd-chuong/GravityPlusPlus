@@ -57,7 +57,8 @@ export function DataSpecsBuilder(subgraph, datasets)
                 specs.data.push({
                     "name": node.id,
                     "values": GetDatasetByName(datasets, node.props.source),
-                    "label": node.props.name
+                    "label": node.props.name,
+                    "format": JSON.parse(node.props.format)
                 });
                 break;
             
@@ -81,6 +82,7 @@ export function DataSpecsBuilder(subgraph, datasets)
                 break;
         }
     }
+    console.log(specs);
     return specs;
 }
 
