@@ -48,7 +48,7 @@ export default class DataTable extends Component {
                             <tr>{headers.map((key) => (<th key={key} className="text-center">{key}</th>))}</tr>
                             </thead>
                             <tbody>
-                                {data.map(datum =>(<tr>{headers.map(key => (<td key={key} className="text-center">{JSON.stringify(datum[key], replacer)}</td>))}</tr>))}
+                                {data.map(datum =>(<tr>{headers.map(key => (<td key={key} className="text-center">{JSON.stringify(datum[key])}</td>))}</tr>))}
                             </tbody>
                         </table>
                     </div>
@@ -59,6 +59,7 @@ export default class DataTable extends Component {
 
 function replacer(key, value) {
     // Filtering out properties
+    
     if (Array.isArray(value))
     {
         return "[ ... ]";
@@ -76,4 +77,4 @@ function replacer(key, value) {
         else return value;
     }
     return value;
-  }
+}

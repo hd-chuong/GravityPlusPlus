@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import {Label, Input, Row, Col, Form, Button} from 'reactstrap'; 
 import Select from 'react-select';
-
+import Creatable from 'react-select/creatable';
 import {AggregationMethods, JoinTypes} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 
@@ -77,7 +77,7 @@ class JoinVegaBuilder extends React.Component {
 
                 <Row className="form-group">
                     <Col>
-                        <Select 
+                        <Creatable 
                             options={this.state.headers1.map((header) => ({value: header, label: header}))}
                             placeholder="Select joined field"
                             onChange={(a) => this.setState({attribute1: a.value})}
@@ -88,7 +88,7 @@ class JoinVegaBuilder extends React.Component {
                     </Col> 
 
                     <Col>
-                        <Select 
+                        <Creatable 
                             options={this.state.headers2.map((header) => ({value: header, label: header}))}
                             placeholder="Select joined field"
                             onChange={(a) => this.setState({attribute2: a.value})}

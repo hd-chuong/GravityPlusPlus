@@ -1,0 +1,318 @@
+[
+    {
+        "LGA": "Alpine",
+        "unemployed": "221"
+    },
+    {
+        "LGA": "Ararat",
+        "unemployed": "308"
+    },
+    {
+        "LGA": "Ballarat",
+        "unemployed": "2432"
+    },
+    {
+        "LGA": "Banyule",
+        "unemployed": "3207"
+    },
+    {
+        "LGA": "Bass Coast",
+        "unemployed": "1141"
+    },
+    {
+        "LGA": "Baw Baw",
+        "unemployed": "1188"
+    },
+    {
+        "LGA": "Bayside",
+        "unemployed": "1699"
+    },
+    {
+        "LGA": "Benalla",
+        "unemployed": "358"
+    },
+    {
+        "LGA": "Boroondara",
+        "unemployed": "4107"
+    },
+    {
+        "LGA": "Brimbank",
+        "unemployed": "41"
+    },
+    {
+        "LGA": "Buloke",
+        "unemployed": "11732"
+    },
+    {
+        "LGA": "Campaspe",
+        "unemployed": "120"
+    },
+    {
+        "LGA": "Cardinia",
+        "unemployed": "1190"
+    },
+    {
+        "LGA": "Casey",
+        "unemployed": "3311"
+    },
+    {
+        "LGA": "Central Goldfields",
+        "unemployed": "11253"
+    },
+    {
+        "LGA": "Colac-Otway",
+        "unemployed": "425"
+    },
+    {
+        "LGA": "Corangamite",
+        "unemployed": "475"
+    },
+    {
+        "LGA": "Darebin",
+        "unemployed": "288"
+    },
+    {
+        "LGA": "East Gippsland",
+        "unemployed": "5733"
+    },
+    {
+        "LGA": "Frankston",
+        "unemployed": "1730"
+    },
+    {
+        "LGA": "Gannawarra",
+        "unemployed": "5174"
+    },
+    {
+        "LGA": "Glen Eira",
+        "unemployed": "190"
+    },
+    {
+        "LGA": "Glenelg",
+        "unemployed": "3217"
+    },
+    {
+        "LGA": "Golden Plains",
+        "unemployed": "587"
+    },
+    {
+        "LGA": "Greater Bendigo",
+        "unemployed": "372"
+    },
+    {
+        "LGA": "Greater Dandenong",
+        "unemployed": "2318"
+    },
+    {
+        "LGA": "Greater Geelong",
+        "unemployed": "7832"
+    },
+    {
+        "LGA": "Greater Shepparton",
+        "unemployed": "7578"
+    },
+    {
+        "LGA": "Hepburn",
+        "unemployed": "2448"
+    },
+    {
+        "LGA": "Hindmarsh",
+        "unemployed": "272"
+    },
+    {
+        "LGA": "Hobsons Bay",
+        "unemployed": "109"
+    },
+    {
+        "LGA": "Horsham",
+        "unemployed": "3249"
+    },
+    {
+        "LGA": "Hume",
+        "unemployed": "397"
+    },
+    {
+        "LGA": "Indigo",
+        "unemployed": "10437"
+    },
+    {
+        "LGA": "Kingston",
+        "unemployed": "290"
+    },
+    {
+        "LGA": "Knox",
+        "unemployed": "4697"
+    },
+    {
+        "LGA": "Latrobe",
+        "unemployed": "3710"
+    },
+    {
+        "LGA": "Loddon",
+        "unemployed": "3647"
+    },
+    {
+        "LGA": "Macedon Ranges",
+        "unemployed": "164"
+    },
+    {
+        "LGA": "Manningham",
+        "unemployed": "633"
+    },
+    {
+        "LGA": "Maribyrnong",
+        "unemployed": "3832"
+    },
+    {
+        "LGA": "Maroondah",
+        "unemployed": "127"
+    },
+    {
+        "LGA": "Melbourne",
+        "unemployed": "3920"
+    },
+    {
+        "LGA": "Melton",
+        "unemployed": "3055"
+    },
+    {
+        "LGA": "Mildura",
+        "unemployed": "3384"
+    },
+    {
+        "LGA": "Mitchell",
+        "unemployed": "6751"
+    },
+    {
+        "LGA": "MOIRA",
+        "unemployed": "1744"
+    },
+    {
+        "LGA": "Monash",
+        "unemployed": "1319"
+    },
+    {
+        "LGA": "Moonee Valley",
+        "unemployed": "911"
+    },
+    {
+        "LGA": "Moorabool",
+        "unemployed": "3197"
+    },
+    {
+        "LGA": "Moreland",
+        "unemployed": "3334"
+    },
+    {
+        "LGA": "Mornington Peninsula",
+        "unemployed": "1086"
+    },
+    {
+        "LGA": "Mount Alexander",
+        "unemployed": "6121"
+    },
+    {
+        "LGA": "Moyne",
+        "unemployed": "3831"
+    },
+    {
+        "LGA": "Murrindindi",
+        "unemployed": "316"
+    },
+    {
+        "LGA": "Nillumbik",
+        "unemployed": "284"
+    },
+    {
+        "LGA": "Northern Grampians",
+        "unemployed": "316"
+    },
+    {
+        "LGA": "Port Phillip",
+        "unemployed": "1022"
+    },
+    {
+        "LGA": "Pyrenees",
+        "unemployed": "290"
+    },
+    {
+        "LGA": "Queenscliffe",
+        "unemployed": "3052"
+    },
+    {
+        "LGA": "South Gippsland",
+        "unemployed": "150"
+    },
+    {
+        "LGA": "Southern Grampians",
+        "unemployed": "658"
+    },
+    {
+        "LGA": "Stonnington",
+        "unemployed": "390"
+    },
+    {
+        "LGA": "Strathbogie",
+        "unemployed": "1991"
+    },
+    {
+        "LGA": "Surf Coast",
+        "unemployed": "215"
+    },
+    {
+        "LGA": "Swan Hill",
+        "unemployed": "440"
+    },
+    {
+        "LGA": "Towong",
+        "unemployed": "455"
+    },
+    {
+        "LGA": "Wangaratta",
+        "unemployed": "140"
+    },
+    {
+        "LGA": "Warrnambool",
+        "unemployed": "696"
+    },
+    {
+        "LGA": "Wellington",
+        "unemployed": "885"
+    },
+    {
+        "LGA": "West Wimmera",
+        "unemployed": "1350"
+    },
+    {
+        "LGA": "Whitehorse",
+        "unemployed": "63"
+    },
+    {
+        "LGA": "Whittlesea",
+        "unemployed": "5386"
+    },
+    {
+        "LGA": "Wodonga",
+        "unemployed": "8151"
+    },
+    {
+        "LGA": "Wyndham",
+        "unemployed": "1161"
+    },
+    {
+        "LGA": "Yarra",
+        "unemployed": "9294"
+    },
+    {
+        "LGA": "Yarra Ranges",
+        "unemployed": "3335"
+    },
+    {
+        "LGA": "Yarriambiack",
+        "unemployed": "3894"
+    },
+    {
+        "LGA": "",
+        "unemployed": "152"
+    }
+]

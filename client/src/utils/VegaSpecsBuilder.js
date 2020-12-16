@@ -79,10 +79,12 @@ export function DataSpecsBuilder(subgraph, datasets)
                     "source": node.props.source,
                     "transform": JSON.parse(node.props.transform)
                 })
+                console.log(JSON.stringify(JSON.parse(node.props.transform), null, 4));
                 break;
         }
     }
-    console.log(specs);
+    // console.log(JSON.stringify(specs, null, 4));
+
     return specs;
 }
 
@@ -115,12 +117,8 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
                         "key": rightAttribute,
                         "from": rightId,
                         "fields": [`${leftDatasetName}_${leftAttribute}`], 
-                        "as": [pseudoAttribute] 
-                    },
-                    {
-                        "type": "project",
-                        "fields": [...newLeftHeaders, ...rightHeaders.filter((header) => (header !== rightAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
-                        "as":     [...newLeftHeaders, ...newRightHeaders.filter((header) => (header !== `${rightDatasetName}_${rightAttribute}`))]
+                        "values": rightHeaders.filter((header) => (header !== rightAttribute)),
+                        "as": rightHeaders.filter((header) => (header !== rightAttribute)).map((header) => `${rightDatasetName}_${header}`)
                     }
                 ]    
 
@@ -136,12 +134,8 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType)
                     "key": leftAttribute,
                     "from": leftId,
                     "fields": [`${rightDatasetName}_${rightAttribute}`], 
-                    "as": [pseudoAttribute] 
-                },
-                {
-                    "type": "project",
-                    "fields": [...newRightHeaders, ...leftHeaders.filter((header) => (header !== leftAttribute)).map((header) => `${pseudoAttribute}.${header}`)],
-                    "as": [...newRightHeaders, ...newLeftHeaders.filter((header) => (header !== `${leftDatasetName}_${leftAttribute}`))]
+                    "values": leftHeaders.filter((header) => (header !== leftAttribute)),
+                    "as": leftHeaders.filter((header) => (header !== leftAttribute)).map((header) => `${leftDatasetName}_${header}`)
                 }
             ]
         

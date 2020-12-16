@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {Label, Input, Row, Col} from 'reactstrap'; 
-import Select from 'react-select';
+import Select from 'react-select/creatable';
 
 import {AggregationMethods} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
@@ -38,8 +38,8 @@ class TransformVegaBuilder extends React.Component {
     
         }
     }
+
     render() {
-        console.log(this.state.type);
         return (<Fragment>
                 <Row className="form-group">
                     <Label for="aggregation" md={2}>Types of transformation</Label>
