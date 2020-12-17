@@ -1,42 +1,51 @@
 import React, {Fragment} from 'react';
 import {Row, Col, Input, Label} from 'reactstrap';
-export default function PieChartForm({xFieldChange, yFieldChange, categoryFieldChange, attributeList}) {
+export default function ScatterplotForm({xFieldChange, yFieldChange, categoryFieldChange, shapeFieldChange, attributeList}) {
     return (<Fragment>
         <Row className="form-group">
           <Col>
-              <Label>Select x field</Label>
               <Input 
                 type="select" 
                 onChange={xFieldChange}
                 name="xField"
-                placeholder="Categorical field" 
+                placeholder="Select x field" 
               >
-                <option key={-1} value={""}>Select an attribute</option>
+                <option key={-1} value={""}>Select x field</option>
                 {attributeList.map(header => (<option key={header} value={header}>{header}</option>))}
                 </Input>
           </Col>
           <Col>
-            <Label>Select y field</Label>
               <Input  
                 type="select" 
                 onChange={yFieldChange}
                 name="yField"
-                placeholder="Quantitative field" 
+                placeholder="Select y field" 
               >
-                <option key={-1} value={""}>Select an attribute</option>
+                <option key={-1} value={""}>Select y field</option>
                 {attributeList.map(header => (<option key={header} value={header}>{header}</option>))}
               </Input>
           </Col>
 
           <Col>
-            <Label>Select category (color) field</Label>
               <Input 
                 type="select" 
                 onChange={categoryFieldChange}
                 name="categoryField"
-                placeholder="Categorical field" 
+                placeholder="Select category (color) field" 
               >
-                <option key={-1} value={""}>Select an attribute</option>
+                <option key={-1} value={""}>Select color attribute</option>
+                {attributeList.map(header => (<option key={header} value={header}>{header}</option>))}
+                </Input>
+          </Col>
+
+          <Col>
+              <Input 
+                type="select" 
+                onChange={shapeFieldChange}
+                name="shapeField"
+                placeholder="Select shape field" 
+              >
+                <option key={-1} value={""}>Select shape attribute</option>
                 {attributeList.map(header => (<option key={header} value={header}>{header}</option>))}
                 </Input>
           </Col>

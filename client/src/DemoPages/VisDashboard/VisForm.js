@@ -9,15 +9,24 @@ import { Fragment } from 'react';
 import AttributeExtractor from '../../utils/AttributeExtractor';
 import calculateDataset from '../../utils/dataGeneration';
 import Vega from '../Vega';
-
 import Charts from './ChartGallery';
+
 import BarChart from "../../vegaTemplates/bar-chart";
 import PieChart from "../../vegaTemplates/pie-chart";
 import LineChart from "../../vegaTemplates/line-chart";
+import GeoMap from "../../vegaTemplates/geo-map";
+import Boxplot from "../../vegaTemplates/boxplot";
+import NormalizedAreaChart from "../../vegaTemplates/normalized-area-chart";
+import StackedBarChart from "../../vegaTemplates/stacked-bar-chart";
+import Scatterplot from "../../vegaTemplates/scatterplot";
 
 import BarChartForm from './BarChartForm';
 import PieChartForm from './PieChartForm';
 import LineChartForm from './LineChartForm';
+import GeoMapForm from './GeoMapForm';
+import BoxplotForm from './BoxplotForm';
+import ScatterplotForm from './ScatterplotForm';
+
 const Wizard = (props) => {
   const initialValues = {
     useOurTemplate: true,
@@ -26,6 +35,8 @@ const Wizard = (props) => {
     xField: null,
     yField: null,
     categoryField: null,
+    choroplethField: null,
+    shapeField: null,
     title: ""
   };
 
@@ -46,7 +57,7 @@ const Wizard = (props) => {
   const previous = values => {
     setSnapshot(values);
     setStepNumber(Math.max(stepNumber - 1, 0));
-  };
+  };  
 
   const handleSubmit = async (values, bag) => {
     
@@ -135,8 +146,8 @@ const OwnSchema = ({formik}) => {
 
 const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
   const [data, setData] = useState(null);
-  
-  if (formik.values.dataNode && formik.values.xField && formik.values.yField) 
+  console.log(formik.values)
+  if (formik.values.dataNode && ((formik.values.xField && formik.values.yField) || formik.values.choroplethField )) 
   {
     switch(formik.values.idiom)
     {
@@ -144,15 +155,39 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
         setSpecs(formik, BarChart("table", formik.values.xField, formik.values.yField, []));
         break;
       
-        case "PieChart":
+      case "PieChart":
         setSpecs(formik, PieChart("table", formik.values.xField, formik.values.yField, []));
         break;
 
       case "LineChart":
         setSpecs(formik, LineChart("table", formik.values.xField, formik.values.yField, formik.values.categoryField, []));
         break;
-      
-        default:
+        
+      case "ChoroplethMap":
+        setSpecs(formik, GeoMap("map", formik.values.choroplethField, []));
+        break;
+
+      case "Boxplot":
+        setSpecs(formik, Boxplot("table", formik.values.xField, formik.values.yField, formik.values.categoryField, []));
+        break;
+
+      case "NormalizedAreaChart":
+        setSpecs(formik, NormalizedAreaChart("table", formik.values.xField, formik.values.yField, formik.values.categoryField, []));
+        break;
+
+      case "StackedBarChart":
+        setSpecs(formik, StackedBarChart("table", formik.values.xField, formik.values.yField, formik.values.categoryField, []));
+        break;
+
+      case "Scatterplot":
+        setSpecs(formik, Scatterplot("table", 
+                                          formik.values.xField, 
+                                          formik.values.yField, 
+                                          formik.values.categoryField, 
+                                          formik.values.shapeField, 
+                                          []));
+        break;
+      default:
         break;  
     }
   }
@@ -197,14 +232,17 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
       {Array.isArray(data) && formik.values.idiom === "BarChart" && <BarChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
       {Array.isArray(data) && formik.values.idiom === "PieChart" && <PieChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
       {Array.isArray(data) && formik.values.idiom === "LineChart" && <LineChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
-  
+      {Array.isArray(data) && formik.values.idiom === "ChoroplethMap" && <GeoMapForm choroplethFieldChange={(newValue) => {formik.values.choroplethField = newValue; console.log(formik.values)} } attributeList={AttributeExtractor(data[0])} />}
+      {Array.isArray(data) && formik.values.idiom === "Boxplot" && <BoxplotForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}  
+      {Array.isArray(data) && formik.values.idiom === "NormalizedAreaChart" && <LineChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
+      {Array.isArray(data) && formik.values.idiom === "StackedBarChart" && <LineChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
+      {Array.isArray(data) && formik.values.idiom === "Scatterplot" && <ScatterplotForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} shapeFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
       {
-        formik.values.dataNode && formik.values.xField && formik.values.yField 
+        formik.values.dataNode && ((formik.values.xField && formik.values.yField) || formik.values.choroplethField) 
         && <Row className="form-group"><Vega 
               className="mx-auto" 
               spec={formik.values.spec} 
               data={data}
-              config={vegaConfig}
         /></Row> 
       }
     </Fragment>
@@ -215,7 +253,5 @@ function setSpecs(formik, spec)
 {
   formik.values.spec = spec;
 }
-
-const vegaConfig = {actions: {compiled: false, editor: false, source: false}};
 
 export default Wizard;

@@ -72,14 +72,14 @@ export function DataSpecsBuilder(subgraph, datasets)
                 break;
 
             case 2:
-                console.log("JOIN operations will be treated here")
-                console.log(node.props);
+                // console.log("JOIN operations will be treated here")
+                // console.log(node.props);
                 specs.data.push({
                     "name": node.id,
                     "source": node.props.source,
                     "transform": JSON.parse(node.props.transform)
                 })
-                console.log(JSON.stringify(JSON.parse(node.props.transform), null, 4));
+                // console.log(JSON.stringify(JSON.parse(node.props.transform), null, 4));
                 break;
         }
     }

@@ -49,7 +49,6 @@ class DataNodeInsertionModal extends React.Component {
             alert("You must select an attribute to parse value");
             return;
         }
-        console.log(this.property)
         if (this.state.format === "geojson")
         {
             format.property = this.property.value;

@@ -11,8 +11,6 @@ import {
     TabPane,
 } from 'reactstrap';
 
-import {pretty} from 'js-object-pretty-print';
-
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 
 const MAX_ROWS_DISPLAYED = 5;

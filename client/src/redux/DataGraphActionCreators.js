@@ -9,8 +9,6 @@ export const saveDataNode = (payload) => ({
 // source: the tabular data itself
 export const addDataNode = ({name, type, source, transform, format}) => (dispatch) => {
     const newNode = {name, type, source, transform, format};
-    
-    console.log("in redux", newNode);
 
     return Axios({
         method: "post",
