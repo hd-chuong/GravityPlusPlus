@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
 import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
-import Select from 'react-select';
 import VegaBuilder from './TransformVegaBuilder';
 import JoinVegaBuilder from './JoinVegaBuilder';
 import {JoinSpecsBuilder} from '../../../utils/VegaSpecsBuilder';
@@ -50,7 +49,6 @@ class DataNodeInsertionModal extends React.Component {
             alert("You must select an attribute to parse value");
             return;
         }
-        console.log(this.property)
         if (this.state.format === "geojson")
         {
             format.property = this.property.value;

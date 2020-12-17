@@ -20,7 +20,7 @@ export default class Chart extends Component {
             </Card>
         );
         const spec = this.props.spec;
-        spec.data[0].values = this.props.data;
+        spec.data.values = this.props.data;
         return (
             <Card className="main-card mb-3">
                     <CardHeader>{this.props.title}</CardHeader>
@@ -28,7 +28,6 @@ export default class Chart extends Component {
                         <Vega 
                             spec={spec} 
                             data={this.props.data} 
-                            config={{actions: {compiled: false, editor: false, source: false}}}
                         />
                     </CardBody>
             </Card>

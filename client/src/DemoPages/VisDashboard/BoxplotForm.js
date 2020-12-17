@@ -1,10 +1,9 @@
 import React, {Fragment} from 'react';
-import {Row, Col, Input, Label} from 'reactstrap';
-export default function PieChartForm({xFieldChange, yFieldChange, categoryFieldChange, attributeList}) {
+import {Row, Col, Input} from 'reactstrap';
+export default function BoxplotForm({xFieldChange, yFieldChange, categoryFieldChange, attributeList}) {
     return (<Fragment>
         <Row className="form-group">
           <Col>
-              <Label>Select x field</Label>
               <Input 
                 type="select" 
                 onChange={xFieldChange}
@@ -16,7 +15,6 @@ export default function PieChartForm({xFieldChange, yFieldChange, categoryFieldC
                 </Input>
           </Col>
           <Col>
-            <Label>Select y field</Label>
               <Input  
                 type="select" 
                 onChange={yFieldChange}
@@ -29,7 +27,6 @@ export default function PieChartForm({xFieldChange, yFieldChange, categoryFieldC
           </Col>
 
           <Col>
-            <Label>Select category (color) field</Label>
               <Input 
                 type="select" 
                 onChange={categoryFieldChange}
