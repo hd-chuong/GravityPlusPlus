@@ -1,7 +1,6 @@
-import Axios from 'axios';
 import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import VisNodeInsertionModal from '../VisNodeInsertionModal';
+const VisNodeInsertionModal = lazy(() => import('../VisNodeInsertionModal'));
 
 import {
     Row, 
@@ -11,6 +10,7 @@ import {
 import VisGraph from '../../DataDashboard/DataGraph';
 import Chart from '../Chart';
 import calculateDataset from '../../../utils/dataGeneration';
+import { lazy } from 'react';
 export default class VisDashboard extends Component {
     constructor(props) {
         super(props);

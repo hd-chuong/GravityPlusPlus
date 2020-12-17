@@ -1,7 +1,5 @@
 import React, {useState, lazy} from 'react';
 import {Card, CardBody, CardTitle, CardImg, Row, Col, Input, Label, Button, Progress, FormGroup} from 'reactstrap';
-import Async from 'react-select/async';
-import Select from 'react-select';
 import Scrollbar from 'react-perfect-scrollbar';
 import {Field, Form, Formik } from 'formik';
 
@@ -20,12 +18,12 @@ import NormalizedAreaChart from "../../vegaTemplates/normalized-area-chart";
 import StackedBarChart from "../../vegaTemplates/stacked-bar-chart";
 import Scatterplot from "../../vegaTemplates/scatterplot";
 
-import BarChartForm from './BarChartForm';
-import PieChartForm from './PieChartForm';
-import LineChartForm from './LineChartForm';
-import GeoMapForm from './GeoMapForm';
-import BoxplotForm from './BoxplotForm';
-import ScatterplotForm from './ScatterplotForm';
+const BarChartForm = lazy(() => import("./BarChartForm"));
+const PieChartForm = lazy(() => import("./PieChartForm"));
+const LineChartForm = lazy(() => import("./LineChartForm"));
+const GeoMapForm = lazy(() => import("./GeoMapForm")); 
+const BoxplotForm = lazy(() => import("./BoxplotForm"));
+const ScatterplotForm = lazy(() => import("./ScatterplotForm"));
 
 const Wizard = (props) => {
   const initialValues = {
