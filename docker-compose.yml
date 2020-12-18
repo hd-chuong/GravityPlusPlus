@@ -24,7 +24,7 @@ services:
       - ./server/routes:/srv/app/server/routes
       - ./server/models:/srv/app/server/models
       - ./server/app.js:/srv/app/server/app.js
-    
+      - ./server/services:/srv/app/server/services
     networks:
       - db-server
       - client-server
