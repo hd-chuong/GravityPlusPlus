@@ -9,11 +9,16 @@ import {
     setEnableMobileMenu
 } from '../../reducers/ThemeOptions';
 
+import {Input} from 'reactstrap';
+
 class VisSideBar extends Component {
 
     constructor(props)
     {
         super(props);
+        this.state = {
+            recommendedSequence: false
+        }
     }
 
     state = {};
@@ -37,13 +42,14 @@ class VisSideBar extends Component {
                 <ReactCSSTransitionGroup
                     component="div"
                     className={cx("app-sidebar", backgroundColor)}
-                    // transitionName="SidebarAnimation"
+                    transitionName="SidebarAnimation"
                     // transitionAppear={true}
-                    // transitionAppearTimeout={1500}
+                    transitionAppearTimeout={0}
                     transitionEnter={false}
                     transitionLeave={false}>
                     <PerfectScrollbar>
                         <div className="app-sidebar__inner">
+                            <h5 className="app-sidebar__heading">Visualisation nodes</h5>
                             <div className="metismenu vertical-nav-menu">
                                 <ul className="metismenu-container">
                                     <li className="metismenu-item" onClick={this.props.toggleNewNodeModal} style={{ cursor: 'pointer' }}>                            
@@ -53,10 +59,24 @@ class VisSideBar extends Component {
                                     </li>
                                 </ul>
                             </div>
-
-                            {/* <VisForm/> */}
+                            <h5 className="app-sidebar__heading">Layers</h5>
+                            <div className="metismenu vertical-nav-menu">
+                                <ul className="metismenu-container">
+                                    <li className="metismenu-item" style={{ cursor: 'pointer' }}>                            
+                                        <div className="metismenu-link" target="_blank">
+                                            <input type="checkbox"/> Transformation links 
+                                        </div>
+                                    </li>
+                                    <li className="metismenu-item" style={{ cursor: 'pointer' }}>                            
+                                        <div className="metismenu-link" target="_blank">
+                                            {this.props.loadRecommendedSequence ? <i className="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> : <input type="checkbox" 
+                                                checked={this.props.isSequenceRecommended} 
+                                                onChange={this.props.handleRecommendedSequence}/>} Recommended Path 
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-
                     </PerfectScrollbar>
                 </ReactCSSTransitionGroup>
             </Fragment>

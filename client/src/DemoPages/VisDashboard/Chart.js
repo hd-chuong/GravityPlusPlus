@@ -19,14 +19,12 @@ export default class Chart extends Component {
                 <CardBody>View chart by choosing a vis node</CardBody>
             </Card>
         );
-        const spec = this.props.spec;
-        spec.data.values = this.props.data;
         return (
             <Card className="main-card mb-3">
                     <CardHeader>{this.props.title}</CardHeader>
                     <CardBody className="mx-auto">
                         <Vega 
-                            spec={spec} 
+                            spec={this.props.spec} 
                             data={this.props.data} 
                         />
                     </CardBody>

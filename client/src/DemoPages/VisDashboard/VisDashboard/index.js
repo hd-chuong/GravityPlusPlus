@@ -11,6 +11,7 @@ import VisGraph from '../../DataDashboard/DataGraph';
 import Chart from '../Chart';
 import calculateDataset from '../../../utils/dataGeneration';
 import { lazy } from 'react';
+
 export default class VisDashboard extends Component {
     constructor(props) {
         super(props);

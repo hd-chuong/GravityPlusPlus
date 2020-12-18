@@ -8,7 +8,7 @@ import ResizeDetector from 'react-resize-detector';
 import AppMain from '../../Layout/AppMain';
 import { addDataset, removeDataset } from '../../redux/DatasetActionCreators';
 import { addDataEdge, addDataNode, removeDataNode, removeEdges, setDataNode } from '../../redux/DataGraphActionCreators';
-import { addVisNode } from '../../redux/VisGraphActionCreators';
+import { addVisNode, addVisEdge } from '../../redux/VisGraphActionCreators';
 
 class Main extends React.Component {
     constructor(props) {
@@ -64,6 +64,7 @@ class Main extends React.Component {
                         setDataNode={this.props.setDataNode}
                         
                         addVisNode={this.props.addVisNode}
+                        addVisEdge={this.props.addVisEdge}
                     />
                     <ResizeDetector handleWidth onResize={this.onResize} />
                 </div>
@@ -88,13 +89,18 @@ const mapStateToProp = state => ({
 const mapDispatchToProp = dispatch => ({
     addDataset: (dataset) => dispatch(addDataset(dataset)),
     removeDataset: (name) => dispatch(removeDataset({name})),
+    
     addDataNode: (name, type, source = null, transform = [], format = {}) => dispatch(addDataNode({name, type, source, transform, format})),
     removeDataNode: (id) => dispatch(removeDataNode({id})),
+    
     removeEdges: (id, direction = null) => dispatch(removeEdges(id, direction)),
+    
     setDataNode: (id, params) => dispatch(setDataNode({id, params})),
     addDataEdge: (source, target, type, data) => dispatch(addDataEdge({source, target, type, data})),
-    addVisNode: (name, dataSource, spec) => dispatch(addVisNode({name, dataSource, spec}))
-  });
+    
+    addVisNode: (name, dataSource, spec) => dispatch(addVisNode({name, dataSource, spec})),
+    addVisEdge: (source, target, type) => dispatch(addVisEdge({source, target, type}))
+});
   
 
 export default withRouter(connect(mapStateToProp, mapDispatchToProp)(Main));

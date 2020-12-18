@@ -9,7 +9,6 @@ var Datagraph = require('../models/data');
 const cors = require('./cors');
 
 const router = express.Router();
-
 router.use(bodyParser.json());
 
 driver = neo4j.driver(
