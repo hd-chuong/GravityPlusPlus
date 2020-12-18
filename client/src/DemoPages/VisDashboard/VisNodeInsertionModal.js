@@ -1,8 +1,6 @@
 import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
 import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
-import Select from 'react-select';
-import classnames from 'classnames';
 import VisForm from "./VisForm";
 class VisNodeInsertionModal extends React.Component {
     constructor(props) 
@@ -19,15 +17,16 @@ class VisNodeInsertionModal extends React.Component {
                     <CardHeader className="card-header-tab">
                         <div className="card-header-title">Add a visualisation node</div>
                     </CardHeader>
-                <ModalBody>
-                    <VisForm
-                        datagraph={this.props.datagraph}
-                        datasets={this.props.datasets}
-                        addVisNode={this.props.addVisNode}
-                    />
-                </ModalBody>
-        </Modal>
-    </span>
+                    <ModalBody>
+                        <VisForm
+                            datagraph={this.props.datagraph}
+                            datasets={this.props.datasets}
+                            addVisNode={this.props.addVisNode}
+                            toggle={this.props.toggle}
+                        />
+                    </ModalBody>
+                </Modal>
+            </span>
         );
     }
 }

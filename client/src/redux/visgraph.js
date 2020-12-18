@@ -7,7 +7,7 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
             var x = Math.random() * 100;
             var y = Math.random() * 100;
 
-            var uiType = "input";
+            var uiType = "default";
 
             var newVisNode = {
                 id: uuidv4(),
@@ -21,7 +21,64 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
             };
             return {...state, visgraph: {edges: state.visgraph.edges, nodes: [...state.visgraph.nodes, newVisNode]}};
         
+        case ActionTypes.ADD_VIS_EDGE:
+            var edgeType = action.payload.type;
+            var style = null;
+            
+            if (edgeType === "RECOMMENDED")
+            {
+                style = {stroke: "green", strokeDasharray: "2,2"}
+            }
+            else if (edgeType === "TRANSFORM")
+            {
+                style = {stroke: "blue"}
+            }
+
+            var newVisEdge = {
+                id: uuidv4(),
+                source: action.payload.source,
+                target: action.payload.target,
+                data: {type: edgeType},
+                arrowHeadType: 'arrowclosed',
+                style
+            };
+            
+            return {
+                ...state, 
+                visgraph: {
+                    edges: [...state.visgraph.edges, newVisEdge], 
+                    nodes: state.visgraph.nodes
+                }
+            };
+        
+        case ActionTypes.REMOVE_ALL_VIS_EDGES_BY_TYPE:
+            
+            var edgeType = action.payload.type;
+            
+            return {
+                ...state,
+                visgraph: {
+                    nodes: state.visgraph.nodes,
+                    edges: state.visgraph.edges.filter(edge => edge.data.type !== edgeType)
+                }
+            }
+        
+        case ActionTypes.REMOVE_EDGE_BY_TYPE:            
+            var edgeType = action.payload.type;
+            var source = action.payload.source;
+            var target = action.payload.target;
+
+            return {
+                ...state,
+                visgraph: {
+                    nodes: state.visgraph.nodes,
+                    edges: state.visgraph.edges.filter(edge => !(edge.target === target 
+                                                                && edge.source === source 
+                                                                && edge.data.type === edgeType))
+                }
+            };
+
         default:
             return state;
     }
-}
+};

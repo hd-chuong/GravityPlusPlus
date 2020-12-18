@@ -21,16 +21,24 @@ export default class Vega extends React.PureComponent {
   
   componentDidMount() {    
     const {spec, data} = this.props;
-    spec.data.values = JSON.parse(JSON.stringify(data));
+
+    // do a deep copy of spec
+    const copiedSpec = JSON.parse(JSON.stringify(spec));
+    // do a deep copy of data
+    copiedSpec.data.values = JSON.parse(JSON.stringify(data));
     var config = {actions: {compiled: false, editor: false, source: false}, tooltip: handler.call, config: {mark: {tooltip: true}}};
-    vegaEmbed(this.refs[this.state.id], spec, config);
+    vegaEmbed(this.refs[this.state.id], copiedSpec, config);
   }
 
   componentDidUpdate() {
     const {spec, data} = this.props;
-    spec.data.values = JSON.parse(JSON.stringify(data));
+
+    // do a deep copy of spec
+    const copiedSpec = JSON.parse(JSON.stringify(spec));
+    // do a deep copy of data
+    copiedSpec.data.values = JSON.parse(JSON.stringify(data));
     var config = {actions: {compiled: false, editor: false, source: false}, tooltip: handler.call, config: {mark: {tooltip: true}}};
-    vegaEmbed(this.refs[this.state.id], spec, config);
+    vegaEmbed(this.refs[this.state.id], copiedSpec, config);
   }
 
   render() {

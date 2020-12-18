@@ -1,10 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 import MetisMenu from 'react-metismenu';
-import {ResizableBox} from 'react-resizable';
 import ReactFileReader from 'react-file-reader';
-
-import {MainNav, DomainNav, FormsNav, WidgetsNav, ChartsNav, DatasetNav} from './NavItems';
 
 import path from 'path';
 import AsyncDataFileHandler from '../../utils/DataFileHandler';

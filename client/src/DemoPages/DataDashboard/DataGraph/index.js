@@ -57,7 +57,6 @@ export default class Graph extends Component {
             </Card>
         );
         const elements = [...this.props.data.nodes, ...this.props.data.edges];
-
         return (
             <Card className="main-card mb-3">
                 <div className="card-header"> Graph view </div>

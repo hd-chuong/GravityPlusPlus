@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import {Route} from 'react-router-dom';
 
 // DASHBOARDS
 import DataDashboard from './DataDashboard';
@@ -7,8 +6,6 @@ import DataDashboard from './DataDashboard';
 // Layout
 import AppHeader from '../../Layout/AppHeader';
 import AppSidebar from '../../Layout/AppSidebar';
-// import AppFooter from '../../Layout/AppFooter/';
-
 
 class Dashboards extends Component{
     constructor(props)
@@ -50,7 +47,6 @@ class Dashboards extends Component{
                             setDataNode={this.props.setDataNode}
                         />
                     </div>
-                    
                 </div>
             </div>
         </Fragment>

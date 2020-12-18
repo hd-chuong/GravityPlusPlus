@@ -13,7 +13,7 @@ import {
     setEnableMobileMenu
 } from '../../reducers/ThemeOptions';
 
-class VisSideBar extends Component {
+class DataSideBar extends Component {
 
     constructor(props)
     {
@@ -41,7 +41,7 @@ class VisSideBar extends Component {
                 <ReactCSSTransitionGroup
                     component="div"
                     className={cx("app-sidebar", backgroundColor)}
-                    // transitionName="SidebarAnimation"
+                    transitionName="SidebarAnimation"
                     // transitionAppear={true}
                     // transitionAppearTimeout={1500}
                     transitionEnter={false}
@@ -73,4 +73,4 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VisSideBar);
+export default connect(mapStateToProps, mapDispatchToProps)(DataSideBar);

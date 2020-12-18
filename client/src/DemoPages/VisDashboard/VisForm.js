@@ -1,7 +1,5 @@
 import React, {useState, lazy} from 'react';
 import {Card, CardBody, CardTitle, CardImg, Row, Col, Input, Label, Button, Progress, FormGroup} from 'reactstrap';
-import Async from 'react-select/async';
-import Select from 'react-select';
 import Scrollbar from 'react-perfect-scrollbar';
 import {Field, Form, Formik } from 'formik';
 
@@ -20,14 +18,14 @@ import NormalizedAreaChart from "../../vegaTemplates/normalized-area-chart";
 import StackedBarChart from "../../vegaTemplates/stacked-bar-chart";
 import Scatterplot from "../../vegaTemplates/scatterplot";
 
-import BarChartForm from './BarChartForm';
-import PieChartForm from './PieChartForm';
-import LineChartForm from './LineChartForm';
-import GeoMapForm from './GeoMapForm';
-import BoxplotForm from './BoxplotForm';
-import ScatterplotForm from './ScatterplotForm';
+const BarChartForm = lazy(() => import("./BarChartForm"));
+const PieChartForm = lazy(() => import("./PieChartForm"));
+const LineChartForm = lazy(() => import("./LineChartForm"));
+const GeoMapForm = lazy(() => import("./GeoMapForm")); 
+const BoxplotForm = lazy(() => import("./BoxplotForm"));
+const ScatterplotForm = lazy(() => import("./ScatterplotForm"));
 
-const Wizard = (props) => {
+const VisForm = (props) => {
   const initialValues = {
     useOurTemplate: true,
     idiom: 'BarChart',
@@ -66,6 +64,7 @@ const Wizard = (props) => {
     }
     if (isLastStep) {
       props.addVisNode(values.title, values.dataNode, values.spec);
+      props.toggle();
       // return onSubmit(values, bag);
     } else {
       bag.setTouched({});
@@ -146,7 +145,7 @@ const OwnSchema = ({formik}) => {
 
 const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
   const [data, setData] = useState(null);
-  console.log(formik.values)
+
   if (formik.values.dataNode && ((formik.values.xField && formik.values.yField) || formik.values.choroplethField )) 
   {
     switch(formik.values.idiom)
@@ -232,7 +231,7 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
       {Array.isArray(data) && formik.values.idiom === "BarChart" && <BarChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
       {Array.isArray(data) && formik.values.idiom === "PieChart" && <PieChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
       {Array.isArray(data) && formik.values.idiom === "LineChart" && <LineChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
-      {Array.isArray(data) && formik.values.idiom === "ChoroplethMap" && <GeoMapForm choroplethFieldChange={(newValue) => {formik.values.choroplethField = newValue; console.log(formik.values)} } attributeList={AttributeExtractor(data[0])} />}
+      {Array.isArray(data) && formik.values.idiom === "ChoroplethMap" && <GeoMapForm choroplethFieldChange={(newValue) => formik.values.choroplethField = newValue } attributeList={AttributeExtractor(data[0])} />}
       {Array.isArray(data) && formik.values.idiom === "Boxplot" && <BoxplotForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}  
       {Array.isArray(data) && formik.values.idiom === "NormalizedAreaChart" && <LineChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
       {Array.isArray(data) && formik.values.idiom === "StackedBarChart" && <LineChartForm xFieldChange={formik.handleChange} yFieldChange={formik.handleChange} categoryFieldChange={formik.handleChange} attributeList={AttributeExtractor(data[0])}/>}
@@ -254,4 +253,4 @@ function setSpecs(formik, spec)
   formik.values.spec = spec;
 }
 
-export default Wizard;
+export default VisForm;
