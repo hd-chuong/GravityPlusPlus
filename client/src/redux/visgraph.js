@@ -116,7 +116,24 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
                     edges: state.visgraph.edges.filter(edge => edge.id !== edgeID)
                 }
             }
-        
+
+        case ActionTypes.SET_VIS_NODE:
+            var nodeId = action.payload.id;
+            var params = action.payload.params;
+            
+            var newNodes = state.datagraph.nodes.map(node => {
+                if (node.id !== nodeId) return node;
+                return {...node, data: {...node.data, ...params}};
+            });
+            
+            return {
+                ...state, 
+                visgraph: {
+                    edges: state.visgraph.edges,
+                    nodes: newNodes,
+                }
+            }
+    
         default:
             return state;
     }

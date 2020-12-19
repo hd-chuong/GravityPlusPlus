@@ -84,6 +84,7 @@
     "react-google-maps": "^9.4.5",
     "react-grid-gallery": "^0.5.5",
     "react-hamburgers": "^1.0.0",
+    "react-json-view": "^1.19.1",
     "react-metismenu": "^1.4.0",
     "react-motion": "^0.5.2",
     "react-multiselect-checkboxes": "^0.1.1",

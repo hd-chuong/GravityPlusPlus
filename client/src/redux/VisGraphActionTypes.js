@@ -1,6 +1,8 @@
 export const ADD_VIS_NODE = "ADD_VIS_NODE";
 export const ADD_VIS_EDGE = "ADD_VIS_EDGE";
 
+export const SET_VIS_NODE = "SET_VIS_NODE";
+
 export const REMOVE_VIS_NODE = "REMOVE_VIS_NODE";
 
 export const REMOVE_ALL_VIS_EDGES_BY_TYPE = "REMOVE_ALL_VIS_EDGES_BY_TYPE";
