@@ -101,14 +101,16 @@ class TransformVegaBuilder extends React.Component {
                             </Col>
                         </Row>
 
-                        <Row className="form-group">
-                            <Label md={4}>Compared value</Label>
-                            <Col>
-                                <Input type="text" placeholder="Enter the compared value here" 
-                                onChange={(e) => this.buildVega({threshold: e.target.value}) }
-                                />
-                            </Col>
-                        </Row>
+                        {ComparisonExpressions.includes(this.state.vegaFilter.operand) && (
+                            <Row className="form-group">
+                                <Label md={4}>Compared value</Label>
+                                <Col>
+                                    <Input type="text" placeholder="Enter the compared value here" 
+                                    onChange={(e) => this.buildVega({threshold: e.target.value}) }
+                                    />
+                                </Col>
+                            </Row>)
+                        }
 
                     </Col>
                     )}
