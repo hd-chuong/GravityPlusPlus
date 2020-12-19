@@ -18,6 +18,8 @@ export default class VisDashboard extends Component {
         this.state = {
             currentNode: null,
             currentNodeData: null,
+
+            // flag to wait for elements to be loaded
             dataPrepared: true
         };
     }
@@ -77,6 +79,7 @@ export default class VisDashboard extends Component {
                             </Col>}
                         </Row>                       
                     </div>
+                    
                     <VisNodeInsertionModal
                         toggle={this.props.toggleNewNodeModal}
                         isOpen={this.props.isNewNodeModalOpen}

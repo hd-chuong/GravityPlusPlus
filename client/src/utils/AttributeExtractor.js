@@ -8,3 +8,18 @@ export default function AttributeExtractor(obj)
     }
     return ans;
 }
+
+export function FieldExtractorFromEncoding(encoding)
+{
+    var fields = [];
+    for (let channel in encoding)
+    {
+        const value = encoding[`${channel}`];
+        
+        if (value.hasOwnProperty("field"))
+        {
+            fields.push(value.field);
+        }
+    }
+    return fields.sort();
+}

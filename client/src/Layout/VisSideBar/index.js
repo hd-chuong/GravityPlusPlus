@@ -64,14 +64,16 @@ class VisSideBar extends Component {
                                 <ul className="metismenu-container">
                                     <li className="metismenu-item" style={{ cursor: 'pointer' }}>                            
                                         <div className="metismenu-link" target="_blank">
-                                            <input type="checkbox"/> Transformation links 
+                                            {this.props.loadTransformationLinks ? <i className="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> : <input type="checkbox" 
+                                                checked={this.props.isTransformationLinks} 
+                                                onChange={this.props.handleTransformationLinks}/>} Transformation Links
                                         </div>
                                     </li>
                                     <li className="metismenu-item" style={{ cursor: 'pointer' }}>                            
                                         <div className="metismenu-link" target="_blank">
                                             {this.props.loadRecommendedSequence ? <i className="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> : <input type="checkbox" 
                                                 checked={this.props.isSequenceRecommended} 
-                                                onChange={this.props.handleRecommendedSequence}/>} Recommended Path 
+                                                onChange={this.props.handleRecommendedSequence}/>} GraphScape Path 
                                         </div>
                                     </li>
                                 </ul>

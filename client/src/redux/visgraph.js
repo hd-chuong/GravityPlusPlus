@@ -23,15 +23,32 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
         
         case ActionTypes.ADD_VIS_EDGE:
             var edgeType = action.payload.type;
+            var arrowHeadType = 'arrowclosed';
+            var animated = false;
+            var type = null;
             var style = null;
             
             if (edgeType === "RECOMMENDED")
             {
                 style = {stroke: "green", strokeDasharray: "2,2"}
+                animated = true;
             }
-            else if (edgeType === "TRANSFORM")
+            else if (edgeType === "DATA_TRANSFORMED")
             {
-                style = {stroke: "blue"}
+                style = {stroke: "blue"};
+                type = "step";
+            }
+            else if (edgeType === "SAME_FIELDS")
+            {
+                style = {stroke: "#00BFFF"}
+                arrowHeadType = null;
+                type = "step";
+            }
+            else if (edgeType === "DIFFERENT_FIELDS")
+            {
+                style = {stroke: "#1E90FF"}
+                arrowHeadType = null;
+                type = "step";
             }
 
             var newVisEdge = {
@@ -39,8 +56,10 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
                 source: action.payload.source,
                 target: action.payload.target,
                 data: {type: edgeType},
-                arrowHeadType: 'arrowclosed',
-                style
+                arrowHeadType,
+                style,
+                animated,
+                type,   
             };
             
             return {
