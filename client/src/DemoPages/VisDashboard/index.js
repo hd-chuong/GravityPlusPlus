@@ -156,7 +156,7 @@ class Dashboard extends Component{
                             toggleNewNodeModal={this.toggleNewNodeModal}
                             isNewNodeModalOpen={this.state.isNewNodeModalOpen}
                             addVisNode={this.props.addVisNode}
-                            
+                            removeVisNode={this.props.removeVisNode}
                         />
                     </div>
                 </div>

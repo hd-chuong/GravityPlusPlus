@@ -8,7 +8,7 @@ import ResizeDetector from 'react-resize-detector';
 import AppMain from '../../Layout/AppMain';
 import { addDataset, removeDataset } from '../../redux/DatasetActionCreators';
 import { addDataEdge, addDataNode, removeDataNode, removeDataEdges, setDataNode } from '../../redux/DataGraphActionCreators';
-import { addVisNode, addVisEdge } from '../../redux/VisGraphActionCreators';
+import { addVisNode, addVisEdge, removeVisNode } from '../../redux/VisGraphActionCreators';
 
 class Main extends React.Component {
     constructor(props) {
@@ -65,6 +65,7 @@ class Main extends React.Component {
                         
                         addVisNode={this.props.addVisNode}
                         addVisEdge={this.props.addVisEdge}
+                        removeVisNode={this.props.removeVisNode}
                     />
                     <ResizeDetector handleWidth onResize={this.onResize} />
                 </div>
@@ -99,7 +100,8 @@ const mapDispatchToProp = dispatch => ({
     addDataEdge: (source, target, type, data) => dispatch(addDataEdge({source, target, type, data})),
     
     addVisNode: (name, dataSource, spec) => dispatch(addVisNode({name, dataSource, spec})),
-    addVisEdge: (source, target, type) => dispatch(addVisEdge({source, target, type}))
+    addVisEdge: (source, target, type) => dispatch(addVisEdge({source, target, type})),
+    removeVisNode: (id) => dispatch(removeVisNode({id})),
 });
   
 

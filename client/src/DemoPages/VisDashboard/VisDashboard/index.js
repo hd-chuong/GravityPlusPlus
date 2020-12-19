@@ -24,6 +24,24 @@ export default class VisDashboard extends Component {
         };
     }
 
+    componentDidMount()
+    {
+        var removedVisNodes = 0;
+        this.props.visgraph.nodes.forEach((node) => {
+            const dataSource = node.data.dataSource;
+            
+            // when the visgraph is rerendered again, the vis node without data source must be removed.
+             
+            if (this.props.datagraph.nodes.filter(node => node.id === dataSource).length === 0)
+            {
+                removedVisNodes++;
+                this.props.removeVisNode(node.id);
+            }
+            // notify the users of this
+        })
+        if (removedVisNodes) console.log(`We remove ${removedVisNodes} visualisation nodes because their corresponding data nodes have been removed.`);
+    }
+
     onElementClick(id)
     {
         this.setState({dataPrepared: false});
