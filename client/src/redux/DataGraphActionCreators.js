@@ -141,8 +141,8 @@ export const setDataNode = ({id, params}) => ({
     payload: {id, params}
 });
 
-export const removeEdges = ({id, direction}) => ({
-    type: ActionTypes.REMOVE_EDGES,
+export const removeDataEdges = ({id, direction}) => ({
+    type: ActionTypes.REMOVE_DATA_EDGES,
     payload: {
         id, 
         direction

@@ -105,7 +105,7 @@ export const DataGraph = (state = {errMess: null,
                 }
             }
         
-        case ActionTypes.REMOVE_EDGES:
+        case ActionTypes.REMOVE_DATA_EDGES:
             var nodeId = action.payload.id;
             var direction = action.payload.direction;
 

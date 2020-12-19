@@ -55,7 +55,7 @@ export default class DataDashboard extends Component {
                                     )});
                 
                 // removing incoming edge
-                this.props.removeEdges(child.id, "INCOMING");
+                this.props.removeDataEdges(child.id, "INCOMING");
                 this.props.setDataNode(child.id, {type: "RAW"});
             });
         })

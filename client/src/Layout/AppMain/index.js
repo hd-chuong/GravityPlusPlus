@@ -21,7 +21,7 @@ const AppMain = ({datasets,
                 addDataNode, 
                 removeDataNode, 
                 addDataEdge, 
-                removeEdges, 
+                removeDataEdges, 
                 setDataNode,
                 addVisNode,
                 addVisEdge
@@ -50,7 +50,7 @@ const AppMain = ({datasets,
 
                         removeDataNode={removeDataNode}
 
-                        removeEdges={removeEdges}
+                        removeDataEdges={removeDataEdges}
                         setDataNode={setDataNode}
                     />
                 </Route>

@@ -7,7 +7,7 @@ import ResizeDetector from 'react-resize-detector';
 
 import AppMain from '../../Layout/AppMain';
 import { addDataset, removeDataset } from '../../redux/DatasetActionCreators';
-import { addDataEdge, addDataNode, removeDataNode, removeEdges, setDataNode } from '../../redux/DataGraphActionCreators';
+import { addDataEdge, addDataNode, removeDataNode, removeDataEdges, setDataNode } from '../../redux/DataGraphActionCreators';
 import { addVisNode, addVisEdge } from '../../redux/VisGraphActionCreators';
 
 class Main extends React.Component {
@@ -60,7 +60,7 @@ class Main extends React.Component {
                         addDataEdge={this.props.addDataEdge}
 
                         removeDataNode={this.props.removeDataNode}
-                        removeEdges={this.props.removeEdges}
+                        removeDataEdges={this.props.removeDataEdges}
                         setDataNode={this.props.setDataNode}
                         
                         addVisNode={this.props.addVisNode}
@@ -93,7 +93,7 @@ const mapDispatchToProp = dispatch => ({
     addDataNode: (name, type, source = null, transform = [], format = {}) => dispatch(addDataNode({name, type, source, transform, format})),
     removeDataNode: (id) => dispatch(removeDataNode({id})),
     
-    removeEdges: (id, direction = null) => dispatch(removeEdges(id, direction)),
+    removeDataEdges: (id, direction = null) => dispatch(removeDataEdges(id, direction)),
     
     setDataNode: (id, params) => dispatch(setDataNode({id, params})),
     addDataEdge: (source, target, type, data) => dispatch(addDataEdge({source, target, type, data})),
