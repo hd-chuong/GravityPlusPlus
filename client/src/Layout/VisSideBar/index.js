@@ -9,8 +9,6 @@ import {
     setEnableMobileMenu
 } from '../../reducers/ThemeOptions';
 
-import {Input} from 'reactstrap';
-
 class VisSideBar extends Component {
 
     constructor(props)
@@ -64,16 +62,18 @@ class VisSideBar extends Component {
                                 <ul className="metismenu-container">
                                     <li className="metismenu-item" style={{ cursor: 'pointer' }}>                            
                                         <div className="metismenu-link" target="_blank">
-                                            {this.props.loadTransformationLinks ? <i className="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> : <input type="checkbox" 
+                                            {this.props.loadTransformationLinks ? <i className="metismenu-icon fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> : 
+                                            <i className="metismenu-icon"><input type="checkbox" className="metismenu-icon" 
                                                 checked={this.props.isTransformationLinks} 
-                                                onChange={this.props.handleTransformationLinks}/>} Transformation Links
+                                                onChange={this.props.handleTransformationLinks}/></i>} Transformation Links
                                         </div>
                                     </li>
                                     <li className="metismenu-item" style={{ cursor: 'pointer' }}>                            
                                         <div className="metismenu-link" target="_blank">
-                                            {this.props.loadRecommendedSequence ? <i className="fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> : <input type="checkbox" 
+                                            {this.props.loadRecommendedSequence ? <i className="metismenu-icon fa fa-spin fa-circle-o-notch" aria-hidden="true"></i> : 
+                                            <i className="metismenu-icon"> <input type="checkbox" 
                                                 checked={this.props.isSequenceRecommended} 
-                                                onChange={this.props.handleRecommendedSequence}/>} GraphScape Path 
+                                                onChange={this.props.handleRecommendedSequence}/></i>} GraphScape Path 
                                         </div>
                                     </li>
                                 </ul>
