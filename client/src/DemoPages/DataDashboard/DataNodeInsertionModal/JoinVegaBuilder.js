@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import {Label, Input, Row, Col, Form, Button} from 'reactstrap'; 
 import Select from 'react-select';
 import Creatable from 'react-select/creatable';
-import {AggregationMethods, JoinTypes} from '../../../utils/VegaSpecsBuilder';
+import {JoinTypes} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 
 class JoinVegaBuilder extends React.Component {

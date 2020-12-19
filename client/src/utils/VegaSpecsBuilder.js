@@ -26,12 +26,48 @@ export const AggregationMethods = [
     "values"
 ];
 
+export const ComparisonExpressions = [
+    ">",
+    "<",
+    "==",
+    ">=",
+    "<=",
+    "!="
+];
+
+export const TypeCheckingFunctions = [
+    "isNaN",
+    "isFinite",
+    "isArray",
+    "isBoolean",
+    "isDate",
+    "isDefined",
+    "isNumber",
+    "isObject",
+    "isString",
+    "isValid"
+];
+
 export const JoinTypes = [
     "LEFT JOIN",
     "RIGHT JOIN",
     "INNER JOIN",
     // "OUTER JOIN"
 ];
+
+export function FilterBuilder(field, operand, threshold)
+{
+    console.log(field, operand, threshold);
+    if (TypeCheckingFunctions.includes(operand))
+    {
+        return `${operand}(datum.${field})`;
+    }
+    if (ComparisonExpressions.includes(operand))
+    {
+        return `datum.${field} ${operand} ${threshold}`;
+    }
+    return "";
+}
 
 function GetDatasetByName(datasets, filename)
 {
