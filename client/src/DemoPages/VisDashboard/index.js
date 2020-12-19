@@ -101,18 +101,19 @@ class Dashboard extends Component{
         })
     } 
 
+    
     handleRecommendedSequence()
     {
         this.setState({recommendedSequence: !this.state.recommendedSequence}, () => {
             if (!this.state.recommendedSequence)
             {
                 const removedEdgeIDs = this.props.visgraph.edges.filter((edge) => edge.data.type === "RECOMMENDED");
-                removedEdgeIDs.forEach(id => {
-                    this.props.removeVisEdge(id);
+                removedEdgeIDs.forEach(node => {
+                    this.props.removeVisEdge(node.id);
                 });
                 return;
             }
-            if (this.state.recommendedSequence) 
+            else 
             {
                 this.setState({loadRecommendedSequence: true});
                 Axios({
