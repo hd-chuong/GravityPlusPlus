@@ -43,7 +43,6 @@ class DataNodeInsertionModal extends React.Component {
         }
         let format = {"type": "json"}
         
-
         if (this.state.format !== "json" && !(this.property && this.property.value))
         {
             alert("You must select an attribute to parse value");

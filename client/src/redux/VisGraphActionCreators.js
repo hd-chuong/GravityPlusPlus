@@ -29,3 +29,8 @@ export const removeVisNode = (payload) => ({
     type: ActionTypes.REMOVE_VIS_NODE,
     payload
 });
+
+export const removeVisEdge = (payload) => ({
+    type: ActionTypes.REMOVE_VIS_EDGE,
+    payload
+});

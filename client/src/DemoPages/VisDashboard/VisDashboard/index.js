@@ -29,9 +29,7 @@ export default class VisDashboard extends Component {
         var removedVisNodes = 0;
         this.props.visgraph.nodes.forEach((node) => {
             const dataSource = node.data.dataSource;
-            
             // when the visgraph is rerendered again, the vis node without data source must be removed.
-             
             if (this.props.datagraph.nodes.filter(node => node.id === dataSource).length === 0)
             {
                 removedVisNodes++;

@@ -46,7 +46,16 @@ class Dashboard extends Component{
             // different dataSource, there is no link between data source
         
         this.setState({transformationLinks: !this.state.transformationLinks}, () => {
-            if (!this.state.transformationLinks) return;
+            if (!this.state.transformationLinks)
+            {
+                const removedEdgeIDs = this.props.visgraph.edges.filter((edge) => edge.data.type === "DATA_TRANSFORMED" 
+                                                        || edge.data.type === "SAME_FIELDS" 
+                                                        || edge.data.type === "DIFFERENT_FIELDS").map(edge => edge.id);
+                removedEdgeIDs.forEach(id => {
+                    this.props.removeVisEdge(id);
+                });
+                return;
+            }
             this.setState({loadTransformationLinks: true});
             const dataEdges = this.props.datagraph.edges.map(edge => ({source: edge.source, target: edge.target}));
             //
@@ -90,11 +99,19 @@ class Dashboard extends Component{
            }
         this.setState({loadTransformationLinks: false});
         })
-    }
+    } 
 
     handleRecommendedSequence()
     {
         this.setState({recommendedSequence: !this.state.recommendedSequence}, () => {
+            if (!this.state.recommendedSequence)
+            {
+                const removedEdgeIDs = this.props.visgraph.edges.filter((edge) => edge.data.type === "RECOMMENDED");
+                removedEdgeIDs.forEach(id => {
+                    this.props.removeVisEdge(id);
+                });
+                return;
+            }
             if (this.state.recommendedSequence) 
             {
                 this.setState({loadRecommendedSequence: true});
@@ -109,6 +126,7 @@ class Dashboard extends Component{
                     {
                         var error = new Error('Error ' + response.status + ': ' + response.statusText);
                         error.response = response;
+                        console.log(err);
                         throw error;
                     } 
                     else 

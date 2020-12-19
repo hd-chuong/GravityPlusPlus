@@ -106,7 +106,17 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
                                                                 && edge.data.type === edgeType))
                 }
             };
-
+        
+        case ActionTypes.REMOVE_VIS_EDGE:
+            var edgeID = action.payload.id;
+            return {
+                ...state,
+                visgraph: {
+                    nodes: state.visgraph.nodes,
+                    edges: state.visgraph.edges.filter(edge => edge.id !== edgeID)
+                }
+            }
+        
         default:
             return state;
     }
