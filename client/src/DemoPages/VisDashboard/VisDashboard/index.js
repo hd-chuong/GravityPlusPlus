@@ -17,7 +17,7 @@ export default class VisDashboard extends Component {
         this.state = {
             currentNode: null,
             currentNodeData: null,
-
+            specDisplayed: null,
             // flag to wait for elements to be loaded
             dataPrepared: true
         };
@@ -48,6 +48,7 @@ export default class VisDashboard extends Component {
                 this.setState({currentNodeData: data}) 
                 this.setState({dataPrepared: true});
             }); 
+            this.setState({specDisplayed: this.state.currentNode.data.spec})
         });
     }
     render() {
@@ -89,12 +90,9 @@ export default class VisDashboard extends Component {
                                         <Chart 
                                             title={this.state.currentNode && this.state.currentNode.data.label}
                                             data={this.state.currentNode && this.state.currentNodeData}
-                                            spec={this.state.currentNode && this.state.currentNode.data.spec}
+                                            spec={this.state.specDisplayed}
                                         />                                   
                                     </ReactCSSTransitionGroup>
-                                </Col>
-                              
-                                <Col md={6}>
                                     <ReactCSSTransitionGroup
                                         component="div"
                                         transitionName="TabsAnimation"
@@ -104,6 +102,8 @@ export default class VisDashboard extends Component {
                                         transitionLeave={false}>
                                         <JSONEditor 
                                             json={this.state.currentNode && this.state.currentNode.data.spec}
+                                            onSave={(newSpec) => this.props.setVisNode(this.state.currentNode.id, {spec: newSpec})}
+                                            onSpecChange={(newSpec) => this.setState({specDisplayed: newSpec})}
                                         />                                   
                                     </ReactCSSTransitionGroup>
                                 </Col>  

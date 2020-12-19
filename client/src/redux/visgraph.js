@@ -121,7 +121,7 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
             var nodeId = action.payload.id;
             var params = action.payload.params;
             
-            var newNodes = state.datagraph.nodes.map(node => {
+            var newNodes = state.visgraph.nodes.map(node => {
                 if (node.id !== nodeId) return node;
                 return {...node, data: {...node.data, ...params}};
             });
