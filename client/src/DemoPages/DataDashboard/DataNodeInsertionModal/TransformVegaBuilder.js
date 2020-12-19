@@ -4,7 +4,7 @@ import Select from 'react-select/creatable';
 
 import {AggregationMethods} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
-
+import JSONView from 'react-json-view';
 class TransformVegaBuilder extends React.Component {
     constructor(props) {
         super(props);
@@ -105,13 +105,8 @@ class TransformVegaBuilder extends React.Component {
                     </Col>)}
                                     
                     <Col className="form-group">
-                        <Input 
-                            type="textarea" 
-                            rows={8} 
-                            name="vega-specs" 
-                            id="vega-specs" 
-                            placeholder="Vega specification"
-                            value={JSON.stringify(this.state.type === "aggregate" ? this.state.vega : this.state.vegaFilter, undefined, 4)}
+                        <JSONView 
+                            src={this.state.type === "aggregate" ? this.state.vega : this.state.vegaFilter}
                         />
                     </Col>
                 </Row>
