@@ -41,8 +41,11 @@ export default class VisDashboard extends Component {
 
     onElementClick(id)
     {
+        const clickedNode = this.props.visgraph.nodes.filter(node => node.id === id)[0];
+        // if clicked on edges
+        if (!clickedNode) return;
         this.setState({dataPrepared: false});
-        this.setState({currentNode: this.props.visgraph.nodes.filter(node => node.id === id)[0] }, () => {
+        this.setState({currentNode:  clickedNode}, () => {
             calculateDataset(this.state.currentNode.data.dataSource, this.props.datasets.datasets).then(data => 
             {
                 this.setState({currentNodeData: data}) 

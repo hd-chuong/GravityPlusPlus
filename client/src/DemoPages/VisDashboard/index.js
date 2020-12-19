@@ -39,12 +39,12 @@ class Dashboard extends Component{
     {
         // following types:
         
-            // same dataSource, same encoding fields (just different visualisations)
-            // same dataSource, different fields (use another fields)
-            
-            // different dataSource, there is a DIRECT link between data source
-            // different dataSource, there is no link between data source
+        // same dataSource, same encoding fields (just different visualisations)
+        // same dataSource, different fields (use another fields)
         
+        // different dataSource, there is a DIRECT link between data source
+        // different dataSource, there is no link between data source
+    
         this.setState({transformationLinks: !this.state.transformationLinks}, () => {
             if (!this.state.transformationLinks)
             {
@@ -93,7 +93,8 @@ class Dashboard extends Component{
                    
                    const field1 = FieldExtractorFromEncoding(encoding1); 
                    const field2 = FieldExtractorFromEncoding(encoding2);
-
+                    console.log(field1, field2);
+                    console.log(_.isEqual(field1, field2));
                    this.props.addVisEdge(node1.id, node2.id, _.isEqual(field1, field2) ? "SAME_FIELDS": "DIFFERENT_FIELDS");
                }
            }

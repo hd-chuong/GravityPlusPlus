@@ -121,7 +121,6 @@ class JoinVegaBuilder extends React.Component {
                         </Button>{' '}  
                     </Col>
                 </Row>
-
             </Form>
         );
     }

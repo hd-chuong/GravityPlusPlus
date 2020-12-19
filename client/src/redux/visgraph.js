@@ -46,7 +46,7 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
             }
             else if (edgeType === "DIFFERENT_FIELDS")
             {
-                style = {stroke: "#1E90FF"}
+                style = {stroke: "purple"}
                 arrowHeadType = null;
                 type = "step";
             }
