@@ -1,14 +1,27 @@
 import React, { Fragment } from 'react';
 import {Label, Input, Row, Col} from 'reactstrap'; 
-import Select from 'react-select/creatable';
-
-import {AggregationMethods} from '../../../utils/VegaSpecsBuilder';
+import Creatable from 'react-select/creatable';
+import Select from 'react-select';
+import {AggregationMethods, ComparisonExpressions, TypeCheckingFunctions, FilterBuilder} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 import JSONView from 'react-json-view';
+
+const filterOptions = [
+    {
+        label: "Comparison",
+        options: ComparisonExpressions.map((operand) => ({label: operand, value: operand}))
+    },
+    {
+        label: "Type checking",
+        options: TypeCheckingFunctions.map((operand) => ({label: operand, value: operand}))
+    }
+]
+
 class TransformVegaBuilder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            type: "aggregate",
             vega: {
                 type: "aggregate",
                 fields: [],
@@ -17,9 +30,13 @@ class TransformVegaBuilder extends React.Component {
             },
             vegaFilter: {
                 type: "filter",
-                expr: ""
+                field: null,
+                operand: null,
+                threshold: null,
+                expr: "",
+
             },
-            type: "aggregate"
+            
         };
         this.buildVega = this.buildVega.bind(this);
         
@@ -30,7 +47,15 @@ class TransformVegaBuilder extends React.Component {
         if (this.state.type === "filter")
         {
             this.setState({vegaFilter: {...this.state.vegaFilter, ...newChange}}, 
-                () => {this.props.updateVegaSpecs(this.state.vegaFilter)});
+                () => {
+                    const filter = FilterBuilder(this.state.vegaFilter.field, 
+                                                this.state.vegaFilter.operand, 
+                                                this.state.vegaFilter.threshold);
+                    this.setState({vegaFilter: {...this.state.vegaFilter, expr: filter}});
+                    console.log(filter);
+                    this.props.updateVegaSpecs({type: this.state.vegaFilter.type, expr: filter});
+                
+                });
         }
         else {
             this.setState({vega: {...this.state.vega, ...newChange}}, 
@@ -55,12 +80,38 @@ class TransformVegaBuilder extends React.Component {
                     {this.state.type === "filter" && (
                     <Col>
                         <Row className="form-group">
-                            <Label md={4}>Expressions</Label>
+                            <Label md={4}>Field</Label>
                             <Col>
-                                <Input type="text" placeholder="enter your filtering expression here" 
-                                onChange={(e) => this.buildVega({expr: e.target.value})}></Input>
+                                <Creatable 
+                                    options={
+                                        this.props.currentData && AttributeExtractor(this.props.currentData[0]).map((key) => ({value: key, label: key})) 
+                                    }
+                                    onChange={(newField) => this.buildVega({field: newField.value}) }
+                                />
                             </Col>
                         </Row>
+
+                        <Row className="form-group">
+                            <Label md={4}>Operand</Label>
+                            <Col>
+                                <Select 
+                                    options={filterOptions}
+                                    onChange={(newOperand) => this.buildVega({operand: newOperand.value}) }
+                                />
+                            </Col>
+                        </Row>
+
+                        {ComparisonExpressions.includes(this.state.vegaFilter.operand) && (
+                            <Row className="form-group">
+                                <Label md={4}>Compared value</Label>
+                                <Col>
+                                    <Input type="text" placeholder="Enter the compared value here" 
+                                    onChange={(e) => this.buildVega({threshold: e.target.value}) }
+                                    />
+                                </Col>
+                            </Row>)
+                        }
+
                     </Col>
                     )}
                     {this.state.type === "aggregate" && (
@@ -68,7 +119,7 @@ class TransformVegaBuilder extends React.Component {
                         <Row className="form-group">
                             <Label for="aggregation" md={4}>Functions</Label>
                             <Col>
-                                <Select 
+                                <Creatable 
                                     isMulti options={
                                         AggregationMethods.map((method) => ({value: method, label: method})) 
                                     }
@@ -81,7 +132,7 @@ class TransformVegaBuilder extends React.Component {
                         <Row className="form-group">
                             <Label for="column" md={4}>Fields</Label>
                             <Col>
-                                <Select 
+                                <Creatable 
                                     isMulti options={
                                         this.props.currentData && AttributeExtractor(this.props.currentData[0]).map((key) => ({value: key, label: key})) 
                                     }
@@ -94,7 +145,7 @@ class TransformVegaBuilder extends React.Component {
                         <Row className="form-group">
                             <Label for="column" md={4}>Group by</Label>
                             <Col>
-                                <Select 
+                                <Creatable 
                                     isMulti options={
                                         this.props.currentData && AttributeExtractor(this.props.currentData[0]).map((key) => ({value: key, label: key})) 
                                     }
@@ -106,7 +157,7 @@ class TransformVegaBuilder extends React.Component {
                                     
                     <Col className="form-group">
                         <JSONView 
-                            src={this.state.type === "aggregate" ? this.state.vega : this.state.vegaFilter}
+                            src={this.state.type === "aggregate" ? this.state.vega : {type: this.state.vegaFilter.type, expr: this.state.vegaFilter.expr}}
                         />
                     </Col>
                 </Row>

@@ -39,6 +39,11 @@ export default class VisDashboard extends Component {
         if (removedVisNodes) console.log(`We remove ${removedVisNodes} visualisation nodes because their corresponding data nodes have been removed.`);
     }
 
+    deleteVisNode(id)
+    {
+        this.props.removeVisNode(id);
+    }
+
     onElementClick(id)
     {
         const clickedNode = this.props.visgraph.nodes.filter(node => node.id === id)[0];
@@ -77,6 +82,7 @@ export default class VisDashboard extends Component {
                                     <VisGraph 
                                         data={this.props.visgraph}
                                         onElementClick={this.onElementClick.bind(this)}
+                                        onElementsRemove={this.deleteVisNode.bind(this)}
                                     />                                    
                                 </ReactCSSTransitionGroup>
                             </Col>
