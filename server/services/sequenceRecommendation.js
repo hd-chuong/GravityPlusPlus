@@ -6,16 +6,12 @@ async function RecommendSequence(charts, options={"fixFirst": false})
     try 
     {
         const IDs = charts.map(chart => chart.id);
-        
         const cleanedCharts = charts.map(chart => CleanChart(chart));
         
-        console.log(JSON.stringify(cleanedCharts, null, 4));
-        
         console.warn("Start looking for the best path...");
-        
         const solve = gs.sequence(cleanedCharts, options);
         var bestSequence = solve[0].sequence;
-        
+
         console.log("Found a path");
         //
         // node 0 is null, need removing
@@ -26,7 +22,7 @@ async function RecommendSequence(charts, options={"fixFirst": false})
         return orderedIDs;
     }
     catch (e) {
-        console.log("catch error");
+        console.log(`Errors catched when finding the best path: ${e}`);
         return [];
     }
 }
