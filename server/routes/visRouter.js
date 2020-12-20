@@ -14,7 +14,10 @@ router.route('/sequenceRecommend')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .post(cors.cors, (req, res, next) => {
     var charts = req.body.charts;
-    RecommendSequence(charts).then(result => {console.log(result); res.json(result);}, err => next(err)).catch(err => next(err))
+    RecommendSequence(charts).then(result => {
+      res.json(result);
+    }, err => res.json(err))
+    .catch(err => res.json(err));
 });
 
 

@@ -46,7 +46,7 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
             }
             else if (edgeType === "DIFFERENT_FIELDS")
             {
-                style = {stroke: "#1E90FF"}
+                style = {stroke: "purple"}
                 arrowHeadType = null;
                 type = "step";
             }
@@ -106,7 +106,34 @@ export const VisGraph = (state = {errMess: null, visgraph: {nodes: [], edges: []
                                                                 && edge.data.type === edgeType))
                 }
             };
+        
+        case ActionTypes.REMOVE_VIS_EDGE:
+            var edgeID = action.payload.id;
+            return {
+                ...state,
+                visgraph: {
+                    nodes: state.visgraph.nodes,
+                    edges: state.visgraph.edges.filter(edge => edge.id !== edgeID)
+                }
+            }
 
+        case ActionTypes.SET_VIS_NODE:
+            var nodeId = action.payload.id;
+            var params = action.payload.params;
+            
+            var newNodes = state.visgraph.nodes.map(node => {
+                if (node.id !== nodeId) return node;
+                return {...node, data: {...node.data, ...params}};
+            });
+            
+            return {
+                ...state, 
+                visgraph: {
+                    edges: state.visgraph.edges,
+                    nodes: newNodes,
+                }
+            }
+    
         default:
             return state;
     }

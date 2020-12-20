@@ -2,15 +2,14 @@ import React, {Component, Fragment} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 const VisNodeInsertionModal = lazy(() => import('../VisNodeInsertionModal'));
 
-import {
-    Row, 
-    Col,
+import {Row, Col,
 } from 'reactstrap';
 
 import VisGraph from '../../DataDashboard/DataGraph';
 import Chart from '../Chart';
 import calculateDataset from '../../../utils/dataGeneration';
 import { lazy } from 'react';
+import JSONEditor from '../../JSONEditor';
 
 export default class VisDashboard extends Component {
     constructor(props) {
@@ -18,7 +17,7 @@ export default class VisDashboard extends Component {
         this.state = {
             currentNode: null,
             currentNodeData: null,
-
+            specDisplayed: null,
             // flag to wait for elements to be loaded
             dataPrepared: true
         };
@@ -29,9 +28,7 @@ export default class VisDashboard extends Component {
         var removedVisNodes = 0;
         this.props.visgraph.nodes.forEach((node) => {
             const dataSource = node.data.dataSource;
-            
             // when the visgraph is rerendered again, the vis node without data source must be removed.
-             
             if (this.props.datagraph.nodes.filter(node => node.id === dataSource).length === 0)
             {
                 removedVisNodes++;
@@ -44,13 +41,17 @@ export default class VisDashboard extends Component {
 
     onElementClick(id)
     {
+        const clickedNode = this.props.visgraph.nodes.filter(node => node.id === id)[0];
+        // if clicked on edges
+        if (!clickedNode) return;
         this.setState({dataPrepared: false});
-        this.setState({currentNode: this.props.visgraph.nodes.filter(node => node.id === id)[0] }, () => {
+        this.setState({currentNode:  clickedNode}, () => {
             calculateDataset(this.state.currentNode.data.dataSource, this.props.datasets.datasets).then(data => 
             {
                 this.setState({currentNodeData: data}) 
                 this.setState({dataPrepared: true});
             }); 
+            this.setState({specDisplayed: this.state.currentNode.data.spec})
         });
     }
     render() {
@@ -67,12 +68,12 @@ export default class VisDashboard extends Component {
                         <Row>
                             <Col md={6}>
                                 <ReactCSSTransitionGroup
-                                component="div"
-                                transitionName="TabsAnimation"
-                                transitionAppear={true}
-                                transitionAppearTimeout={0}
-                                transitionEnter={false}
-                                transitionLeave={false}>
+                                    component="div"
+                                    transitionName="TabsAnimation"
+                                    transitionAppear={true}
+                                    transitionAppearTimeout={0}
+                                    transitionEnter={false}
+                                    transitionLeave={false}>
                                     <VisGraph 
                                         data={this.props.visgraph}
                                         onElementClick={this.onElementClick.bind(this)}
@@ -80,21 +81,37 @@ export default class VisDashboard extends Component {
                                 </ReactCSSTransitionGroup>
                             </Col>
                             
-                            {this.state.dataPrepared && <Col md={6}>
-                                <ReactCSSTransitionGroup
-                                component="div"
-                                transitionName="TabsAnimation"
-                                transitionAppear={true}
-                                transitionAppearTimeout={0}
-                                transitionEnter={false}
-                                transitionLeave={false}>
-                                    <Chart 
-                                        title={this.state.currentNode && this.state.currentNode.data.label}
-                                        data={this.state.currentNode && this.state.currentNodeData}
-                                        spec={this.state.currentNode && this.state.currentNode.data.spec}
-                                    />                                   
-                                </ReactCSSTransitionGroup>
-                            </Col>}
+                            {this.state.dataPrepared && <Fragment>
+                                <Col md={6}>
+                                    <ReactCSSTransitionGroup
+                                        component="div"
+                                        transitionName="TabsAnimation"
+                                        transitionAppear={true}
+                                        transitionAppearTimeout={0}
+                                        transitionEnter={false}
+                                        transitionLeave={false}>
+                                        <Chart 
+                                            title={this.state.currentNode && this.state.currentNode.data.label}
+                                            data={this.state.currentNode && this.state.currentNodeData}
+                                            spec={this.state.specDisplayed}
+                                        />                                   
+                                    </ReactCSSTransitionGroup>
+                                    <ReactCSSTransitionGroup
+                                        component="div"
+                                        transitionName="TabsAnimation"
+                                        transitionAppear={true}
+                                        transitionAppearTimeout={0}
+                                        transitionEnter={false}
+                                        transitionLeave={false}>
+                                        <JSONEditor 
+                                            json={this.state.currentNode && this.state.currentNode.data.spec}
+                                            onSave={(newSpec) => this.props.setVisNode(this.state.currentNode.id, {spec: newSpec})}
+                                            onSpecChange={(newSpec) => this.setState({specDisplayed: newSpec})}
+                                        />                                   
+                                    </ReactCSSTransitionGroup>
+                                </Col>  
+                            </Fragment>
+                            }
                         </Row>                       
                     </div>
                     

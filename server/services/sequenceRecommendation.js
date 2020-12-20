@@ -1,5 +1,5 @@
 const gs = require("./graphscape");
-const MAX_TIME_OUT = 2;
+const MAX_TIME_OUT = 20000;
 
 function RecommendSequence(charts, options={"fixFirst": false})
 {
@@ -11,19 +11,27 @@ function RecommendSequence(charts, options={"fixFirst": false})
         try 
         {
             const IDs = charts.map(chart => chart.id);
+            
             const cleanedCharts = charts.map(chart => CleanChart(chart));
             
+            console.log(JSON.stringify(cleanedCharts, null, 4));
+            
             console.warn("Start looking for the best path...");
+            
             const solve = gs.sequence(cleanedCharts, options);
             var bestSequence = solve[0].sequence;
+            
             console.log("Found a path");
+            //
             // node 0 is null, need removing
+            //
             bestSequence = bestSequence.filter(order => order !== 0).map(order => order - 1);
             const orderedIDs = [];
             bestSequence.forEach(order => orderedIDs.push(IDs[order]));
             resolve(orderedIDs);
         }
         catch (e) {
+            console.log("catch error");
             reject(`${e}. Graphscape can not find a viable path.`);
         }
     });
@@ -31,7 +39,7 @@ function RecommendSequence(charts, options={"fixFirst": false})
 
 function CleanChart(chart)
 {
-    const {
+    var {
         // data,
         transforms,
         mark,
@@ -43,7 +51,6 @@ function CleanChart(chart)
     {
         mark = mark.hasOwnProperty("type") ? mark.type : "";
     }
-
 
     // encoding has to be x and y
     if (mark === "arc") // likely to be color and theta
@@ -59,7 +66,7 @@ function CleanChart(chart)
             delete encoding.theta;
         }
     }
-
+    
     return {mark, encoding, transforms};
 }
 module.exports.RecommendSequence = RecommendSequence;

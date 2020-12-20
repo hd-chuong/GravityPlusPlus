@@ -26,6 +26,8 @@ const AppMain = ({datasets,
                 addVisNode,
                 addVisEdge,
                 removeVisNode,
+                removeVisEdge,
+                setVisNode
             }) => {
     return (
         <Fragment>
@@ -64,7 +66,11 @@ const AppMain = ({datasets,
                         visgraph={visgraph.visgraph}
                         addVisNode={addVisNode}
                         addVisEdge={addVisEdge}
+
                         removeVisNode={removeVisNode}
+                        removeVisEdge={removeVisEdge}
+                    
+                        setVisNode={setVisNode}
                     />
                 </Route>
                 

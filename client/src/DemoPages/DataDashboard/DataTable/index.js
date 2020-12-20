@@ -6,9 +6,6 @@ import {
     CardHeader,
     Card,
     CardBody,
-    Progress,
-    TabContent,
-    TabPane,
 } from 'reactstrap';
 
 import AttributeExtractor from '../../../utils/AttributeExtractor';
@@ -38,8 +35,8 @@ export default class DataTable extends Component {
         
         return (
             <Card className="main-card mb-3">
-                    <div className="card-header">{this.props.label}
-                    </div>
+                    <CardHeader>{this.props.label}
+                    </CardHeader>
                     <div className="table-responsive">
                         <table className="align-middle mb-0 table table-borderless table-striped table-hover">
                             <thead>

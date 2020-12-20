@@ -39,14 +39,23 @@ class Dashboard extends Component{
     {
         // following types:
         
-            // same dataSource, same encoding fields (just different visualisations)
-            // same dataSource, different fields (use another fields)
-            
-            // different dataSource, there is a DIRECT link between data source
-            // different dataSource, there is no link between data source
+        // same dataSource, same encoding fields (just different visualisations)
+        // same dataSource, different fields (use another fields)
         
+        // different dataSource, there is a DIRECT link between data source
+        // different dataSource, there is no link between data source
+    
         this.setState({transformationLinks: !this.state.transformationLinks}, () => {
-            if (!this.state.transformationLinks) return;
+            if (!this.state.transformationLinks)
+            {
+                const removedEdgeIDs = this.props.visgraph.edges.filter((edge) => edge.data.type === "DATA_TRANSFORMED" 
+                                                        || edge.data.type === "SAME_FIELDS" 
+                                                        || edge.data.type === "DIFFERENT_FIELDS").map(edge => edge.id);
+                removedEdgeIDs.forEach(id => {
+                    this.props.removeVisEdge(id);
+                });
+                return;
+            }
             this.setState({loadTransformationLinks: true});
             const dataEdges = this.props.datagraph.edges.map(edge => ({source: edge.source, target: edge.target}));
             //
@@ -84,18 +93,28 @@ class Dashboard extends Component{
                    
                    const field1 = FieldExtractorFromEncoding(encoding1); 
                    const field2 = FieldExtractorFromEncoding(encoding2);
-
+                    console.log(field1, field2);
+                    console.log(_.isEqual(field1, field2));
                    this.props.addVisEdge(node1.id, node2.id, _.isEqual(field1, field2) ? "SAME_FIELDS": "DIFFERENT_FIELDS");
                }
            }
         this.setState({loadTransformationLinks: false});
         })
-    }
+    } 
 
+    
     handleRecommendedSequence()
     {
         this.setState({recommendedSequence: !this.state.recommendedSequence}, () => {
-            if (this.state.recommendedSequence) 
+            if (!this.state.recommendedSequence)
+            {
+                const removedEdgeIDs = this.props.visgraph.edges.filter((edge) => edge.data.type === "RECOMMENDED");
+                removedEdgeIDs.forEach(node => {
+                    this.props.removeVisEdge(node.id);
+                });
+                return;
+            }
+            else 
             {
                 this.setState({loadRecommendedSequence: true});
                 Axios({
@@ -109,6 +128,7 @@ class Dashboard extends Component{
                     {
                         var error = new Error('Error ' + response.status + ': ' + response.statusText);
                         error.response = response;
+                        console.log(err);
                         throw error;
                     } 
                     else 
@@ -157,6 +177,7 @@ class Dashboard extends Component{
                             isNewNodeModalOpen={this.state.isNewNodeModalOpen}
                             addVisNode={this.props.addVisNode}
                             removeVisNode={this.props.removeVisNode}
+                            setVisNode={this.props.setVisNode}
                         />
                     </div>
                 </div>
