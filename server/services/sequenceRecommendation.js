@@ -1,40 +1,34 @@
 const gs = require("./graphscape");
-const MAX_TIME_OUT = 20000;
 
-function RecommendSequence(charts, options={"fixFirst": false})
+
+async function RecommendSequence(charts, options={"fixFirst": false})
 {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            reject(`TIME OUT ${MAX_TIME_OUT / 1000}s.`);
-        }, MAX_TIME_OUT);
-
-        try 
-        {
-            const IDs = charts.map(chart => chart.id);
-            
-            const cleanedCharts = charts.map(chart => CleanChart(chart));
-            
-            console.log(JSON.stringify(cleanedCharts, null, 4));
-            
-            console.warn("Start looking for the best path...");
-            
-            const solve = gs.sequence(cleanedCharts, options);
-            var bestSequence = solve[0].sequence;
-            
-            console.log("Found a path");
-            //
-            // node 0 is null, need removing
-            //
-            bestSequence = bestSequence.filter(order => order !== 0).map(order => order - 1);
-            const orderedIDs = [];
-            bestSequence.forEach(order => orderedIDs.push(IDs[order]));
-            resolve(orderedIDs);
-        }
-        catch (e) {
-            console.log("catch error");
-            reject(`${e}. Graphscape can not find a viable path.`);
-        }
-    });
+    try 
+    {
+        const IDs = charts.map(chart => chart.id);
+        
+        const cleanedCharts = charts.map(chart => CleanChart(chart));
+        
+        console.log(JSON.stringify(cleanedCharts, null, 4));
+        
+        console.warn("Start looking for the best path...");
+        
+        const solve = gs.sequence(cleanedCharts, options);
+        var bestSequence = solve[0].sequence;
+        
+        console.log("Found a path");
+        //
+        // node 0 is null, need removing
+        //
+        bestSequence = bestSequence.filter(order => order !== 0).map(order => order - 1);
+        const orderedIDs = [];
+        bestSequence.forEach(order => orderedIDs.push(IDs[order]));
+        return orderedIDs;
+    }
+    catch (e) {
+        console.log("catch error");
+        return [];
+    }
 }
 
 function CleanChart(chart)
@@ -69,4 +63,12 @@ function CleanChart(chart)
     
     return {mark, encoding, transforms};
 }
-module.exports.RecommendSequence = RecommendSequence;
+
+process.on("message", async (message) => {
+    const recommended = await RecommendSequence(message.charts);
+    process.send({result: recommended});
+})
+// console.log("okie");
+// RecommendSequence(workerData);
+// parentPort.postMessage( 
+//     { chart: workerData, status: 'Done' }) 
