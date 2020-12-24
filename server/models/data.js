@@ -88,10 +88,11 @@ module.exports = class DataGraph {
       });
   }
 
-  removeNode(id)
-  {
-    const params = {id};
-    
+  removeNode(id) {
+    const params = {
+      id
+    };
+
     const cypher = `
     MATCH (n: DATA_NODE {id: $id})
     OPTIONAL MATCH(n)-[r]->(children:DATA_NODE)
@@ -108,17 +109,17 @@ module.exports = class DataGraph {
     
     RETURN children  
     `;
-    
+
     const session = this.neo4jDriver.session();
-    
+
     return session.writeTransaction(tx => tx.run(cypher, params))
-    .then(() => {
-      session.close();  
-      return 0;
-    })
-    .catch(e => {
-      console.log(e)
-    });
+      .then(() => {
+        session.close();
+        return 0;
+      })
+      .catch(e => {
+        console.log(e)
+      });
   }
 
   getAllNodes() {
@@ -266,8 +267,10 @@ module.exports = class DataGraph {
   }
 
   getSubgraphTo(target) {
-    const params = {id : target}
-    
+    const params = {
+      id: target
+    }
+
     const cypher = `
         MATCH (p:DATA_NODE {id: $id})
         CALL apoc.path.subgraphNodes(p, {
@@ -280,31 +283,33 @@ module.exports = class DataGraph {
         RETURN node, collect(r) as edge, collect(x.id) as source_id ORDER BY node.createdAt DESC;
       `;
     const session = this.neo4jDriver.session();
-    
+
     return session.readTransaction(tx => tx.run(cypher, params))
       .then(res => {
         session.close();
 
-        let result = res.records.map(record => (
-          {
-            node: {
-              id: record["_fields"][0].properties.id,
-              props: record["_fields"][0].properties,
-              types: record["_fields"][0].labels,
-            }, 
-            // exposing id, type and operations
-            edges: record["_fields"][1].map((edge, i) => ({properties: edge.properties, source_id: record["_fields"][2][i] }) ) 
-            }
-            ));
+        let result = res.records.map(record => ({
+          node: {
+            id: record["_fields"][0].properties.id,
+            props: record["_fields"][0].properties,
+            types: record["_fields"][0].labels,
+          },
+          // exposing id, type and operations
+          edges: record["_fields"][1].map((edge, i) => ({
+            properties: edge.properties,
+            source_id: record["_fields"][2][i]
+          }))
+        }));
         return result;
       }).catch(e => {
         console.log(e)
-      });    
-  } 
+      });
+  }
 
-  getChildren(nodeId)
-  {
-    const params = {id: nodeId};
+  getChildren(nodeId) {
+    const params = {
+      id: nodeId
+    };
     const cypher = `
     MATCH 
       (p:DATA_NODE {id: $id})-[r:DATA_EDGE]->(dest:DATA_NODE)
@@ -315,19 +320,21 @@ module.exports = class DataGraph {
       .then(res => {
         console.log(res.records);
         let result = res.records.map(record => ({
-              id: record["_fields"][0],
-              name: record["_fields"][1]
-            }));
+          id: record["_fields"][0],
+          name: record["_fields"][1]
+        }));
         return result;
       })
       .catch(e => {
         console.log(e);
       });
   }
-  
+
   deleteSubgraphFrom(target) {
-    const params = {id : target}
-    
+    const params = {
+      id: target
+    }
+
     const fetchIdCypher = `
         MATCH (p:DATA_NODE {id: $id})
         CALL apoc.path.subgraphNodes(p, {
@@ -350,13 +357,13 @@ module.exports = class DataGraph {
         DETACH DELETE node;
     `;
     const session = this.neo4jDriver.session();
-    
+
     return session.readTransaction(tx => tx.run(fetchIdCypher, params))
       .then(res => {
         console.log(res.records);
         let result = res.records.map(record => (
-              record["_fields"][0]
-          ));
+          record["_fields"][0]
+        ));
         return result;
       })
       .then(res => {
@@ -365,7 +372,7 @@ module.exports = class DataGraph {
       })
       .catch(e => {
         console.log(e)
-      });    
+      });
   }
 
 }
