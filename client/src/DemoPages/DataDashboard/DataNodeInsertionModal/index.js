@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
+import {Button, Modal, ModalBody, ModalFooter, Card, CardBody, CardHeader, Nav, NavLink, NavItem, TabContent, TabPane, CardFooter} from 'reactstrap';
 import {Form, FormGroup, Label, Input, Row, Col} from 'reactstrap'; 
 import VegaBuilder from './TransformVegaBuilder';
 import JoinVegaBuilder from './JoinVegaBuilder';
@@ -7,6 +7,7 @@ import {JoinSpecsBuilder} from '../../../utils/VegaSpecsBuilder';
 import classnames from 'classnames';
 import calculateDataset from '../../../utils/dataGeneration';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
+
 class DataNodeInsertionModal extends React.Component {
     constructor(props) 
     {

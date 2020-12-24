@@ -5,6 +5,7 @@ import Select from 'react-select';
 import {AggregationMethods, ComparisonExpressions, TypeCheckingFunctions, FilterBuilder} from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 import JSONView from 'react-json-view';
+import Tooltip from 'react-tooltip';
 
 const filterOptions = [
     {
@@ -52,7 +53,6 @@ class TransformVegaBuilder extends React.Component {
                                                 this.state.vegaFilter.operand, 
                                                 this.state.vegaFilter.threshold);
                     this.setState({vegaFilter: {...this.state.vegaFilter, expr: filter}});
-                    console.log(filter);
                     this.props.updateVegaSpecs({type: this.state.vegaFilter.type, expr: filter});
                 
                 });
@@ -80,7 +80,7 @@ class TransformVegaBuilder extends React.Component {
                     {this.state.type === "filter" && (
                     <Col>
                         <Row className="form-group">
-                            <Label md={4}>Field</Label>
+                            <Label md={4}>Field *</Label>
                             <Col>
                                 <Creatable 
                                     options={
@@ -92,7 +92,7 @@ class TransformVegaBuilder extends React.Component {
                         </Row>
 
                         <Row className="form-group">
-                            <Label md={4}>Operand</Label>
+                            <Label md={4}>Operand *</Label>
                             <Col>
                                 <Select 
                                     options={filterOptions}
@@ -103,12 +103,18 @@ class TransformVegaBuilder extends React.Component {
 
                         {ComparisonExpressions.includes(this.state.vegaFilter.operand) && (
                             <Row className="form-group">
-                                <Label md={4}>Compared value</Label>
-                                <Col>
-                                    <Input type="text" placeholder="Enter the compared value here" 
-                                    onChange={(e) => this.buildVega({threshold: e.target.value}) }
-                                    />
-                                </Col>
+                                <a data-tip data-for="param-info">
+                                    <Label md={4}>Compared value</Label>
+                                    <Col>
+                                        <Input type="text" placeholder="Enter the compared value here" 
+                                        onChange={(e) => this.buildVega({threshold: e.target.value}) }
+                                        />
+                                    </Col>
+                                </a>
+                                <Tooltip id='param-info' type='dark'>
+                                    <p>In case the compared value is not provided, </p> 
+                                    <p>a param will automatically be created and passed in during user interaction</p>
+                                </Tooltip>
                             </Row>)
                         }
 
