@@ -7,8 +7,8 @@ import {
   Button,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
- } from 'reactstrap';
+  DropdownItem,
+} from 'reactstrap';
 
 export default class FormInputGroupButton extends React.Component {
   constructor(props) {
@@ -18,37 +18,40 @@ export default class FormInputGroupButton extends React.Component {
     this.toggleSplit = this.toggleSplit.bind(this);
     this.state = {
       dropdownOpen: false,
-      splitButtonOpen: false
+      splitButtonOpen: false,
     };
   }
 
   toggleDropDown() {
     this.setState({
-      dropdownOpen: !this.state.dropdownOpen
+      dropdownOpen: !this.state.dropdownOpen,
     });
   }
 
   toggleSplit() {
     this.setState({
-      splitButtonOpen: !this.state.splitButtonOpen
+      splitButtonOpen: !this.state.splitButtonOpen,
     });
   }
-
 
   render() {
     return (
       <div>
         <InputGroup>
-          <InputGroupAddon addonType="prepend"><Button>I'm a button</Button> </InputGroupAddon>
+          <InputGroupAddon addonType="prepend">
+            <Button>I'm a button</Button>{' '}
+          </InputGroupAddon>
           <Input />
         </InputGroup>
         <br />
         <InputGroup>
           <Input />
-          <InputGroupButtonDropdown addonType="append" isOpen={this.state.dropdownOpen} toggle={this.toggleDropDown}>
-            <DropdownToggle caret>
-              Button Dropdown
-            </DropdownToggle>
+          <InputGroupButtonDropdown
+            addonType="append"
+            isOpen={this.state.dropdownOpen}
+            toggle={this.toggleDropDown}
+          >
+            <DropdownToggle caret>Button Dropdown</DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Header</DropdownItem>
               <DropdownItem disabled>Action</DropdownItem>
@@ -60,7 +63,11 @@ export default class FormInputGroupButton extends React.Component {
         </InputGroup>
         <br />
         <InputGroup>
-          <InputGroupButtonDropdown addonType="prepend" isOpen={this.state.splitButtonOpen} toggle={this.toggleSplit}>
+          <InputGroupButtonDropdown
+            addonType="prepend"
+            isOpen={this.state.splitButtonOpen}
+            toggle={this.toggleSplit}
+          >
             <Button outline>Split Button</Button>
             <DropdownToggle split outline />
             <DropdownMenu>
@@ -72,7 +79,9 @@ export default class FormInputGroupButton extends React.Component {
             </DropdownMenu>
           </InputGroupButtonDropdown>
           <Input placeholder="and..." />
-          <InputGroupAddon addonType="append"><Button color="secondary">I'm a button</Button> </InputGroupAddon>
+          <InputGroupAddon addonType="append">
+            <Button color="secondary">I'm a button</Button>{' '}
+          </InputGroupAddon>
         </InputGroup>
       </div>
     );

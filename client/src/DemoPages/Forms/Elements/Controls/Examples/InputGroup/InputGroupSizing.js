@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
 
-const FormInputGroupSizing = (props) => {
+const FormInputGroupSizing = props => {
   return (
     <div>
       <InputGroup size="lg">

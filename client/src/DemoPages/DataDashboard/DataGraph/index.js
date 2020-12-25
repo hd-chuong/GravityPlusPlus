@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import ReactFlow, {MiniMap, Controls, Background, removeElements} from 'react-flow-renderer';
-import {Card, CardBody, CardHeader} from 'reactstrap';
+import ReactFlow, {
+  MiniMap,
+  Controls,
+  Background,
+  removeElements,
+} from 'react-flow-renderer';
+import { Card, CardBody, CardHeader } from 'reactstrap';
 
-// examples of data to be passed into react flow 
+// examples of data to be passed into react flow
 // const elements = [
 //   {
 //     id: '1',
@@ -37,42 +42,40 @@ import {Card, CardBody, CardHeader} from 'reactstrap';
 // ];
 
 export default class Graph extends Component {
-    constructor(props)
-    {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    render() 
-    {
-        if (this.props.data === null || this.props.data === undefined) 
-        return (
-            <Card className="main-card mb-3">
-                <CardHeader>
-                    Graph view
-                </CardHeader>
-                
-                <CardBody>
-                    Create a node to view the graph
-                </CardBody>
-            </Card>
-        );
-        const elements = [...this.props.data.nodes, ...this.props.data.edges];
-        return (
-            <Card className="main-card mb-3">
-                <div className="card-header"> Graph view </div>
-                <div style={{ height: 600 }}> 
-                    <ReactFlow elements={elements} 
-                                onElementClick={(event, element) => {this.props.onElementClick(element.id)}}
-                                onElementsRemove={(elements) => 
-                                    elements.map(element => element.id)
-                                    .forEach(e => this.props.onElementsRemove(e))    
-                                }
-                                >                               
-                        <Controls />  
-                        <Background color="#aaa" gap={16} /> 
-                    </ReactFlow>
-                </div>
-            </Card>
-        );
-    }
+  render() {
+    if (this.props.data === null || this.props.data === undefined)
+      return (
+        <Card className="main-card mb-3">
+          <CardHeader>Graph view</CardHeader>
+
+          <CardBody>Create a node to view the graph</CardBody>
+        </Card>
+      );
+    const elements = [...this.props.data.nodes, ...this.props.data.edges];
+    return (
+      <Card className="main-card mb-3">
+        <div className="card-header"> Graph view </div>
+        <div style={{ height: 600 }}>
+          <ReactFlow
+            elements={elements}
+            onElementClick={(event, element) => {
+              this.props.onElementClick(element.id);
+            }}
+            onElementsRemove={elements =>
+              elements
+                .map(element => element.id)
+                .forEach(e => this.props.onElementsRemove(e))
+            }
+          >
+            <Controls />
+            <Background color="#aaa" gap={16} />
+          </ReactFlow>
+        </div>
+      </Card>
+    );
+  }
 }

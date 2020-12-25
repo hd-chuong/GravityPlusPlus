@@ -1,2 +1,2 @@
-export const ADD_DATASET = "ADD_DATASET";
-export const REMOVE_DATASET = "REMOVE_DATASET";
+export const ADD_DATASET = 'ADD_DATASET';
+export const REMOVE_DATASET = 'REMOVE_DATASET';

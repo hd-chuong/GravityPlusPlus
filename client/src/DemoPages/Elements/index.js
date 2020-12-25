@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import {Route} from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Route } from 'react-router-dom';
 
 // BUTTONS
 
@@ -40,50 +40,61 @@ import AppHeader from '../../Layout/AppHeader/';
 import AppSidebar from '../../Layout/AppSidebar/';
 import AppFooter from '../../Layout/AppFooter/';
 
-const Elements = ({match}) => (
-    <Fragment>
-        <AppHeader/>
-        <div className="app-main">
-            <AppSidebar/>
-            <div className="app-main__outer">
-                <div className="app-main__inner">
+const Elements = ({ match }) => (
+  <Fragment>
+    <AppHeader />
+    <div className="app-main">
+      <AppSidebar />
+      <div className="app-main__outer">
+        <div className="app-main__inner">
+          {/* Buttons */}
 
-                    {/* Buttons */}
+          <Route
+            path={`${match.url}/buttons-standard`}
+            component={ButtonsStandard}
+          />
 
-                    <Route path={`${match.url}/buttons-standard`} component={ButtonsStandard}/>
+          {/* Dropdowns */}
 
-                    {/* Dropdowns */}
+          <Route path={`${match.url}/dropdowns`} component={DropdownExamples} />
 
-                    <Route path={`${match.url}/dropdowns`} component={DropdownExamples}/>
+          {/* Badges & Labels */}
 
-                    {/* Badges & Labels */}
+          <Route path={`${match.url}/badges-labels`} component={BadgesLabels} />
 
-                    <Route path={`${match.url}/badges-labels`} component={BadgesLabels}/>
+          {/* Icons */}
 
-                    {/* Icons */}
+          <Route path={`${match.url}/icons`} component={IconsExamples} />
 
-                    <Route path={`${match.url}/icons`} component={IconsExamples}/>
+          {/* Cards */}
 
-                    {/* Cards */}
+          <Route path={`${match.url}/cards`} component={CardsExamples} />
 
-                    <Route path={`${match.url}/cards`} component={CardsExamples}/>
+          {/* List Group */}
 
-                    {/* List Group */}
+          <Route
+            path={`${match.url}/list-group`}
+            component={ListGroupExample}
+          />
 
-                    <Route path={`${match.url}/list-group`} component={ListGroupExample}/>
+          {/* Navs */}
 
-                    {/* Navs */}
+          <Route
+            path={`${match.url}/navigation`}
+            component={NavigationExample}
+          />
 
-                    <Route path={`${match.url}/navigation`} component={NavigationExample}/>
+          {/* Utilities */}
 
-                    {/* Utilities */}
-
-                    <Route path={`${match.url}/utilities`} component={UtilitiesExamples}/>
-                </div>
-                <AppFooter/>
-            </div>
+          <Route
+            path={`${match.url}/utilities`}
+            component={UtilitiesExamples}
+          />
         </div>
-    </Fragment>
+        <AppFooter />
+      </div>
+    </div>
+  </Fragment>
 );
 
 export default Elements;
