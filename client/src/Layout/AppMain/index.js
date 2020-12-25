@@ -23,7 +23,7 @@ const AppMain = ({
   addVisEdge,
   removeVisNode,
   removeVisEdge,
-  setVisNode,
+  setVisNode
 }) => {
   return (
     <Fragment>
@@ -31,7 +31,11 @@ const AppMain = ({
         fallback={
           <div className="loader-container">
             <div className="loader-container-inner">
-              <h6 className="mt-3">Loading</h6>
+              <i
+                className="fa fa-spin fa-cog fa-5x"
+                aria-hidden="true"
+              ></i>
+              <h4 className="mt-3">Loading</h4>
             </div>
           </div>
         }
