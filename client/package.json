@@ -102,6 +102,7 @@
     "react-sizeme": "^2.5.2",
     "react-sliding-side-panel": "^2.0.3",
     "react-toastify": "^4.5.2",
+    "react-tooltip": "^4.2.11",
     "react-transition-group": "^2.5.3",
     "react-vega": "^6.1.0",
     "react-vega-lite": "^6.1.0",

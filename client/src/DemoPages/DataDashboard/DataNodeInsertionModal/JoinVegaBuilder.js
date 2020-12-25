@@ -44,7 +44,7 @@ class JoinVegaBuilder extends React.Component {
                             )}
                             placeholder="Dataset 1"
                             onChange={(newDataset) => this.setState({dataset1: newDataset.value}, () => {
-                                if (this.state.dataset1) this.props.calculateDataset(this.state.dataset1).then((data) => {
+                                if (this.state.dataset1) this.props.calculateDataset(this.state.dataset1).then(({data}) => {
                                     this.setState({headers1: AttributeExtractor(data[0])
                                 })
                                 })
@@ -66,7 +66,7 @@ class JoinVegaBuilder extends React.Component {
                                     )}
                             placeholder="Dataset 2"
                             onChange={(newDataset) => this.setState({dataset2: newDataset.value}, () => {
-                                if (this.state.dataset2) this.props.calculateDataset(this.state.dataset2).then((data) => {
+                                if (this.state.dataset2) this.props.calculateDataset(this.state.dataset2).then(({data}) => {
                                     this.setState({headers2: AttributeExtractor(data[0])
                                 })
                                 })

@@ -13,8 +13,7 @@ function pieChartSchema(tableName, x, y, value)
         "theta": {"field": y, "type": "quantitative"},
       },
       "view": {"stroke": null}
-    }
-       
+    }   
 }
 
 export default pieChartSchema;

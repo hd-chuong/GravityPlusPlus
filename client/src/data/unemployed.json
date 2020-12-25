@@ -1,115 +1,115 @@
 [
     {
         "LGA": "Alpine",
-        "unemployed": "221"
+        "unemployed": 221
     },
     {
         "LGA": "Ararat",
-        "unemployed": "308"
+        "unemployed": 308
     },
     {
         "LGA": "Ballarat",
-        "unemployed": "2432"
+        "unemployed": 2432
     },
     {
         "LGA": "Banyule",
-        "unemployed": "3207"
+        "unemployed": 3207
     },
     {
         "LGA": "Bass Coast",
-        "unemployed": "1141"
+        "unemployed": 1141
     },
     {
         "LGA": "Baw Baw",
-        "unemployed": "1188"
+        "unemployed": 1188
     },
     {
         "LGA": "Bayside",
-        "unemployed": "1699"
+        "unemployed": 1699
     },
     {
         "LGA": "Benalla",
-        "unemployed": "358"
+        "unemployed": 358
     },
     {
         "LGA": "Boroondara",
-        "unemployed": "4107"
+        "unemployed": 4107
     },
     {
         "LGA": "Brimbank",
-        "unemployed": "41"
+        "unemployed": 41
     },
     {
         "LGA": "Buloke",
-        "unemployed": "11732"
+        "unemployed": 11732
     },
     {
         "LGA": "Campaspe",
-        "unemployed": "120"
+        "unemployed": 120
     },
     {
         "LGA": "Cardinia",
-        "unemployed": "1190"
+        "unemployed": 1190
     },
     {
         "LGA": "Casey",
-        "unemployed": "3311"
+        "unemployed": 3311
     },
     {
         "LGA": "Central Goldfields",
-        "unemployed": "11253"
+        "unemployed": 11253
     },
     {
         "LGA": "Colac-Otway",
-        "unemployed": "425"
+        "unemployed": 425
     },
     {
         "LGA": "Corangamite",
-        "unemployed": "475"
+        "unemployed": 475
     },
     {
         "LGA": "Darebin",
-        "unemployed": "288"
+        "unemployed": 288
     },
     {
         "LGA": "East Gippsland",
-        "unemployed": "5733"
+        "unemployed": 5733
     },
     {
         "LGA": "Frankston",
-        "unemployed": "1730"
+        "unemployed": 1730
     },
     {
         "LGA": "Gannawarra",
-        "unemployed": "5174"
+        "unemployed": 5174
     },
     {
         "LGA": "Glen Eira",
-        "unemployed": "190"
+        "unemployed": 190
     },
     {
         "LGA": "Glenelg",
-        "unemployed": "3217"
+        "unemployed": 3217
     },
     {
         "LGA": "Golden Plains",
-        "unemployed": "587"
+        "unemployed": 587
     },
     {
         "LGA": "Greater Bendigo",
-        "unemployed": "372"
+        "unemployed": 372
     },
     {
         "LGA": "Greater Dandenong",
-        "unemployed": "2318"
+        "unemployed": 2318
     },
     {
         "LGA": "Greater Geelong",
-        "unemployed": "7832"
+        "unemployed": 7832
     },
     {
         "LGA": "Greater Shepparton",
-        "unemployed": "7578"
+        "unemployed": 7578
     },
     {
         "LGA": "Hepburn",
@@ -305,14 +305,14 @@
     },
     {
         "LGA": "Yarra Ranges",
-        "unemployed": "3335"
+        "unemployed": 3335
     },
     {
         "LGA": "Yarriambiack",
-        "unemployed": "3894"
+        "unemployed": 3894
     },
     {
         "LGA": "",
-        "unemployed": "152"
+        "unemployed": 152
     }
 ]

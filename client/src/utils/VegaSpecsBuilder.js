@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
-
+import nanoid from './nanoid';
 export const AggregationMethods = [
     "count", 
     "valid", 
@@ -51,20 +51,18 @@ export const TypeCheckingFunctions = [
 export const JoinTypes = [
     "LEFT JOIN",
     "RIGHT JOIN",
-    "INNER JOIN",
-    // "OUTER JOIN"
+    "INNER JOIN"
 ];
 
 export function FilterBuilder(field, operand, threshold)
 {
-    console.log(field, operand, threshold);
     if (TypeCheckingFunctions.includes(operand))
     {
         return `${operand}(datum.${field})`;
     }
     if (ComparisonExpressions.includes(operand))
     {
-        return `datum.${field} ${operand} ${threshold}`;
+        return `if(isDefined(${threshold}), datum.${field} ${operand} ${threshold}, true)`;
     }
     return "";
 }
@@ -79,7 +77,7 @@ function GetDatasetByName(datasets, filename)
 
 export function DataSpecsBuilder(subgraph, datasets)
 {
-    const specs = {data: []}
+    const specs = {data: [], signals: []}
     for (let i = subgraph.length - 1; i >= 0; --i)
     {
         let record = subgraph[i];
@@ -100,11 +98,42 @@ export function DataSpecsBuilder(subgraph, datasets)
             
             // transformed
             case 1:
-                specs.data.push({
+                const datapoint = {
                     "name": node.id,
                     "source": edge[0].source_id,
-                    "transform": [JSON.parse(edge[0].properties.operation)] 
-                })
+                };   
+
+                // there is one incoming edge only for transformed nodes
+                const operation = JSON.parse(edge[0].properties.operation);
+                                
+                if (operation.type === "aggregate")
+                {
+                    datapoint.transform = [operation];
+                }
+
+                // decide if a parameter is needed
+                if (operation.type === "filter")
+                {
+                    let threshold = null;
+                    if (operation.threshold)
+                    {
+                        threshold = operation.threshold; 
+                    }
+                    // a signal is needed to represent the parameter
+                    if (ComparisonExpressions.includes(operation.operand) && !operation.threshold)
+                    {
+                        threshold = nanoid();
+
+                        specs.signals.push({
+                            "name": threshold,
+                        });
+                    }
+                    datapoint.transform = [{
+                        "type": operation.type,
+                        "expr": FilterBuilder(operation.field, operation.operand, threshold)
+                    }]; 
+                }
+                specs.data.push(datapoint);
                 break;
 
             case 2:
@@ -115,12 +144,9 @@ export function DataSpecsBuilder(subgraph, datasets)
                     "source": node.props.source,
                     "transform": JSON.parse(node.props.transform)
                 })
-                // console.log(JSON.stringify(JSON.parse(node.props.transform), null, 4));
                 break;
         }
     }
-    // console.log(JSON.stringify(specs, null, 4));
-
     return specs;
 }
 

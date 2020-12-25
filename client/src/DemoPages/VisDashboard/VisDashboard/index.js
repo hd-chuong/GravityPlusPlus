@@ -51,7 +51,7 @@ export default class VisDashboard extends Component {
         if (!clickedNode) return;
         this.setState({dataPrepared: false});
         this.setState({currentNode:  clickedNode}, () => {
-            calculateDataset(this.state.currentNode.data.dataSource, this.props.datasets.datasets).then(data => 
+            calculateDataset(this.state.currentNode.data.dataSource, this.props.datasets.datasets).then(({data}) => 
             {
                 this.setState({currentNodeData: data}) 
                 this.setState({dataPrepared: true});

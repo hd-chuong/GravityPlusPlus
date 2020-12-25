@@ -35,12 +35,9 @@ class TransformVegaBuilder extends React.Component {
                 operand: null,
                 threshold: null,
                 expr: "",
-
             },
-            
         };
-        this.buildVega = this.buildVega.bind(this);
-        
+        this.buildVega = this.buildVega.bind(this);      
     }
 
     buildVega(newChange)
@@ -48,24 +45,30 @@ class TransformVegaBuilder extends React.Component {
         if (this.state.type === "filter")
         {
             this.setState({vegaFilter: {...this.state.vegaFilter, ...newChange}}, 
-                () => {
-                    const filter = FilterBuilder(this.state.vegaFilter.field, 
-                                                this.state.vegaFilter.operand, 
-                                                this.state.vegaFilter.threshold);
-                    this.setState({vegaFilter: {...this.state.vegaFilter, expr: filter}});
-                    this.props.updateVegaSpecs({type: this.state.vegaFilter.type, expr: filter});
-                
+            () => {
+                const filter = FilterBuilder(
+                                            this.state.vegaFilter.field, 
+                                            this.state.vegaFilter.operand, 
+                                            this.state.vegaFilter.threshold
+                                            );
+                this.setState({vegaFilter: {...this.state.vegaFilter, expr: filter}}, () => {
+                    this.props.updateVegaSpecs(this.state.vegaFilter);
                 });
+            });
         }
-        else {
+        else 
+        {
             this.setState({vega: {...this.state.vega, ...newChange}}, 
-                () => {this.props.updateVegaSpecs(this.state.vega)});
-    
+            () => {
+                this.props.updateVegaSpecs(this.state.vega)
+            });
         }
     }
 
-    render() {
-        return (<Fragment>
+    render() 
+    {
+        return (
+            <Fragment>
                 <Row className="form-group">
                     <Label for="aggregation" md={2}>Types of transformation</Label>
                     <Col>
@@ -76,7 +79,6 @@ class TransformVegaBuilder extends React.Component {
                     </Col>
                 </Row>                
                 <Row className="form-group">
-
                     {this.state.type === "filter" && (
                     <Col>
                         <Row className="form-group">
@@ -117,7 +119,6 @@ class TransformVegaBuilder extends React.Component {
                                 </Tooltip>
                             </Row>)
                         }
-
                     </Col>
                     )}
                     {this.state.type === "aggregate" && (

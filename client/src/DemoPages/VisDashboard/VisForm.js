@@ -219,8 +219,7 @@ const VisVegaTemplateBuilder = ({datagraph, formik, datasets}) => {
           <Col md={9}>
             <Input type="select" onChange={(event) => {
                                               formik.handleChange(event);
-
-                                              calculateDataset(event.target.value, datasets.datasets).then(dataset => {setData(dataset)}); 
+                                              calculateDataset(event.target.value, datasets.datasets).then(({data}) => {setData(data)}); 
                                           }} name="dataNode">
               <option key={-1} value={""}>Select a data node</option>
               {datagraph.nodes.map((node) => (<option key={node.id} value={node.id}>{node.data.label}</option>))}

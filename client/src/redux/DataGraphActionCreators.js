@@ -58,7 +58,13 @@ export const saveDataEdge = ({id, source, target, type, data}) => ({
 });
 
 export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
-    const newEdge = {source, target, type, operation: data};
+    const newEdge = {
+        source, 
+        target, 
+        type, 
+        operation: data
+    };
+
     return Axios({
         method: "post",
         url: "http://localhost:7473/data/edges",

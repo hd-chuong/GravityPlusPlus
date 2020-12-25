@@ -2,7 +2,7 @@ import Axios from 'axios';
 import {DataSpecsBuilder} from './VegaSpecsBuilder';
 import {View, parse} from 'vega';
 
-async function calculateDataset(dataNodeId, datasets) 
+async function calculateDataset(dataNodeId, datasets, params = {}) 
 {
     return Axios({
         method: "get",
@@ -21,11 +21,25 @@ async function calculateDataset(dataNodeId, datasets)
     .then(data => {
         // resort to Vega to automatically return the data
         // Vega data is based on a dataflow graph
-        const specs = DataSpecsBuilder(data, datasets);
-        const view = new View(parse(specs)).renderer("none").initialize();
+        const spec = DataSpecsBuilder(data, datasets);
+        
+        // arm with params
+        spec.signals.forEach((signal) => {
+            const signalID = signal.name;
+            if (params.hasOwnProperty(signalID)) {
+                signal.value = params[signalID];
+            }
+            console.log("signal ID ", signalID);
+        })
+
+        const view = new View(parse(spec)).renderer("none").initialize();
         view.toSVG();
         const result = view.data(dataNodeId); 
-        return result;
+        
+        const outputParams = {};
+        spec.signals.forEach(signal => outputParams[signal.name] = "");
+
+        return {data: result, params: outputParams};
     })
     .catch(error => {
         alert("Unable to generate data: " + error.message);    

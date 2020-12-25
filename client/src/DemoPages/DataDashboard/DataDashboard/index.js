@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import React, {Component, Fragment} from 'react';
+import {Card, CardHeader, Input} from 'reactstrap';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 // import classnames from 'classnames';
 
@@ -20,10 +21,12 @@ export default class DataDashboard extends Component {
         super(props);
         this.state = {
             currentData: null,
-            currentDataLabel: null
+            currentDataLabel: null,
+            params: {}
         };
         this.updateCurrentData = this.updateCurrentData.bind(this);
         this.deleteNode = this.deleteNode.bind(this);
+        this.updateParams = this.updateParams.bind(this);
     }
 
     deleteNode(dataNodeId)
@@ -50,7 +53,7 @@ export default class DataDashboard extends Component {
                 
                 // adding each child datasets to the list of all datasets
                 calculateDataset(child.id, this.props.datasets.datasets)
-                                    .then(data => {
+                                    .then(({data}) => {
                                         this.props.addDataset({name: child.name, dataset: data}
                                     )});
                 
@@ -63,27 +66,33 @@ export default class DataDashboard extends Component {
             this.props.removeDataNode(dataNodeId);
         })
         .catch(error => {
-            alert("Unable to view the data: " + error.message);    
+            alert("Unable to delete the data: " + error.message);    
         });
     }
 
     updateCurrentData(dataNodeId)
     {
         calculateDataset(dataNodeId, this.props.datasets.datasets)
-        .then(data => {
-            const labels = this.props.datagraph.datagraph.nodes.filter(node => node.id === dataNodeId);
-
-            if (labels.length !== 0)
-            {
-                this.setState({currentData: data});
-                this.setState({currentDataLabel: labels[0].data.label});
-            }
-        })
-        .catch(error => {
+        .then(({data, params}) => {
+            this.setState({currentData: data});
+            console.log(params);
+        }).catch(error => {
             alert("Unable to view the data: " + error.message);    
         });
+        
+        // retrieve data labels
+        const labels = this.props.datagraph.datagraph.nodes.filter(node => node.id === dataNodeId);
+        if (labels.length !== 0)
+        {
+            this.setState({currentDataLabel: labels[0].data.label});
+        }
     }
-    
+
+    updateParams(paramDict)
+    {
+        this.setState({params: {...this.state.params, ...paramDict}});
+    }
+
     render() {
         return (
             <Fragment>
@@ -112,34 +121,44 @@ export default class DataDashboard extends Component {
                         </Col>
                         <Col md="5" >   
                             <ReactCSSTransitionGroup
-                            component="div"
-                            transitionName="TabsAnimation"
-                            transitionAppear={true}
-                            transitionAppearTimeout={0}
-                            transitionEnter={false}
-                            transitionLeave={false}>
+                                component="div"
+                                transitionName="TabsAnimation"
+                                transitionAppear={true}
+                                transitionAppearTimeout={0}
+                                transitionEnter={false}
+                                transitionLeave={false}
+                            >
                                 <DataTable 
                                     label={this.state.currentDataLabel} 
                                     tableData={this.state.currentData}
                                 />
+                                
+                                {/*
+                                    Will make these become a separate class now
+                                */}
+                                <Card className="main-card mb-3">
+                                    <CardHeader>Params control
+                                        {Object.keys(this.state.params).map((param) => (<Input type="text" onChange={(e) => {this.updateParams({param: e.target.value})}}></Input>))}
+                                    </CardHeader>
+                                </Card>
                             </ReactCSSTransitionGroup>
                         </Col>
                     </Row>
 
                     
                     <DataNodeInsertionModal 
-                            datasets={this.props.datasets} 
-                            isOpen={this.props.isNewNodeModalOpen} 
-                            toggle={this.props.toggleNewNodeModal}
-                            addDataNode={this.props.addDataNode}
-                            addDataEdge={this.props.addDataEdge}
+                        datasets={this.props.datasets} 
+                        isOpen={this.props.isNewNodeModalOpen} 
+                        toggle={this.props.toggleNewNodeModal}
+                        addDataNode={this.props.addDataNode}
+                        addDataEdge={this.props.addDataEdge}
 
-                            removeDataNode={this.props.removeDataNode}
+                        removeDataNode={this.props.removeDataNode}
 
-                            datagraph={this.props.datagraph}
-                            updateCurrentData={this.updateCurrentData}
-                            currentData={this.state.currentData}              
-                        />
+                        datagraph={this.props.datagraph}
+                        updateCurrentData={this.updateCurrentData}
+                        currentData={this.state.currentData}              
+                    />
                 </ReactCSSTransitionGroup>
             </Fragment>
         )
