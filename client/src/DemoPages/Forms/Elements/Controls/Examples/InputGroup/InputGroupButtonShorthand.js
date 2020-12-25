@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputGroup, InputGroupAddon, Button, Input } from 'reactstrap';
 
-const FormInputGroupButtonShorthand = (props) => {
+const FormInputGroupButtonShorthand = props => {
   return (
     <div>
       <InputGroup>

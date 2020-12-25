@@ -1,8 +1,16 @@
 import React from 'react';
-import {Radar} from 'react-chartjs-2';
+import { Radar } from 'react-chartjs-2';
 
 const data = {
-  labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+  labels: [
+    'Eating',
+    'Drinking',
+    'Sleeping',
+    'Designing',
+    'Coding',
+    'Cycling',
+    'Running',
+  ],
   datasets: [
     {
       label: 'My First dataset',
@@ -12,7 +20,7 @@ const data = {
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(179,181,198,1)',
-      data: [65, 59, 90, 81, 56, 55, 40]
+      data: [65, 59, 90, 81, 56, 55, 40],
     },
     {
       label: 'My Second dataset',
@@ -22,21 +30,19 @@ const data = {
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(255,99,132,1)',
-      data: [28, 48, 40, 19, 96, 27, 100]
-    }
-  ]
+      data: [28, 48, 40, 19, 96, 27, 100],
+    },
+  ],
 };
 
 class RadarExample extends React.Component {
-
-    render() {
-        return (
-            <div>
-              <Radar data={data} />
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <Radar data={data} />
+      </div>
+    );
+  }
 }
-
 
 export default RadarExample;

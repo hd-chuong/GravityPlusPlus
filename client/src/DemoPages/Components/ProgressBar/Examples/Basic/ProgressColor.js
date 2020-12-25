@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress } from 'reactstrap';
 
-const ProgressColorExample = (props) => {
+const ProgressColorExample = props => {
   return (
     <div>
       <Progress className="mb-3" value={2 * 5} />

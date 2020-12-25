@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress } from 'reactstrap';
 
-const ProgressStripedExample = (props) => {
+const ProgressStripedExample = props => {
   return (
     <div>
       <Progress className="mb-3" striped value={2 * 5} />

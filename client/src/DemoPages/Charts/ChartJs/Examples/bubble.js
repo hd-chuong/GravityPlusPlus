@@ -1,5 +1,5 @@
 import React from 'react';
-import {Bubble} from 'react-chartjs-2';
+import { Bubble } from 'react-chartjs-2';
 
 const data = {
   labels: ['January'],
@@ -23,13 +23,12 @@ const data = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [{x:10,y:20,r:5}]
-    }
-  ]
+      data: [{ x: 10, y: 20, r: 5 }],
+    },
+  ],
 };
 
 class BubbleExample extends React.Component {
-
   render() {
     return (
       <div>

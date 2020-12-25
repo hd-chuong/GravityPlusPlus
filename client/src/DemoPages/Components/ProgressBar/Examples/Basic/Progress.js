@@ -1,7 +1,7 @@
 import React from 'react';
 import { Progress } from 'reactstrap';
 
-const ProgressExample = (props) => {
+const ProgressExample = props => {
   return (
     <div>
       <div className="text-center">0%</div>
