@@ -35,7 +35,7 @@ const AppMain = ({
                 className="fa fa-spin fa-cog fa-5x"
                 aria-hidden="true"
               ></i>
-              <h4 className="mt-3">Loading</h4>
+              <h4 className="mt-3">Loading ...</h4>
             </div>
           </div>
         }
