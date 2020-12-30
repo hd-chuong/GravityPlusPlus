@@ -12,7 +12,7 @@ export default class VisDashboard extends Component {
     render() {
         return (
             <Fragment>
-                {/* <ReactCSSTransitionGroup
+                <ReactCSSTransitionGroup
                     component="div"
                     transitionName="TabsAnimation"
                     transitionAppear={true}
@@ -30,14 +30,14 @@ export default class VisDashboard extends Component {
                                     transitionEnter={false}
                                     transitionLeave={false}>
                                     <VisGraph 
-                                        data={this.props.visgraph}
-                                        onElementClick={this.onElementClick.bind(this)}
-                                        onElementsRemove={this.deleteVisNode.bind(this)}
+                                        // data={this.props.visgraph}
+                                        // onElementClick={this.onElementClick.bind(this)}
+                                        // onElementsRemove={this.deleteVisNode.bind(this)}
                                     />                                    
                                 </ReactCSSTransitionGroup>
                             </Col>
                             
-                            {this.state.dataPrepared && <Fragment>
+                            {/* {this.state.dataPrepared && <Fragment>
                                 <Col md={6}>
                                     <ReactCSSTransitionGroup
                                         component="div"
@@ -67,18 +67,18 @@ export default class VisDashboard extends Component {
                                     </ReactCSSTransitionGroup>
                                 </Col>  
                             </Fragment>
-                            }
+                            } */}
                         </Row>                       
                     </div>
                     
-                    <VisNodeInsertionModal
+                    {/* <VisNodeInsertionModal
                         toggle={this.props.toggleNewNodeModal}
                         isOpen={this.props.isNewNodeModalOpen}
                         datagraph={this.props.datagraph}
                         datasets={this.props.datasets}
                         addVisNode={this.props.addVisNode}
-                    />
-                </ReactCSSTransitionGroup> */}
+                    /> */}
+                </ReactCSSTransitionGroup>
             </Fragment>
         )
     }

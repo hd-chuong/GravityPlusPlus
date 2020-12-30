@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 // Layout
 import AppHeader from '../../Layout/AppHeader';
 import IntSideBar from '../../Layout/IntSideBar';
+import Dashboard from './IntDashboard';
 class IntDashboard extends Component{
     render() 
     {
@@ -20,21 +21,21 @@ class IntDashboard extends Component{
                     // loadRecommendedSequence={this.state.loadRecommendedSequence}
                     // loadTransformationLinks={this.state.loadTransformationLinks}        
                 />
-                {/* <div className="app-main__outer">
+                <div className="app-main__outer">
                     <div className="app-main__inner">
-                        <VisDashboard
-                            datasets={this.props.datasets}
-                            datagraph={this.props.datagraph}
-                            visgraph={this.props.visgraph}
+                        <Dashboard
+                            // datasets={this.props.datasets}
+                            // datagraph={this.props.datagraph}
+                            // visgraph={this.props.visgraph}
                             
-                            toggleNewNodeModal={this.toggleNewNodeModal}
-                            isNewNodeModalOpen={this.state.isNewNodeModalOpen}
-                            addVisNode={this.props.addVisNode}
-                            removeVisNode={this.props.removeVisNode}
-                            setVisNode={this.props.setVisNode}
+                            // toggleNewNodeModal={this.toggleNewNodeModal}
+                            // isNewNodeModalOpen={this.state.isNewNodeModalOpen}
+                            // addVisNode={this.props.addVisNode}
+                            // removeVisNode={this.props.removeVisNode}
+                            // setVisNode={this.props.setVisNode}
                         />
                     </div>
-                </div> */}
+                </div>
             </div>
         </Fragment>
         )
