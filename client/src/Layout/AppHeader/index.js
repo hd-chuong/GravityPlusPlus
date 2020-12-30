@@ -2,13 +2,12 @@ import React, { Fragment } from 'react';
 import cx from 'classnames';
 
 import { connect } from 'react-redux';
-
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-
 import HeaderLogo from '../AppLogo';
 
-import SearchBox from './Components/SearchBox';
-import UserBox from './Components/UserBox';
+// import SearchBox from './Components/SearchBox';
+// import UserBox from './Components/UserBox';
+
 import { withRouter } from 'react-router-dom';
 import { Nav, NavItem, Navbar } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
@@ -35,12 +34,12 @@ class Header extends React.Component {
         >
           <HeaderLogo />
 
-          {/* <div className={cx(
+          <div className={cx(
                         "app-header__content",
                         {'header-mobile-open': enableMobileMenuSmall},
                     )}>
-                     */}
-          {/* <div className="app-header-left"> */}
+                    
+          <div className="app-header-left">
           <Navbar dark expand="sm">
             <Nav navbar>
               <NavItem className="metismenu-item mr-3">
@@ -54,19 +53,26 @@ class Header extends React.Component {
                 </NavLink>
               </NavItem>
               <NavItem className="metismenu-item mr-3">
-                <NavLink className="nav-link" to="/interaction">
+                <NavLink className="nav-link" to="/int/">
                   <i className="fa fa-hand-pointer-o fa-lg mr-2"></i>Interaction
                 </NavLink>
               </NavItem>
             </Nav>
           </Navbar>
 
-          {/* </div> */}
-          {/* <div className="app-header-right"> */}
-          {/* <UserBox/> */}
-
-          {/* </div> */}
-          {/* </div> */}
+          </div>
+            <div className="app-header-right">
+              <Navbar dark expand="sm">
+                <Nav navbar>
+                  <NavItem className="metismenu-item mr-3">
+                    <NavLink className="nav-link" to="/story/">
+                      Watch your story <i style={{color: 'yellow'}} className="fa fa-television fa-lg mr-2"></i>
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+            </Navbar>
+            </div>
+          </div>
         </ReactCSSTransitionGroup>
       </Fragment>
     );

@@ -7,6 +7,7 @@ import { Switch, withRouter } from 'react-router-dom';
 
 const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
+const IntDashboard = lazy(() => import('../../DemoPages/IntDashboard'));
 
 const AppMain = ({
   datasets,
@@ -67,6 +68,10 @@ const AppMain = ({
                 removeVisEdge={removeVisEdge}
                 setVisNode={setVisNode}
               />
+            </Route>
+
+            <Route exact path="/int">
+                <IntDashboard/>
             </Route>
 
             <Redirect to="/data" />
