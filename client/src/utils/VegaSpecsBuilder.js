@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from 'uuid';
-
+import {v4 as uuidv4} from 'uuid';
+import nanoid from './nanoid';
 export const AggregationMethods = [
   'count',
   'valid',
@@ -42,21 +42,22 @@ export const TypeCheckingFunctions = [
 ];
 
 export const JoinTypes = [
-  'LEFT JOIN',
-  'RIGHT JOIN',
-  'INNER JOIN',
-  // "OUTER JOIN"
+    "LEFT JOIN",
+    "RIGHT JOIN",
+    "INNER JOIN"
 ];
 
-export function FilterBuilder(field, operand, threshold) {
-  console.log(field, operand, threshold);
-  if (TypeCheckingFunctions.includes(operand)) {
-    return `${operand}(datum.${field})`;
-  }
-  if (ComparisonExpressions.includes(operand)) {
-    return `datum.${field} ${operand} ${threshold}`;
-  }
-  return '';
+export function FilterBuilder(field, operand, threshold)
+{
+    if (TypeCheckingFunctions.includes(operand))
+    {
+        return `${operand}(datum.${field})`;
+    }
+    if (ComparisonExpressions.includes(operand))
+    {
+        return `if(isDefined(${threshold}), datum.${field} ${operand} ${threshold}, true)`;
+    }
+    return "";
 }
 
 function GetDatasetByName(datasets, filename) {
@@ -66,48 +67,79 @@ function GetDatasetByName(datasets, filename) {
   else return matched[0].dataset;
 }
 
-export function DataSpecsBuilder(subgraph, datasets) {
-  const specs = { data: [] };
-  for (let i = subgraph.length - 1; i >= 0; --i) {
-    let record = subgraph[i];
-    let node = record.node;
-    let edge = record.edges;
+export function DataSpecsBuilder(subgraph, datasets)
+{
+    const specs = {data: [], signals: []}
+    for (let i = subgraph.length - 1; i >= 0; --i)
+    {
+        let record = subgraph[i];
+        let node = record.node;
+        let edge = record.edges;
+        
+        switch(edge.length)
+        {
+            // case raw node
+            case 0:
+                specs.data.push({
+                    "name": node.id,
+                    "values": GetDatasetByName(datasets, node.props.source),
+                    "label": node.props.name,
+                    "format": JSON.parse(node.props.format)
+                });
+                break;
+            
+            // transformed
+            case 1:
+                const datapoint = {
+                    "name": node.id,
+                    "source": edge[0].source_id,
+                };   
 
-    switch (edge.length) {
-      // case raw node
-      case 0:
-        specs.data.push({
-          name: node.id,
-          values: GetDatasetByName(datasets, node.props.source),
-          label: node.props.name,
-          format: JSON.parse(node.props.format),
-        });
-        break;
+                // there is one incoming edge only for transformed nodes
+                const operation = JSON.parse(edge[0].properties.operation);            
+                if (operation.type === "aggregate")
+                {
+                    datapoint.transform = [operation];
+                }
 
-      // transformed
-      case 1:
-        specs.data.push({
-          name: node.id,
-          source: edge[0].source_id,
-          transform: [JSON.parse(edge[0].properties.operation)],
-        });
-        break;
+                // decide if a parameter is needed
+                if (operation.type === "filter")
+                {
+                    let threshold = null;
+                    if (operation.threshold)
+                    {
+                        threshold = operation.threshold; 
+                    }
+                    // a signal is needed to represent the parameter
+                    if (ComparisonExpressions.includes(operation.operand) && !operation.threshold)
+                    {
+                        threshold = nanoid();
 
-      case 2:
-        // console.log("JOIN operations will be treated here")
-        // console.log(node.props);
-        specs.data.push({
-          name: node.id,
-          source: node.props.source,
-          transform: JSON.parse(node.props.transform),
-        });
-        // console.log(JSON.stringify(JSON.parse(node.props.transform), null, 4));
-        break;
+                        specs.signals.push({
+                            "name": threshold,
+                        });
+                    }
+                    
+                    datapoint.transform = [{
+                        "type": operation.type,
+                        "expr": FilterBuilder(operation.field, operation.operand, threshold)
+                    }]; 
+                }
+                specs.data.push(datapoint);
+                break;
+
+            case 2:
+                // console.log("JOIN operations will be treated here")
+                // console.log(node.props);
+                specs.data.push({
+                    "name": node.id,
+                    "source": node.props.source,
+                    "transform": JSON.parse(node.props.transform)
+                })
+                break;
+        }
     }
-  }
-  // console.log(JSON.stringify(specs, null, 4));
-
-  return specs;
+    return specs;
 }
 
 // JOINING based on either

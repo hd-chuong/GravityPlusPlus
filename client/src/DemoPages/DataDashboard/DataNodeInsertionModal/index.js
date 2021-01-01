@@ -22,6 +22,7 @@ import { JoinSpecsBuilder } from '../../../utils/VegaSpecsBuilder';
 import classnames from 'classnames';
 import calculateDataset from '../../../utils/dataGeneration';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
+
 class DataNodeInsertionModal extends React.Component {
   constructor(props) {
     super(props);

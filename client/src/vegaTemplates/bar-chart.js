@@ -1,5 +1,4 @@
 export default function barChartSchema(name, x, y, value) {
-  console.log('inside bar-chart.js');
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     description: 'Bar chart',

@@ -62,23 +62,27 @@ export const saveDataEdge = ({ id, source, target, type, data }) => ({
   },
 });
 
-export const addDataEdge = ({ source, target, type, data }) => dispatch => {
-  const newEdge = { source, target, type, operation: data };
-  return Axios({
-    method: 'post',
-    url: 'http://localhost:7473/data/edges',
-    data: newEdge,
-  })
-    .then(response => {
-      if (response.statusText !== 'OK') {
-        var error = new Error(
-          'Error ' + response.status + ': ' + response.statusText,
-        );
-        error.response = response;
-        throw error;
-      } else {
-        return response.data;
-      }
+export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
+    const newEdge = {
+        source, 
+        target, 
+        type, 
+        operation: data
+    };
+
+    return Axios({
+        method: "post",
+        url: "http://localhost:7473/data/edges",
+        data: newEdge
+    }).then(response => {
+        if (response.statusText !== "OK") {
+            var error = new Error('Error ' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }   
+        else {
+            return response.data;
+        }
     })
     .then(responseData => {
       dispatch(

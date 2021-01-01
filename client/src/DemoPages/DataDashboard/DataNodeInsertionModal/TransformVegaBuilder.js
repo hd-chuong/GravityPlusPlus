@@ -62,12 +62,7 @@ class TransformVegaBuilder extends React.Component {
           );
           this.setState({
             vegaFilter: { ...this.state.vegaFilter, expr: filter },
-          });
-          console.log(filter);
-          this.props.updateVegaSpecs({
-            type: this.state.vegaFilter.type,
-            expr: filter,
-          });
+          }, () => this.props.updateVegaSpecs(this.state.vegaFilter));
         },
       );
     } else {
