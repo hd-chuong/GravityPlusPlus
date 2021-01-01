@@ -27,21 +27,22 @@ async function calculateDataset(dataNodeId, datasets, params = {})
         spec.signals.forEach((signal) => {
             const signalID = signal.name;
             if (params.hasOwnProperty(signalID)) {
-                signal.value = params[signalID];
+                signal.value = params[signalID] ? params[signalID] : null;
             }
         });
+
         const view = new View(parse(spec)).renderer("none").initialize();
         view.toSVG();
         const result = view.data(dataNodeId); 
         
+        // store all outputParams in a dictionary so that keys are imposed to be distinct.
         const outputParams = {};
-        spec.signals.forEach(signal => outputParams[signal.name] = "");
 
-        return {data: result, params: outputParams};
+        spec.signals.forEach((signal) => outputParams[signal.name] = "");
+        return {data: result, params: outputParams, spec};
     })
     .catch(error => {
       console.log('Unable to generate data: ' + error.message);
-        
     });
 }
 

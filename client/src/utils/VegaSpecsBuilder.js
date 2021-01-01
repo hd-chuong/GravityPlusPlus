@@ -55,7 +55,7 @@ export function FilterBuilder(field, operand, threshold)
     }
     if (ComparisonExpressions.includes(operand))
     {
-        return `if(isDefined(${threshold}), datum.${field} ${operand} ${threshold}, true)`;
+        return `if(isValid(${threshold}), datum.${field} ${operand} ${threshold}, true)`;
     }
     return "";
 }
@@ -97,6 +97,8 @@ export function DataSpecsBuilder(subgraph, datasets)
 
                 // there is one incoming edge only for transformed nodes
                 const operation = JSON.parse(edge[0].properties.operation);            
+                
+
                 if (operation.type === "aggregate")
                 {
                     datapoint.transform = [operation];
@@ -105,21 +107,14 @@ export function DataSpecsBuilder(subgraph, datasets)
                 // decide if a parameter is needed
                 if (operation.type === "filter")
                 {
-                    let threshold = null;
-                    if (operation.threshold)
-                    {
-                        threshold = operation.threshold; 
-                    }
+                    let threshold = operation.threshold; 
                     // a signal is needed to represent the parameter
-                    if (ComparisonExpressions.includes(operation.operand) && !operation.threshold)
+                    if (ComparisonExpressions.includes(operation.operand) && operation.useParams)
                     {
-                        threshold = nanoid();
-
                         specs.signals.push({
                             "name": threshold,
                         });
                     }
-                    
                     datapoint.transform = [{
                         "type": operation.type,
                         "expr": FilterBuilder(operation.field, operation.operand, threshold)

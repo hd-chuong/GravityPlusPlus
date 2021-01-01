@@ -2,18 +2,13 @@ import React, { Fragment } from 'react';
 import {
   Button,
   Modal,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
-  Card,
-  CardBody,
   CardHeader,
   Nav,
   NavLink,
   NavItem,
   TabContent,
   TabPane,
-  CardFooter,
 } from 'reactstrap';
 import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import VegaBuilder from './TransformVegaBuilder';
@@ -29,7 +24,7 @@ class DataNodeInsertionModal extends React.Component {
     this.state = {
       activeTab: '1',
       joinDatasets: [],
-      specs: '',
+      spec: {},
       format: 'json',
       rawDataset: null,
     };
@@ -83,8 +78,8 @@ class DataNodeInsertionModal extends React.Component {
     this.props.toggle();
   }
 
-  updateVegaSpecs(newSpecs) {
-    this.setState({ specs: newSpecs });
+  updateVegaSpecs(newSpec) {
+    this.setState({ spec: newSpec });
   }
 
   handleMultipleDatasets(curOptions) {
@@ -133,7 +128,7 @@ class DataNodeInsertionModal extends React.Component {
       alert('You must provide a node name');
       return;
     }
-    var specs = this.state.specs;
+    var spec = this.state.spec;
 
     var sourceNode = this.sourceNode.value;
 
@@ -145,9 +140,8 @@ class DataNodeInsertionModal extends React.Component {
       sourceNode,
       newNodeId,
       'TRANSFORM',
-      specs !== '' ? specs : {},
+      spec
     );
-
     this.props.toggle();
   }
 
