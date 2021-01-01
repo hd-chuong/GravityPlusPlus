@@ -1,6 +1,5 @@
 import * as ActionTypes from './DataGraphActionTypes';
 import Axios from 'axios';
-import nanoid from '../utils/nanoid';
 
 export const saveDataNode = payload => ({
   type: ActionTypes.ADD_DATA_NODE,
@@ -16,6 +15,7 @@ export const addDataNode = ({
   format,
 }) => dispatch => {
   const newNode = { name, type, source, transform, format };
+
   return Axios({
     method: 'post',
     url: 'http://localhost:7473/data/nodes',
@@ -34,6 +34,7 @@ export const addDataNode = ({
     })
     .then(data => {
       var id = data.id;
+
       var name = data.props.name;
 
       // Check if the data is raw
@@ -42,6 +43,7 @@ export const addDataNode = ({
         type = 'RAW';
       }
       dispatch(saveDataNode({ id, name, type, source, transform, format }));
+
       return id;
     })
     .catch(error => {
@@ -61,12 +63,6 @@ export const saveDataEdge = ({ id, source, target, type, data }) => ({
 });
 
 export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
-  
-    if (type === "filter"  && data.threshold === null)
-    {
-      data.useParams = true;
-      data.threshold = nanoid();
-    }
     const newEdge = {
         source, 
         target, 
