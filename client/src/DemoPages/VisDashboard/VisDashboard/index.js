@@ -1,14 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, lazy } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-const VisNodeInsertionModal = lazy(() => import('../VisNodeInsertionModal'));
-
 import { Row, Col } from 'reactstrap';
-
 import VisGraph from '../../DataDashboard/DataGraph';
 import Chart from '../Chart';
 import calculateDataset from '../../../utils/dataGeneration';
-import { lazy } from 'react';
 import JSONEditor from '../../JSONEditor';
+
+const VisNodeInsertionModal = lazy(() => import('../VisNodeInsertionModal'));
 
 export default class VisDashboard extends Component {
   constructor(props) {
