@@ -1,6 +1,6 @@
 import Axios from 'axios';
-import {DataSpecsBuilder} from './VegaSpecsBuilder';
-import {View, parse} from 'vega';
+import { DataSpecsBuilder } from './VegaSpecsBuilder';
+import { View, parse } from 'vega';
 
 async function calculateDataset(dataNodeId, datasets, params = {}) 
 {
@@ -22,16 +22,14 @@ async function calculateDataset(dataNodeId, datasets, params = {})
         // resort to Vega to automatically return the data
         // Vega data is based on a dataflow graph
         const spec = DataSpecsBuilder(data, datasets);
-        
+
         // arm with params
         spec.signals.forEach((signal) => {
             const signalID = signal.name;
             if (params.hasOwnProperty(signalID)) {
                 signal.value = params[signalID];
             }
-            console.log("signal ID ", signalID);
-        })
-
+        });
         const view = new View(parse(spec)).renderer("none").initialize();
         view.toSVG();
         const result = view.data(dataNodeId); 
@@ -42,8 +40,9 @@ async function calculateDataset(dataNodeId, datasets, params = {})
         return {data: result, params: outputParams};
     })
     .catch(error => {
-        alert("Unable to generate data: " + error.message);    
+      console.log('Unable to generate data: ' + error.message);
+        
     });
-};
+}
 
 export default calculateDataset;

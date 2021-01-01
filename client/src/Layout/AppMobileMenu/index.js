@@ -1,75 +1,67 @@
-import React, {Fragment} from 'react';
-import {connect} from 'react-redux';
+import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 
 import Hamburger from 'react-hamburgers';
 
 import cx from 'classnames';
 
-import {
-    faEllipsisV,
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
-} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-
-import {
-    Button
-} from 'reactstrap';
+import { Button } from 'reactstrap';
 
 import {
-    setEnableMobileMenu,
-    setEnableMobileMenuSmall,
+  setEnableMobileMenu,
+  setEnableMobileMenuSmall,
 } from '../../reducers/ThemeOptions';
 
 class AppMobileMenu extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            active: false,
-            mobile: false,
-            activeSecondaryMenuMobile: false
-        };
-
-    }
-
-    toggleMobileSidebar = () => {
-        let {enableMobileMenu, setEnableMobileMenu} = this.props;
-        setEnableMobileMenu(!enableMobileMenu);
-    }
-
-
-    toggleMobileSmall = () => {
-        let {enableMobileMenuSmall, setEnableMobileMenuSmall} = this.props;
-        setEnableMobileMenuSmall(!enableMobileMenuSmall);
-    }
-
-    state = {
-        openLeft: false,
-        openRight: false,
-        relativeWidth: false,
-        width: 280,
-        noTouchOpen: false,
-        noTouchClose: false,
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: false,
+      mobile: false,
+      activeSecondaryMenuMobile: false,
     };
+  }
 
-    render() {
-        let {
-            enableMobileMenu,
-        } = this.props;
+  toggleMobileSidebar = () => {
+    let { enableMobileMenu, setEnableMobileMenu } = this.props;
+    setEnableMobileMenu(!enableMobileMenu);
+  };
 
-        return (
-            <Fragment>
+  toggleMobileSmall = () => {
+    let { enableMobileMenuSmall, setEnableMobileMenuSmall } = this.props;
+    setEnableMobileMenuSmall(!enableMobileMenuSmall);
+  };
 
-                <div className="app-header__mobile-menu">
-                    <div onClick={this.toggleMobileSidebar}>
-                        <Hamburger
-                            active={enableMobileMenu}
-                            type="elastic"
-                            onClick={() => this.setState({activeMobile: !this.state.activeMobile})}
-                        />
-                    </div>
-                </div>
-                {/* <div className="app-header__menu">
+  state = {
+    openLeft: false,
+    openRight: false,
+    relativeWidth: false,
+    width: 280,
+    noTouchOpen: false,
+    noTouchClose: false,
+  };
+
+  render() {
+    let { enableMobileMenu } = this.props;
+
+    return (
+      <Fragment>
+        <div className="app-header__mobile-menu">
+          <div onClick={this.toggleMobileSidebar}>
+            <Hamburger
+              active={enableMobileMenu}
+              type="elastic"
+              onClick={() =>
+                this.setState({ activeMobile: !this.state.activeMobile })
+              }
+            />
+          </div>
+        </div>
+        {/* <div className="app-header__menu">
                     <span onClick={this.toggleMobileSmall}>
                         <Button size="sm"
                                 className={cx("btn-icon btn-icon-only", {active: this.state.activeSecondaryMenuMobile})}
@@ -79,23 +71,21 @@ class AppMobileMenu extends React.Component {
                         </Button>
                     </span>
                 </div> */}
-            </Fragment>
-        )
-    }
+      </Fragment>
+    );
+  }
 }
 
-
 const mapStateToProps = state => ({
-    closedSmallerSidebar: state.ThemeOptions.closedSmallerSidebar,
-    enableMobileMenu: state.ThemeOptions.enableMobileMenu,
-    enableMobileMenuSmall: state.ThemeOptions.enableMobileMenuSmall,
+  closedSmallerSidebar: state.ThemeOptions.closedSmallerSidebar,
+  enableMobileMenu: state.ThemeOptions.enableMobileMenu,
+  enableMobileMenuSmall: state.ThemeOptions.enableMobileMenuSmall,
 });
 
 const mapDispatchToProps = dispatch => ({
-
-    setEnableMobileMenu: enable => dispatch(setEnableMobileMenu(enable)),
-    setEnableMobileMenuSmall: enable => dispatch(setEnableMobileMenuSmall(enable)),
-
+  setEnableMobileMenu: enable => dispatch(setEnableMobileMenu(enable)),
+  setEnableMobileMenuSmall: enable =>
+    dispatch(setEnableMobileMenuSmall(enable)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppMobileMenu);

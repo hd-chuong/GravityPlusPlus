@@ -1,13 +1,9 @@
 import Axios from 'axios';
-import React, {Component, Fragment} from 'react';
-import {Card, CardHeader, Input} from 'reactstrap';
+import React, { Component, Fragment } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 // import classnames from 'classnames';
 
-import {
-    Row, 
-    Col,
-} from 'reactstrap';
+import { Row, Col, Card, CardHeader } from 'reactstrap';
 
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';

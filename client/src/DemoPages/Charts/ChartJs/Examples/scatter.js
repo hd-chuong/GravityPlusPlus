@@ -1,5 +1,5 @@
 import React from 'react';
-import {Scatter} from 'react-chartjs-2';
+import { Scatter } from 'react-chartjs-2';
 
 const data = {
   labels: ['Scatter'],
@@ -25,20 +25,19 @@ const data = {
         { x: 56, y: 36 },
         { x: 55, y: 25 },
         { x: 40, y: 18 },
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 };
 
 class ScatterExample extends React.Component {
-
-    render() {
-        return (
-            <div>
-              <Scatter data={data} />
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <Scatter data={data} />
+      </div>
+    );
+  }
 }
 
 export default ScatterExample;

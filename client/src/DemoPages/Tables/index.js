@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import {Route} from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Route } from 'react-router-dom';
 
 // Tables
 
@@ -11,22 +11,24 @@ import AppHeader from '../../Layout/AppHeader/';
 import AppSidebar from '../../Layout/AppSidebar/';
 import AppFooter from '../../Layout/AppFooter/';
 
-const Tables = ({match}) => (
-    <Fragment>
-        <AppHeader/>
-        <div className="app-main">
-            <AppSidebar/>
-            <div className="app-main__outer">
-                <div className="app-main__inner">
+const Tables = ({ match }) => (
+  <Fragment>
+    <AppHeader />
+    <div className="app-main">
+      <AppSidebar />
+      <div className="app-main__outer">
+        <div className="app-main__inner">
+          {/* Tables */}
 
-                    {/* Tables */}
-
-                    <Route path={`${match.url}/regular-tables`} component={RegularTables}/>
-                </div>
-                <AppFooter/>
-            </div>
+          <Route
+            path={`${match.url}/regular-tables`}
+            component={RegularTables}
+          />
         </div>
-    </Fragment>
+        <AppFooter />
+      </div>
+    </div>
+  </Fragment>
 );
 
 export default Tables;

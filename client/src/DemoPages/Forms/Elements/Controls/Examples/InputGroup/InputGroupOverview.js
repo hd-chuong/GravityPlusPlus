@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
 
-const FormInputGroupOverview = (props) => {
+const FormInputGroupOverview = props => {
   return (
     <div>
       <InputGroup>
@@ -12,7 +12,11 @@ const FormInputGroupOverview = (props) => {
       <InputGroup>
         <InputGroupAddon addonType="prepend">
           <InputGroupText>
-            <Input addon type="checkbox" aria-label="Checkbox for following text input" />
+            <Input
+              addon
+              type="checkbox"
+              aria-label="Checkbox for following text input"
+            />
           </InputGroupText>
         </InputGroupAddon>
         <Input placeholder="Check it out" />
