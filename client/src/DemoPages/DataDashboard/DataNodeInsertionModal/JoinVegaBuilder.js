@@ -8,7 +8,7 @@ import AttributeExtractor from '../../../utils/AttributeExtractor';
 class JoinVegaBuilder extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {  
       dataset1: null,
       dataset2: null,
 
@@ -23,6 +23,7 @@ class JoinVegaBuilder extends React.Component {
   }
 
   render() {
+    console.log(this.state.dataset1, this.state.dataset2, this.state.headers1)
     return (
       <Form>
         <small>Join two datasets.</small>
@@ -57,7 +58,7 @@ class JoinVegaBuilder extends React.Component {
                   if (this.state.dataset1)
                     this.props
                       .calculateDataset(this.state.dataset1)
-                      .then(data => {
+                      .then(({data}) => {
                         this.setState({
                           headers1: AttributeExtractor(data[0]),
                         });
@@ -87,7 +88,7 @@ class JoinVegaBuilder extends React.Component {
                   if (this.state.dataset2)
                     this.props
                       .calculateDataset(this.state.dataset2)
-                      .then(data => {
+                      .then(({data}) => {
                         this.setState({
                           headers2: AttributeExtractor(data[0]),
                         });
