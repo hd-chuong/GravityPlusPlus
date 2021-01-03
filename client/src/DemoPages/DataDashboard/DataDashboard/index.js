@@ -103,7 +103,12 @@ export default class DataDashboard extends Component {
     }
 
     extractSignal(data, signals)
-    {   
+    {
+        /*
+        * data: the data property of a vega spec
+        * signals: the signals property of a vega spec
+        */
+        console.log(this.state.spec);   
         const signalData = [];
         signals.forEach((signal) => {
             const name = signal;
