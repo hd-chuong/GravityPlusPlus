@@ -69,7 +69,8 @@ export default class DataDashboard extends Component {
     updateCurrentData(dataNodeId)
     {
         calculateDataset(dataNodeId, this.props.datasets.datasets)
-        .then(({data, params}) => {
+        .then(({data, params, spec}) => {
+
             this.setState({currentData: data});
             console.log(params);
         }).catch(error => {
@@ -86,9 +87,10 @@ export default class DataDashboard extends Component {
 
     updateParams(paramDict)
     {
-        this.setState({params: {...this.state.params, ...paramDict}}, () => {
+        this.setState({params: Object.assign(this.state.params, paramDict)}, () => {
             calculateDataset(this.state.currentDataId, this.props.datasets.datasets, this.state.params)
             .then(({data, params, spec}) => {
+                console.log(params);
                 this.setState({currentData: data});
                 this.setState({params});
                 this.setState({spec});
@@ -104,7 +106,6 @@ export default class DataDashboard extends Component {
         * data: the data property of a vega spec
         * signals: the signals property of a vega spec
         */
-        console.log(this.state.spec);   
         const signalData = [];
         signals.forEach((signal) => {
             const name = signal;
