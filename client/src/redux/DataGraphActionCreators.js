@@ -67,6 +67,7 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
       data.useParams = true;
       data.threshold = nanoid();
     }
+    
     const newEdge = {
         source, 
         target, 

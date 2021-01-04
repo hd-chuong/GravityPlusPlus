@@ -38,7 +38,7 @@ async function calculateDataset(dataNodeId, datasets, params = {})
         // store all outputParams in a dictionary so that keys are imposed to be distinct.
         const outputParams = {};
 
-        spec.signals.forEach((signal) => outputParams[signal.name] = "");
+        spec.signals.forEach((signal) => outputParams[signal.name] = params[signal.name]);
         return {data: result, params: outputParams, spec};
     })
     .catch(error => {
