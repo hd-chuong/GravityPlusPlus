@@ -1,26 +1,28 @@
 import Axios from 'axios';
 import React, { Component, Fragment } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Row, Col, Card, CardHeader, Input, CardBody } from 'reactstrap';
+// import classnames from 'classnames';
+
+import { Row, Col, Card, CardHeader } from 'reactstrap';
+
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
+import calculateDataset from '../../../utils/dataGeneration';
+
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
-import calculateDataset from '../../../utils/dataGeneration';
 
 export default class DataDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentData: null,
-            params: {},
-            spec: {},
-            currentDataId: null
+            currentDataLabel: null,
+            params: {}
         };
         this.updateCurrentData = this.updateCurrentData.bind(this);
         this.deleteNode = this.deleteNode.bind(this);
         this.updateParams = this.updateParams.bind(this);
-        this.extractSignal = this.extractSignal.bind(this);
     }
 
     deleteNode(dataNodeId)
@@ -66,26 +68,20 @@ export default class DataDashboard extends Component {
 
     updateCurrentData(dataNodeId)
     {
-        this.setState(({currentDataId: dataNodeId}));
         calculateDataset(dataNodeId, this.props.datasets.datasets)
-        .then(({data, params, spec}) => {
+        .then(({data, params}) => {
             this.setState({currentData: data});
-            this.setState({params});
-            this.setState({spec});
-
+            console.log(params);
         }).catch(error => {
             alert("Unable to view the data: " + error.message);    
         });
-    }
-
-    getCurrentLabel(dataNodeId)
-    {
+        
+        // retrieve data labels
         const labels = this.props.datagraph.datagraph.nodes.filter(node => node.id === dataNodeId);
         if (labels.length !== 0)
         {
-            return labels[0].data.label
+            this.setState({currentDataLabel: labels[0].data.label});
         }
-        return "";
     }
 
     updateParams(paramDict)
@@ -161,7 +157,7 @@ export default class DataDashboard extends Component {
                                 transitionLeave={false}
                             >
                                 <DataTable 
-                                    label={this.getCurrentLabel(this.state.currentDataId)} 
+                                    label={this.state.currentDataLabel} 
                                     tableData={this.state.currentData}
                                 />
                                 
@@ -169,20 +165,9 @@ export default class DataDashboard extends Component {
                                     Will make these become a separate class now
                                 */}
                                 <Card className="main-card mb-3">
-                                    <CardHeader>
-                                        Params control    
+                                    <CardHeader>Params control
+                                        {Object.keys(this.state.params).map((param) => (<Input type="text" onChange={(e) => {this.updateParams({param: e.target.value})}}></Input>))}
                                     </CardHeader>
-                                    <CardBody>
-                                        {                                            
-                                            this.state.spec.data && this.extractSignal(this.state.spec.data, Object.keys(this.state.params))
-                                            .map((param) => (
-                                                <Fragment>
-                                                    <p>{param.description}</p>
-                                                    <Input type="text" onChange={(e) => {this.updateParams({[param.name]: e.target.value})}}></Input>
-                                                </Fragment>
-                                                ))
-                                        }
-                                    </CardBody>
                                 </Card>
                             </ReactCSSTransitionGroup>
                         </Col>
