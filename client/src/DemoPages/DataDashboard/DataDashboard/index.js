@@ -86,7 +86,39 @@ export default class DataDashboard extends Component {
 
     updateParams(paramDict)
     {
-        this.setState({params: {...this.state.params, ...paramDict}});
+        this.setState({params: {...this.state.params, ...paramDict}}, () => {
+            calculateDataset(this.state.currentDataId, this.props.datasets.datasets, this.state.params)
+            .then(({data, params, spec}) => {
+                this.setState({currentData: data});
+                this.setState({params});
+                this.setState({spec});
+            }).catch(error => {
+                alert("Unable to view the data: " + error.message);    
+            });
+        });
+    }
+
+    extractSignal(data, signals)
+    {
+        /*
+        * data: the data property of a vega spec
+        * signals: the signals property of a vega spec
+        */
+        console.log(this.state.spec);   
+        const signalData = [];
+        signals.forEach((signal) => {
+            const name = signal;
+            data.forEach((dat) => {
+                if (!dat.hasOwnProperty("transform")) return;
+                dat.transform.forEach((transform) => {
+                    if (transform.type !== "filter") return;
+                    const exp = transform.expr;
+                    const comparison = exp.split(", ")[1];
+                    if (comparison.includes(name)) signalData.push({name, description: comparison});
+                });
+            });
+        });
+        return signalData;
     }
 
     render() {
