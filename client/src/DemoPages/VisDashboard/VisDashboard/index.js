@@ -55,7 +55,7 @@ export default class VisDashboard extends Component {
       calculateDataset(
         this.state.currentNode.data.dataSource,
         this.props.datasets.datasets,
-      ).then(data => {
+      ).then(({data}) => {
         this.setState({ currentNodeData: data });
         this.setState({ dataPrepared: true });
       });
