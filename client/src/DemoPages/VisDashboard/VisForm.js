@@ -2,7 +2,6 @@ import React, { useState, lazy } from 'react';
 import {
   Card,
   CardBody,
-  CardTitle,
   CardImg,
   Row,
   Col,
@@ -289,9 +288,8 @@ const VisVegaTemplateBuilder = ({ datagraph, formik, datasets }) => {
             type="select"
             onChange={event => {
               formik.handleChange(event);
-
               calculateDataset(event.target.value, datasets.datasets).then(
-                dataset => {
+                ({data: dataset}) => {
                   setData(dataset);
                 },
               );
