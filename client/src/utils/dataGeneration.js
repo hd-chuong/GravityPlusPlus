@@ -37,8 +37,7 @@ async function calculateDataset(dataNodeId, datasets, params = {})
         const outputParams = {};
         spec.signals.forEach(signal => outputParams[signal.name] = "");
 
-        spec.signals.forEach((signal) => outputParams[signal.name] = params[signal.name]);
-        return {data: result, params: outputParams, spec};
+        return {data: result, params: outputParams};
     })
     .catch(error => {
       console.log('Unable to generate data: ' + error.message);
