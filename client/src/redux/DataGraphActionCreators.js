@@ -60,7 +60,6 @@ export const saveDataEdge = ({ id, source, target, type, data }) => ({
   },
 });
 
-
 export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
 
     if (type === "TRANSFORM" && data.type === "filter"  && data.threshold === null)

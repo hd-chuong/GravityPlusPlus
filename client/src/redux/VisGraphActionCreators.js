@@ -1,4 +1,5 @@
 import * as ActionTypes from './VisGraphActionTypes';
+import { v4 as uuidv4 } from 'uuid';
 
 export const saveVisNode = payload => ({
   type: ActionTypes.ADD_VIS_NODE,
@@ -6,7 +7,7 @@ export const saveVisNode = payload => ({
 });
 
 export const addVisNode = ({ name, dataSource, spec }) => dispatch => {
-  const newNode = { name, dataSource, spec };
+  const newNode = { name, dataSource, spec, id: uuidv4() };
   dispatch(saveVisNode(newNode));
 };
 

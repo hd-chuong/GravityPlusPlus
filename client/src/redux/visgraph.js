@@ -13,7 +13,7 @@ export const VisGraph = (
       var uiType = 'default';
 
       var newVisNode = {
-        id: uuidv4(),
+        id: action.payload.id,
         type: uiType,
         data: {
           label: action.payload.name,
