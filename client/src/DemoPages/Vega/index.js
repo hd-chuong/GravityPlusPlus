@@ -21,10 +21,11 @@ export default class Vega extends React.PureComponent {
   componentDidMount() {
     const { spec, data } = this.props;
 
+    console.log("didMount", spec, data);
     // do a deep copy of spec
     const copiedSpec = JSON.parse(JSON.stringify(spec));
     // do a deep copy of data
-    copiedSpec.data.values = JSON.parse(JSON.stringify(data));
+    AttachDataToSpec(copiedSpec, JSON.parse(JSON.stringify(data)));
     var config = {
       actions: { compiled: false, editor: false, source: false },
       tooltip: handler.call,
@@ -36,10 +37,11 @@ export default class Vega extends React.PureComponent {
   componentDidUpdate() {
     const { spec, data } = this.props;
 
+    console.log("update", spec, data);
     // do a deep copy of spec
     const copiedSpec = JSON.parse(JSON.stringify(spec));
     // do a deep copy of data
-    copiedSpec.data.values = JSON.parse(JSON.stringify(data));
+    AttachDataToSpec(copiedSpec, JSON.parse(JSON.stringify(data)));
     var config = {
       actions: { compiled: false, editor: false, source: false },
       tooltip: handler.call,
@@ -50,5 +52,22 @@ export default class Vega extends React.PureComponent {
 
   render() {
     return <div className={this.props.className} ref={this.state.id} />;
+  }
+}
+
+const AttachDataToSpec = (spec, data) => {
+  if (Array.isArray(spec.data)) {
+    // if vega 
+    for (let i = 0; i < spec.data.length; ++i)
+    {
+      let item = spec.data[i];
+      if (item.values) item.values = data;
+      return;
+    }
+  }
+  else {
+    // if vega-lite
+    spec.data.values = data;
+    return;
   }
 }
