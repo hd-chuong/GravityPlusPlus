@@ -32,7 +32,7 @@ export const IntGraph = (
         }
 
       case ActionTypes.ADD_INT_EDGE:
-        const {id, source, target, binding, type, markType} = action.payload;
+        const {id, source, target, binding, signal} = action.payload;
 
         var newIntEdge = {
           id,
@@ -40,8 +40,7 @@ export const IntGraph = (
           target,
           data: {
             binding,
-            type,
-            markType
+            signal,
           },
           arrowHeadType: 'arrowclosed',
           style: { stroke: 'green', strokeDasharray: '2,2' },
