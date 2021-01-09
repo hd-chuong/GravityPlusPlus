@@ -21,15 +21,8 @@ export default class Vega extends React.PureComponent {
 
   updateChart()
   {
-    const { spec, data, } = this.props;
-    var signal = null;
-    var eventHandler = null;
+    const { spec, data, signals} = this.props;
 
-    if (this.props.hasOwnProperty("signal"))
-    {
-      signal = this.props.signal.signal;
-      eventHandler = this.props.signal.eventHandler;
-    }
     // do a deep copy of spec
     const copiedSpec = JSON.parse(JSON.stringify(spec));
     // do a deep copy of data
@@ -41,28 +34,43 @@ export default class Vega extends React.PureComponent {
       config: { mark: { tooltip: true } },
     };
 
+    // var signal = null;
+    // var eventHandler = null;
+
+    // if (this.props.hasOwnProperty("signals"))
+    // {
+    //   signal = this.props.signal.signal;
+    //   eventHandler = this.props.signal.eventHandler;
+    // }
+
     vegaEmbed(this.refs[this.state.id], copiedSpec, {
       ...config, patch: (copiedSpec) => {
         if (!copiedSpec.hasOwnProperty("signals"))
         {
           copiedSpec.signals = [];
         }
-        if (signal) copiedSpec.signals.push(signal);
+        if (Array.isArray(signals)) 
+        {
+          const signalNames = signals.map(signal => signal.name);
+          copiedSpec.signals.push(...signalNames);
+        }
         return copiedSpec;
       }
     }).then(result => {
-      if (signal)
+      if (Array.isArray(signals))
       {
-        result.view.addSignalListener(signal.name, eventHandler);
+        signals.forEach(signal => result.view.addSignalListener(signal.name, signal.eventHandler));
       }
     }).catch(console.warn);
   }
 
-  componentDidMount() {
+  componentDidMount() 
+  {
     this.updateChart();  
   }
 
-  componentDidUpdate() {
+  componentDidUpdate() 
+  {
     this.updateChart();
   }
 
