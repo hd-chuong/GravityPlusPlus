@@ -1,4 +1,4 @@
-import React, { useState, lazy } from 'react';
+import React, { useState, lazy, Fragment } from 'react';
 import {
   Card,
   CardBody,
@@ -11,10 +11,9 @@ import {
   Progress,
   FormGroup,
 } from 'reactstrap';
+
 import Scrollbar from 'react-perfect-scrollbar';
 import { Field, Form, Formik } from 'formik';
-
-import { Fragment } from 'react';
 import AttributeExtractor from '../../utils/AttributeExtractor';
 import calculateDataset from '../../utils/dataGeneration';
 import Vega from '../Vega';
@@ -51,9 +50,7 @@ const VisForm = props => {
 
   const [stepNumber, setStepNumber] = useState(0);
   const [snapshot, setSnapshot] = useState(initialValues);
-
   const steps = [<OwnSchema />, <VisVegaTemplateBuilder />];
-
   const step = steps[stepNumber];
   const totalSteps = steps.length;
   const isLastStep = stepNumber === totalSteps - 1;
@@ -86,7 +83,7 @@ const VisForm = props => {
     <Formik
       initialValues={snapshot}
       onSubmit={handleSubmit}
-      validationSchema={step.props.validationSchema}
+      // validationSchema={step.props.validationSchema}
     >
       {formik => (
         <Form>

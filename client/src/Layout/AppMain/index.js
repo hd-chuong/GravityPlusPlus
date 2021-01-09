@@ -13,6 +13,7 @@ const AppMain = ({
   datasets,
   datagraph,
   visgraph,
+  intgraph,
   addDataset,
   removeDataset,
   addDataNode,
@@ -24,7 +25,9 @@ const AppMain = ({
   addVisEdge,
   removeVisNode,
   removeVisEdge,
-  setVisNode
+  setVisNode,
+  addIntNode,
+  addIntEdge
 }) => {
   return (
     <Fragment>
@@ -71,7 +74,14 @@ const AppMain = ({
             </Route>
 
             <Route exact path="/int">
-                <IntDashboard/>
+              <IntDashboard
+                datasets={datasets}
+                datagraph={datagraph.datagraph}
+                visgraph={visgraph.visgraph}
+                intgraph={intgraph.intgraph}
+                addIntNode={addIntNode}
+                addIntEdge={addIntEdge}
+              />
             </Route>
 
             <Redirect to="/data" />

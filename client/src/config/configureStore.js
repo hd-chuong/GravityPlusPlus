@@ -6,6 +6,8 @@ import reducers from '../reducers';
 import { Datasets } from '../redux/datasets';
 import { DataGraph } from '../redux/datagraph';
 import { VisGraph} from '../redux/visgraph';
+import { IntGraph} from '../redux/intgraph';
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function configureStore() {
@@ -14,6 +16,7 @@ export default function configureStore() {
       datasets: Datasets,
       datagraph: DataGraph,
       visgraph: VisGraph,
+      intgraph: IntGraph,
       ...reducers
     }),
     composeEnhancers(applyMiddleware(thunk, logger)),

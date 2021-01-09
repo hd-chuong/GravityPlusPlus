@@ -8,6 +8,8 @@ export const saveDataNode = payload => ({
 });
 
 // source: the tabular data itself
+// why id is not created at frontend: 
+// -> let backend create id as a centralized source of control
 export const addDataNode = ({
   name,
   type,

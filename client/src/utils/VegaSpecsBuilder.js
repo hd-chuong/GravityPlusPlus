@@ -1,5 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
+import {compile} from 'vega-lite';
 import nanoid from './nanoid';
+
 export const AggregationMethods = [
   'count',
   'valid',
@@ -46,6 +48,17 @@ export const JoinTypes = [
     "RIGHT JOIN",
     "INNER JOIN"
 ];
+
+export const EventTypes = [
+  "click",
+  "dblclick",
+  "mousedown",
+  "mousemove",
+  "mouseout",
+  "mouseover",
+  "mouseup",
+  ""
+] 
 
 export function FilterBuilder(field, operand, threshold)
 {
@@ -98,7 +111,6 @@ export function DataSpecsBuilder(subgraph, datasets)
                 // there is one incoming edge only for transformed nodes
                 const operation = JSON.parse(edge[0].properties.operation);            
                 
-
                 if (operation.type === "aggregate")
                 {
                     datapoint.transform = [operation];
@@ -241,5 +253,36 @@ export function JoinSpecsBuilder(leftNode, rightNode, joinType) {
     // case "OUTER JOIN":
     default:
       return [];
+  }
+}
+
+export function ExtractMarkTypes(marks)
+{
+  // recursive in case of group marks (recursive to find the elements)
+  const markList = marks.reduce((flat, toFlatten) => {
+    return flat.concat(toFlatten.type === "group" ? ExtractMarkTypes(toFlatten.marks) : {type: toFlatten.type, style: toFlatten.style});
+  }, []);
+  return markList;
+}
+
+export function GetCompiledVegaSpec(vegaLiteSpec, options = {})
+{
+  return compile(vegaLiteSpec, options).spec;
+}
+
+export function SignalBuilder(id, marktype, type)
+{
+  return {
+    "name": id,
+    "on": [
+      {
+        "events": 
+          {
+            "marktype": marktype, 
+            "type": type
+          }, 
+          "update": "datum"
+      }
+    ]    
   }
 }

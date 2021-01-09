@@ -4,9 +4,11 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Row, Col, Card, CardHeader, Input, CardBody } from 'reactstrap';
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
+
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 import calculateDataset from '../../../utils/dataGeneration';
+import {describeParams} from "../../../utils/describeParams";
 
 export default class DataDashboard extends Component {
     constructor(props) {
@@ -20,7 +22,6 @@ export default class DataDashboard extends Component {
         this.updateCurrentData = this.updateCurrentData.bind(this);
         this.deleteNode = this.deleteNode.bind(this);
         this.updateParams = this.updateParams.bind(this);
-        this.extractSignal = this.extractSignal.bind(this);
     }
 
     deleteNode(dataNodeId)
@@ -94,7 +95,6 @@ export default class DataDashboard extends Component {
         this.setState({params: Object.assign(this.state.params, paramDict)}, () => {
             calculateDataset(this.state.currentDataId, this.props.datasets.datasets, this.state.params)
             .then(({data, params, spec}) => {
-                console.log(params);
                 this.setState({currentData: data});
                 this.setState({params});
                 this.setState({spec});
@@ -102,28 +102,6 @@ export default class DataDashboard extends Component {
                 alert("Unable to view the data: " + error.message);    
             });
         });
-    }
-
-    extractSignal(data, signals)
-    {
-        /*
-        * data: the data property of a vega spec
-        * signals: the signals property of a vega spec
-        */
-        const signalData = [];
-        signals.forEach((signal) => {
-            const name = signal;
-            data.forEach((dat) => {
-                if (!dat.hasOwnProperty("transform")) return;
-                dat.transform.forEach((transform) => {
-                    if (transform.type !== "filter") return;
-                    const exp = transform.expr;
-                    const comparison = exp.split(", ")[1];
-                    if (comparison.includes(name)) signalData.push({name, description: comparison});
-                });
-            });
-        });
-        return signalData;
     }
 
     render() {
@@ -175,7 +153,7 @@ export default class DataDashboard extends Component {
                                     </CardHeader>
                                     <CardBody>
                                         {                                            
-                                            this.state.spec.data && this.extractSignal(this.state.spec.data, Object.keys(this.state.params))
+                                            this.state.spec.data && describeParams(this.state.spec.data, Object.keys(this.state.params))
                                             .map((param) => (
                                                 <Fragment>
                                                     <p>{param.description}</p>

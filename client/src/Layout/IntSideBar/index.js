@@ -10,7 +10,6 @@ import {
 } from '../../reducers/ThemeOptions';
 
 class IntSideBar extends Component {
-
     constructor(props)
     {
         super(props);
@@ -50,16 +49,27 @@ class IntSideBar extends Component {
                             <h5 className="app-sidebar__heading">Interaction nodes</h5>
                             <div className="metismenu vertical-nav-menu">
                                 <ul className="metismenu-container">
-                                <li
-                                    className="metismenu-item"
-                                    // onClick={this.props.toggleNewNodeModal}
-                                    style={{ cursor: 'pointer' }}
-                                >
-                                    <div className="metismenu-link" target="_blank">
-                                    <i className="metismenu-icon fa fa-asterisk fa-lg"></i>{' '}
-                                    Add new Node
-                                    </div>
-                                </li>
+                                    <li
+                                        className="metismenu-item"
+                                        onClick={this.props.toggleNewNodeModal}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <div className="metismenu-link" target="_blank">
+                                            <i className="metismenu-icon fa fa-asterisk fa-lg"></i>{' '}
+                                            Add new Node
+                                        </div>
+                                    </li>
+
+                                    <li 
+                                        className="metismenu-item"
+                                        onClick={this.props.toggleNewEdgeModal}
+                                        style={{ cursor: 'pointer'}}
+                                    >
+                                        <div className="metismenu-link" target="_blank">
+                                            <i className="metismenu-icon fa fa-link fa-lg"></i>{' '}
+                                            Add new Edge
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -80,7 +90,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
     setEnableMobileMenu: enable => dispatch(setEnableMobileMenu(enable)),
 
 });

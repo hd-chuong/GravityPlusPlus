@@ -1,14 +1,16 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component, Fragment, lazy} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import {Row, Col,
+import {
+    Row, 
+    Col,
 } from 'reactstrap';
 
-import VisGraph from '../../DataDashboard/DataGraph';
+import Graph from '../../DataDashboard/DataGraph';
 import calculateDataset from '../../../utils/dataGeneration';
-import { lazy } from 'react';
-import JSONEditor from '../../JSONEditor';
+import IntNodeInsertionModal from '../IntNodeInsertionModal';
+import IntEdgeInsertionModal from '../IntEdgeInsertionModal';
 
-export default class VisDashboard extends Component {
+export default class IntDashboard extends Component {
     render() {
         return (
             <Fragment>
@@ -29,8 +31,8 @@ export default class VisDashboard extends Component {
                                     transitionAppearTimeout={0}
                                     transitionEnter={false}
                                     transitionLeave={false}>
-                                    <VisGraph 
-                                        // data={this.props.visgraph}
+                                    <Graph 
+                                        data={this.props.intgraph}
                                         // onElementClick={this.onElementClick.bind(this)}
                                         // onElementsRemove={this.deleteVisNode.bind(this)}
                                     />                                    
@@ -71,13 +73,24 @@ export default class VisDashboard extends Component {
                         </Row>                       
                     </div>
                     
-                    {/* <VisNodeInsertionModal
+                    <IntNodeInsertionModal
                         toggle={this.props.toggleNewNodeModal}
                         isOpen={this.props.isNewNodeModalOpen}
-                        datagraph={this.props.datagraph}
                         datasets={this.props.datasets}
-                        addVisNode={this.props.addVisNode}
-                    /> */}
+                        datagraph={this.props.datagraph}
+                        visgraph={this.props.visgraph}    
+                        addIntNode={this.props.addIntNode}
+                    />
+
+                    {this.props.isNewEdgeModalOpen && <IntEdgeInsertionModal
+                        toggle={this.props.toggleNewEdgeModal}
+                        isOpen={this.props.isNewEdgeModalOpen}
+                        datasets={this.props.datasets}
+                        datagraph={this.props.datagraph}
+                        visgraph={this.props.visgraph}
+                        intgraph={this.props.intgraph}
+                        addIntEdge={this.props.addIntEdge}
+                    />}
                 </ReactCSSTransitionGroup>
             </Fragment>
         )
