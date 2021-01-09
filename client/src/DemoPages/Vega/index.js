@@ -51,15 +51,18 @@ export default class Vega extends React.PureComponent {
         }
         if (Array.isArray(signals)) 
         {
-          const signalNames = signals.map(signal => signal.name);
+          const signalNames = signals.map(signal => signal.signal);
           copiedSpec.signals.push(...signalNames);
         }
+        console.log(copiedSpec);
         return copiedSpec;
       }
     }).then(result => {
       if (Array.isArray(signals))
       {
-        signals.forEach(signal => result.view.addSignalListener(signal.name, signal.eventHandler));
+        signals.forEach(signal => {
+          result.view.addSignalListener(signal.signal.name, signal.eventHandler);
+        });
       }
     }).catch(console.warn);
   }
