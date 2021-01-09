@@ -134,7 +134,7 @@ const mapDispatchToProp = dispatch => ({
   removeVisEdge: id => dispatch(removeVisEdge({ id })),
   setVisNode: (id, params) => dispatch(setVisNode({ id, params })),
   addIntNode: (name, source) => dispatch(saveIntNode({name, source})),
-  addIntEdge: (source, target, signal, binding, id) => dispatch(addIntEdge({source, target, signal, binding, id}))
+  addIntEdge: (source, target, signal, binding, label, id) => dispatch(addIntEdge({source, target, signal, binding, label, id}))
 });
 
 export default withRouter(connect(mapStateToProp, mapDispatchToProp)(Main));

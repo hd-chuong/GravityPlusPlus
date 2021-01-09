@@ -11,11 +11,11 @@ export const saveIntEdge = payload => ({
     payload,
 });
 
-export const addIntEdge = ({source, target, signal, binding, id}) => dispatch => {
+export const addIntEdge = ({source, target, signal, binding, id, label}) => dispatch => {
     if (!id) 
     {
         id = uuidv4();
     }
-    const newNode = {source, target, signal, binding, id};
+    const newNode = {source, target, signal, binding, id, label};
     dispatch(saveIntEdge(newNode));
 };

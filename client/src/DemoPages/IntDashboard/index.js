@@ -13,8 +13,8 @@ class IntDashboard extends Component{
         };
         this.toggleNewNodeModal = this.toggleNewNodeModal.bind(this);
         this.toggleNewEdgeModal = this.toggleNewEdgeModal.bind(this);
-      }
-    
+    }
+
     toggleNewNodeModal() {
         this.setState({ isNewNodeModalOpen: !this.state.isNewNodeModalOpen });
     }
@@ -44,7 +44,7 @@ class IntDashboard extends Component{
                 <div className="app-main__outer">
                     <div className="app-main__inner">
                         <Dashboard
-                            datasets={this.props.datasets}
+                            datasets={this.props.datasets.datasets}
                             datagraph={this.props.datagraph}
                             visgraph={this.props.visgraph}
                             intgraph={this.props.intgraph}

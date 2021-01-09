@@ -1,5 +1,6 @@
 import {GetNodeById, GetOutgoingEdgesFromId} from "./graphUtil";
-import {calculateDataset} from "./dataGeneration";
+import calculateDataset from "./dataGeneration";
+import AttributeExtractor from "./AttributeExtractor";
 // each state includes:
 // the data (after parameterized)
 // the specs
@@ -19,22 +20,48 @@ export function GetGraphIds(datagraph, visgraph, intgraph, intNodeId)
     return {dataId, visId: visNodeIds[0], intId: intNodeId};
 }
 
-export function GetState(datasets, datagraph, visgraph, intgraph, intNodeId, params)
+// finite state machine getter
+export function GetState(datasets, datagraph, visgraph, intgraph, intNodeId, params, setter)
 {
     const {dataId, visId, intId} = GetGraphIds(datagraph, visgraph, intgraph, intNodeId);
-
-    var result = {};
-
-    calculateDataset(dataId, datasets, params).then(({data, params, spec}) => {
-        result.data = data;
-    })
-
-    const visNode = GetNodeById(visgraph, visId);
-    result.spec = visNode.data.spec;
     
-    const nextEdges = GetOutgoingEdgesFromId(intgraph, intNodeId);
-    const signals = nextEdges.map(edge => edge.data.signal);
+    return calculateDataset(dataId, datasets, params).then(({data, params, spec}) => {
+        return data;
+    }).then((data) => {
+        // update signals
+        const nextEdges = GetOutgoingEdgesFromId(intgraph, intNodeId);
+        const signals = nextEdges.map(edge => edge.data.signal);
+        const bindings = nextEdges.map(edge => edge.data.binding);
+        
+        const events = signals.map((signal, i) => {
+            return (event, item) => {
+                const nextNodeId = nextEdges[i].target;
+                
+                // binding signal nanoid to the attribute of the item
+                const binding = bindings[i];
+                
+                const paramDict = Object.keys(binding)
+                                .reduce((result, newKey) => ({...result, [newKey]: item[`${binding[newKey]}`]}), {});
+                const nextState = GetState(datasets, datagraph, visgraph, intgraph, nextNodeId, paramDict, setter);
+                return nextState;
+            }
+        });
+        
+        // update spec
+        const visNode = GetNodeById(visgraph, visId);
 
-    return result;
+        const thisState = {
+            data, 
+            spec: visNode.data.spec, 
+            signals: signals.map((signal, i) => ({signal, eventHandler: events[i]}))
+        };
+        
+        console.log(thisState);
+
+        // ??? 
+        setter({...thisState});
+        return thisState;
+    });
 }
 
+ 

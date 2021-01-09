@@ -14,7 +14,7 @@ import {
 
 export default class Chart extends Component {
   render() {
-    if (this.props.data === null || this.props.data === undefined)
+    if (!this.props.data || !this.props.spec)
       return (
         <Card className="main-card mb-3">
           <CardHeader>Chart View</CardHeader>
@@ -25,7 +25,7 @@ export default class Chart extends Component {
       <Card className="main-card mb-3">
         <CardHeader>{this.props.title}</CardHeader>
         <CardBody className="mx-auto">
-          <Vega spec={this.props.spec} data={this.props.data} />
+          <Vega spec={this.props.spec} data={this.props.data} signals={this.props.signals}/>
         </CardBody>
       </Card>
     );

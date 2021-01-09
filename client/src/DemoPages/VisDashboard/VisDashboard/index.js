@@ -62,6 +62,7 @@ export default class VisDashboard extends Component {
       this.setState({ specDisplayed: this.state.currentNode.data.spec });
     });
   }
+  
   render() {
     return (
       <Fragment>

@@ -14,6 +14,7 @@ import {describeParams} from "../../utils/describeParams";
 import nanoid from "../../utils/nanoid";
 import ParamTable from "../Components/ParamTable";
 import AttributeExtractor from '../../utils/AttributeExtractor';
+import {GetNodeById} from '../../utils/graphUtil';
 
 const IntEdgeInsertionModal = (props) => {
   const [source, setSource] = useState(null);
@@ -91,7 +92,7 @@ const IntEdgeInsertionModal = (props) => {
 
   const SetTargetParams = async (intNodeId) => {
     const currentDataId = getDataId(intNodeId);
-    calculateDataset(currentDataId, props.datasets.datasets).then(({spec, params, data}) => {
+    calculateDataset(currentDataId, props.datasets).then(({spec, params, data}) => {
       setParams(params);
       setSpec(spec);
       setData(data);
@@ -103,14 +104,15 @@ const IntEdgeInsertionModal = (props) => {
     const visSpec = GetVisSpecs(intNodeId)[0];
 
     setSourceSpec(visSpec);
-    calculateDataset(currentDataId, props.datasets.datasets).then(({data}) => {
+    calculateDataset(currentDataId, props.datasets).then(({data}) => {
       setSourceData(data);
     });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.addIntEdge(source, target, spec, binding, id);
+    const label = `${element}-${eventType}`;
+    props.addIntEdge(source, target, signal, binding, label, id);
     props.toggle();
     reset();
   }
@@ -202,7 +204,7 @@ const IntEdgeInsertionModal = (props) => {
             
             <Row className="form-group">
               <Col md={6}>
-                {viewSource && <Vega className="mx-auto" data={sourceData} spec={sourceSpec} signal={{signal, eventHandler}}/>}
+                {viewSource && <Vega className="mx-auto" data={sourceData} spec={sourceSpec} signals={[{signal, eventHandler}]}/>}
               </Col>
               <Col md={6}>
                 {interactionData && <ParamTable 
@@ -251,12 +253,5 @@ const IntEdgeInsertionModal = (props) => {
     </span>
   );
 }
-
-const GetNodeById = (graph, id) => {
-  if (!graph.nodes) return null;
-  const nodeList = graph.nodes.filter(node => node.id === id);
-  if (nodeList.length > 0) return nodeList[0];
-  else return null; 
-};
 
 export default IntEdgeInsertionModal;

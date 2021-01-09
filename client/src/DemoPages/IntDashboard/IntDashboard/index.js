@@ -4,13 +4,49 @@ import {
     Row, 
     Col,
 } from 'reactstrap';
-
 import Graph from '../../DataDashboard/DataGraph';
-import calculateDataset from '../../../utils/dataGeneration';
 import IntNodeInsertionModal from '../IntNodeInsertionModal';
 import IntEdgeInsertionModal from '../IntEdgeInsertionModal';
+import {GetState} from "../../../utils/stateMachine";
+import Chart from "../../VisDashboard/Chart";
 
 export default class IntDashboard extends Component {
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+            stateLoading: false,
+            data: null,
+            spec: null,
+            signals: []
+        }
+        this.updateState = this.updateState.bind(this);
+    }
+    
+    updateState(nextState)
+    {
+        this.setState({...nextState});
+    }
+    onElementClick(id)
+    {
+        const clickedNode = this.props.intgraph.nodes.filter(
+            node => node.id === id,
+        )[0];
+        // if clicked on edges
+        if (!clickedNode) return;
+
+        this.setState({stateLoading: true});
+        GetState(
+            this.props.datasets, 
+            this.props.datagraph, 
+            this.props.visgraph, 
+            this.props.intgraph, 
+            id, 
+            {},
+            this.updateState
+        )
+    }
+
     render() {
         return (
             <Fragment>
@@ -33,13 +69,12 @@ export default class IntDashboard extends Component {
                                     transitionLeave={false}>
                                     <Graph 
                                         data={this.props.intgraph}
-                                        // onElementClick={this.onElementClick.bind(this)}
-                                        // onElementsRemove={this.deleteVisNode.bind(this)}
+                                        onElementClick={this.onElementClick.bind(this)}
                                     />                                    
                                 </ReactCSSTransitionGroup>
                             </Col>
                             
-                            {/* {this.state.dataPrepared && <Fragment>
+                            {this.state.data && <Fragment>
                                 <Col md={6}>
                                     <ReactCSSTransitionGroup
                                         component="div"
@@ -49,12 +84,13 @@ export default class IntDashboard extends Component {
                                         transitionEnter={false}
                                         transitionLeave={false}>
                                         <Chart 
-                                            title={this.state.currentNode && this.state.currentNode.data.label}
-                                            data={this.state.currentNode && this.state.currentNodeData}
-                                            spec={this.state.specDisplayed}
+                                            title={"Preview"}
+                                            data={this.state.data}
+                                            spec={this.state.spec}
+                                            signals={this.state.signals}
                                         />                                   
                                     </ReactCSSTransitionGroup>
-                                    <ReactCSSTransitionGroup
+                                    {/* <ReactCSSTransitionGroup
                                         component="div"
                                         transitionName="TabsAnimation"
                                         transitionAppear={true}
@@ -66,10 +102,10 @@ export default class IntDashboard extends Component {
                                             onSave={(newSpec) => this.props.setVisNode(this.state.currentNode.id, {spec: newSpec})}
                                             onSpecChange={(newSpec) => this.setState({specDisplayed: newSpec})}
                                         />                                   
-                                    </ReactCSSTransitionGroup>
+                                    </ReactCSSTransitionGroup> */}
                                 </Col>  
                             </Fragment>
-                            } */}
+                            }
                         </Row>                       
                     </div>
                     
