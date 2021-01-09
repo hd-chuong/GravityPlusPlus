@@ -7,6 +7,7 @@ var tooltipOptions = {
   theme: 'dark',
   offsetX: 0,
 };
+
 var handler = new vegaTooltip.Handler(tooltipOptions);
 
 // TODO: change to use react-vega once it is migrated to the latest version of vega-embed
@@ -19,25 +20,40 @@ export default class Vega extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { spec, data } = this.props;
-
-    console.log("didMount", spec, data);
+    const { spec, data, signal } = this.props;
     // do a deep copy of spec
     const copiedSpec = JSON.parse(JSON.stringify(spec));
     // do a deep copy of data
     AttachDataToSpec(copiedSpec, JSON.parse(JSON.stringify(data)));
+ 
     var config = {
       actions: { compiled: false, editor: false, source: false },
       tooltip: handler.call,
       config: { mark: { tooltip: true } },
     };
-    vegaEmbed(this.refs[this.state.id], copiedSpec, config);
+
+    vegaEmbed(this.refs[this.state.id], copiedSpec, {
+      ...config, patch: (copiedSpec) => {
+        if (!copiedSpec.hasOwnProperty("signals"))
+        {
+          copiedSpec.signals = [];
+        }
+        console.log(signal);
+        if (signal) copiedSpec.signals.push(signal);
+        return copiedSpec;
+      }
+    }).then(result => {
+      if (signal)
+      {
+        result.view.addSignalListener(signal.name, (event, item) => {
+          console.log(item);
+        });
+      }
+    }).catch(console.warn);
   }
 
   componentDidUpdate() {
-    const { spec, data } = this.props;
-
-    console.log("update", spec, data);
+    const { spec, data, signal } = this.props;
     // do a deep copy of spec
     const copiedSpec = JSON.parse(JSON.stringify(spec));
     // do a deep copy of data
@@ -47,7 +63,25 @@ export default class Vega extends React.PureComponent {
       tooltip: handler.call,
       config: { mark: { tooltip: true } },
     };
-    vegaEmbed(this.refs[this.state.id], copiedSpec, config);
+
+    vegaEmbed(this.refs[this.state.id], copiedSpec, {
+      ...config, patch: (copiedSpec) => {
+        if (!copiedSpec.hasOwnProperty("signals"))
+        {
+          copiedSpec.signals = [];
+        }
+        console.log(signal);
+        if (signal) copiedSpec.signals.push(signal);
+        return copiedSpec;
+      }
+    }).then(result => {
+      if (signal)
+      {
+        result.view.addSignalListener(signal.name, (event, item) => {
+          console.log(item);
+        });
+      }
+    }).catch(console.warn);
   }
 
   render() {
