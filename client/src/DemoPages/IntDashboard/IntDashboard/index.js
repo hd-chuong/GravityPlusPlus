@@ -26,7 +26,6 @@ export default class IntDashboard extends Component {
         this.updateState = this.updateState.bind(this);
     }
     
- 
     updateState(nextState)
     {
         this.setState({...nextState});

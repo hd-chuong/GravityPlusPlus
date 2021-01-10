@@ -23,7 +23,6 @@ class JoinVegaBuilder extends React.Component {
   }
 
   render() {
-    console.log(this.state.dataset1, this.state.dataset2, this.state.headers1)
     return (
       <Form>
         <small>Join two datasets.</small>

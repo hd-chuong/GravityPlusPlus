@@ -18,7 +18,6 @@ const IntNodeInsertionModal = (props) => {
 
   const [snapshot, setSnapshot] = useState(initialValues);
   const handleSubmit = async (values) => {
-    console.log(values.name, values.visNodes)
     props.addIntNode(values.name, values.visNodes);
     props.toggle();
   }
