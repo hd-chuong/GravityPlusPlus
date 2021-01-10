@@ -224,15 +224,21 @@ const IntEdgeInsertionModal = (props) => {
               </Col>
             </Row> */}
             
-            <Row className="form-group">
+              {spec && <Row className="form-group">
+                <Col md={12}><h6>Param binding</h6></Col>  
+              </Row>}
               {spec && describeParams(spec.data, Object.keys(params))
                 .map((param) => (
-                    <Fragment>
-                        <p>{param.description} 
-                        <Input type="text" onChange={(e) => setBinding({...binding, [param.name]: e.target.value}) }></Input></p>
-                    </Fragment>
+                  <Row className="form-group">
+                    <Col md={8}>
+                      <Label>{param.description}</Label>
+                    </Col>
+                    <Col md={4}>
+                      <Input type="text" onChange={(e) => setBinding({...binding, [param.name]: e.target.value}) }></Input>
+                    </Col>
+                  </Row>
                   ))}
-            </Row>
+            
             {/* <Row className="form-group"> */}
               {/* {spec && params && describeParams(spec.data, Object.keys(params)).map((param) => (<Label>{param.description}</Label>))} */}
             {/* </Row> */}

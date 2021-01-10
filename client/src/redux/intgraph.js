@@ -55,6 +55,30 @@ export const IntGraph = (
             nodes: state.intgraph.nodes,
           }
         }
+
+      case ActionTypes.REMOVE_INT_NODE:
+        var nodeId = action.payload.id;
+        return {
+          ...state,
+          intgraph: {
+            edges: state.intgraph.edges.filter(
+              edge => edge.source !== nodeId && edge.target !== nodeId,
+            ),
+            nodes: state.intgraph.nodes.filter(node => node.id !== nodeId),
+          },
+        };
+
+      case ActionTypes.REMOVE_INT_EDGE:
+        var edgeId = action.payload.id;
+        return {
+          ...state,
+          intgraph: {
+            edges: state.intgraph.edges.filter(
+              edge => edge.id !== edgeId,
+            ),
+            nodes: state.intgraph.nodes,
+          },  
+        };
       default:
         return state;  
     }

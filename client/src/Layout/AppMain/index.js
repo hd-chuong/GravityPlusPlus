@@ -27,7 +27,9 @@ const AppMain = ({
   removeVisEdge,
   setVisNode,
   addIntNode,
-  addIntEdge
+  addIntEdge,
+  removeIntNode,
+  removeIntEdge
 }) => {
   return (
     <Fragment>
@@ -81,6 +83,8 @@ const AppMain = ({
                 intgraph={intgraph.intgraph}
                 addIntNode={addIntNode}
                 addIntEdge={addIntEdge}
+                removeIntNode={removeIntNode}
+                removeIntEdge={removeIntEdge}
               />
             </Route>
 

@@ -23,7 +23,6 @@ export default class Vega extends React.PureComponent {
   {
     const { spec, data, signals} = this.props;
 
-    console.log(spec, data, signals);
     // do a deep copy of spec
     const copiedSpec = JSON.parse(JSON.stringify(spec));
     // do a deep copy of data

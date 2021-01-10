@@ -8,7 +8,9 @@ import Graph from '../../DataDashboard/DataGraph';
 import IntNodeInsertionModal from '../IntNodeInsertionModal';
 import IntEdgeInsertionModal from '../IntEdgeInsertionModal';
 import {GetState} from "../../../utils/stateMachine";
+import {GetNodeById} from "../../../utils/graphUtil";
 import Chart from "../../VisDashboard/Chart";
+
 
 export default class IntDashboard extends Component {
     constructor(props)
@@ -18,15 +20,31 @@ export default class IntDashboard extends Component {
             stateLoading: false,
             data: null,
             spec: null,
-            signals: []
+            signals: [],
+            intNodeId: null
         }
         this.updateState = this.updateState.bind(this);
     }
     
+ 
     updateState(nextState)
     {
         this.setState({...nextState});
     }
+
+    updateGraphDisplay(id)
+    {
+        const displayedGraph = JSON.parse(JSON.stringify(this.props.intgraph));
+
+        displayedGraph.nodes.forEach(node => {
+            if (node.id !== id) node.style = null;
+            else {
+                node.style = currentNodeStyle;
+            }
+        })
+        return displayedGraph;
+    }
+
     onElementClick(id)
     {
         const clickedNode = this.props.intgraph.nodes.filter(
@@ -34,7 +52,7 @@ export default class IntDashboard extends Component {
         )[0];
         // if clicked on edges
         if (!clickedNode) return;
-
+        
         this.setState({stateLoading: true});
         GetState(
             this.props.datasets, 
@@ -44,10 +62,26 @@ export default class IntDashboard extends Component {
             id, 
             {},
             this.updateState
-        )
+        );
+    }
+    
+    onElementsRemove(id)
+    {
+        if (GetNodeById(this.props.intgraph, id))
+        {
+            // remove node
+            this.props.removeIntNode(id);
+        }
+        else 
+        {
+            // remove edge
+            this.props.removeIntEdge(id);
+        }
     }
 
     render() {
+        const displayedGraph = this.updateGraphDisplay(this.state.intNodeId);
+
         return (
             <Fragment>
                 <ReactCSSTransitionGroup
@@ -68,8 +102,9 @@ export default class IntDashboard extends Component {
                                     transitionEnter={false}
                                     transitionLeave={false}>
                                     <Graph 
-                                        data={this.props.intgraph}
+                                        data={displayedGraph}
                                         onElementClick={this.onElementClick.bind(this)}
+                                        onElementsRemove={this.onElementsRemove.bind(this)}
                                     />                                    
                                 </ReactCSSTransitionGroup>
                             </Col>
@@ -132,3 +167,9 @@ export default class IntDashboard extends Component {
         )
     }
 }
+
+const currentNodeStyle =
+{
+    background: '#9EE493',
+    color: '#333'
+};   

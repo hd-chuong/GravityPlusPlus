@@ -53,11 +53,9 @@ export function GetState(datasets, datagraph, visgraph, intgraph, intNodeId, par
         const thisState = {
             data, 
             spec: visNode.data.spec, 
-            signals: signals.map((signal, i) => ({signal, eventHandler: events[i]}))
+            signals: signals.map((signal, i) => ({signal, eventHandler: events[i]})),
+            intNodeId 
         };
-        
-        console.log(thisState);
-
         // ??? 
         setter({...thisState});
         return thisState;

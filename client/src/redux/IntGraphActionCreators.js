@@ -19,3 +19,14 @@ export const addIntEdge = ({source, target, signal, binding, id, label}) => disp
     const newNode = {source, target, signal, binding, id, label};
     dispatch(saveIntEdge(newNode));
 };
+
+export const removeIntNode = payload => ({
+    type: ActionTypes.REMOVE_INT_NODE,
+    payload,
+});
+
+export const removeIntEdge = payload => ({
+    type: ActionTypes.REMOVE_INT_EDGE,
+    payload,
+});
+  

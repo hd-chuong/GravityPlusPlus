@@ -54,7 +54,8 @@ class IntDashboard extends Component{
                             isNewEdgeModalOpen={this.state.isNewEdgeModalOpen}
                             addIntNode={this.props.addIntNode}
                             addIntEdge={this.props.addIntEdge}
-                            // removeVisNode={this.props.removeVisNode}
+                            removeIntNode={this.props.removeIntNode}
+                            removeIntEdge={this.props.removeIntEdge}
                             // setVisNode={this.props.setVisNode}   
                         />
                     </div>

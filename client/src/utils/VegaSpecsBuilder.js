@@ -57,7 +57,7 @@ export const EventTypes = [
   "mouseout",
   "mouseover",
   "mouseup",
-  ""
+  "wheel"
 ] 
 
 export function FilterBuilder(field, operand, threshold)

@@ -24,7 +24,9 @@ import {
 
 import {
   saveIntNode, 
-  addIntEdge
+  addIntEdge,
+  removeIntNode,
+  removeIntEdge
 } from '../../redux/IntGraphActionCreators';
 
 class Main extends React.Component {
@@ -84,6 +86,8 @@ class Main extends React.Component {
             setVisNode={this.props.setVisNode}
             addIntNode={this.props.addIntNode}
             addIntEdge={this.props.addIntEdge}
+            removeIntNode={this.props.removeIntNode}
+            removeIntEdge={this.props.removeIntEdge}
           />
           <ResizeDetector handleWidth onResize={this.onResize} />
         </div>
@@ -134,7 +138,9 @@ const mapDispatchToProp = dispatch => ({
   removeVisEdge: id => dispatch(removeVisEdge({ id })),
   setVisNode: (id, params) => dispatch(setVisNode({ id, params })),
   addIntNode: (name, source) => dispatch(saveIntNode({name, source})),
-  addIntEdge: (source, target, signal, binding, label, id) => dispatch(addIntEdge({source, target, signal, binding, label, id}))
+  addIntEdge: (source, target, signal, binding, label, id) => dispatch(addIntEdge({source, target, signal, binding, label, id})),
+  removeIntNode: id => dispatch(removeIntNode({id})),
+  removeIntEdge: id => dispatch(removeIntEdge({id})),
 });
 
 export default withRouter(connect(mapStateToProp, mapDispatchToProp)(Main));

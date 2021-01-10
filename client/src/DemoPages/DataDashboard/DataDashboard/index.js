@@ -11,7 +11,8 @@ import calculateDataset from '../../../utils/dataGeneration';
 import {describeParams} from "../../../utils/describeParams";
 
 export default class DataDashboard extends Component {
-    constructor(props) {
+    constructor(props) 
+    {
         super(props);
         this.state = {
             currentData: null,
@@ -29,7 +30,8 @@ export default class DataDashboard extends Component {
         Axios({
             method: "get",
             url: `http://localhost:7473/data/nodes/${dataNodeId}/children`,
-        }).then(response => 
+        })
+        .then(response => 
         {
             if (response.statusText !== "OK")
             {
@@ -57,7 +59,8 @@ export default class DataDashboard extends Component {
                 this.props.setDataNode(child.id, {type: "RAW"});
             });
         })
-        .then(() => {
+        .then(() => 
+        {
             this.props.removeDataNode(dataNodeId);
         })
         .catch(error => {
@@ -71,9 +74,7 @@ export default class DataDashboard extends Component {
         calculateDataset(dataNodeId, this.props.datasets.datasets)
         .then(({data, params, spec}) => {
 
-            this.setState({currentData: data});
-            this.setState({params});
-            this.setState({spec});
+            this.setState({currentData: data, params, spec});
 
         }).catch(error => {
             alert("Unable to view the data: " + error.message);    
@@ -95,9 +96,7 @@ export default class DataDashboard extends Component {
         this.setState({params: Object.assign(this.state.params, paramDict)}, () => {
             calculateDataset(this.state.currentDataId, this.props.datasets.datasets, this.state.params)
             .then(({data, params, spec}) => {
-                this.setState({currentData: data});
-                this.setState({params});
-                this.setState({spec});
+                this.setState({currentData: data, params, spec});
             }).catch(error => {
                 alert("Unable to view the data: " + error.message);    
             });
@@ -152,13 +151,19 @@ export default class DataDashboard extends Component {
                                         Params control    
                                     </CardHeader>
                                     <CardBody>
-                                        {                                            
+                                        {console.log("rernder")}
+                                        {                                                
                                             this.state.spec.data && describeParams(this.state.spec.data, Object.keys(this.state.params))
                                             .map((param) => (
-                                                <Fragment>
+                                                <div>
                                                     <p>{param.description}</p>
-                                                    <Input type="text" onChange={(e) => {this.updateParams({[param.name]: e.target.value})}}></Input>
-                                                </Fragment>
+                                                    <Input 
+                                                        defaultValue=""
+                                                        type="text" onChange={(e) => {
+                                                            this.updateParams({[param.name]: e.target.value})
+                                                        }}>
+                                                    </Input>
+                                                </div>
                                                 ))
                                         }
                                     </CardBody>
@@ -167,7 +172,6 @@ export default class DataDashboard extends Component {
                         </Col>
                     </Row>
 
-                    
                     <DataNodeInsertionModal 
                         datasets={this.props.datasets} 
                         isOpen={this.props.isNewNodeModalOpen} 
