@@ -151,7 +151,6 @@ export default class DataDashboard extends Component {
                                         Params control    
                                     </CardHeader>
                                     <CardBody>
-                                        {console.log("rernder")}
                                         {                                                
                                             this.state.spec.data && describeParams(this.state.spec.data, Object.keys(this.state.params))
                                             .map((param) => (
