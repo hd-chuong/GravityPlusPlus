@@ -2,6 +2,10 @@ function pieChartSchema(tableName, x, y, value) {
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     description: 'Pie Chart',
+    autosize: {
+      type: 'fit',
+      contains: 'padding',
+    },
     data: {
       name: tableName,
       values: value,

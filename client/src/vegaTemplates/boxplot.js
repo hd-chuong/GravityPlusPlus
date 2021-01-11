@@ -2,6 +2,10 @@ export default function boxplotSchema(tableName, x, y, category, value) {
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     description: 'Vertical Box Plot',
+    autosize: {
+      type: 'fit',
+      contains: 'padding',
+    },
     data: {
       name: tableName,
       values: value,

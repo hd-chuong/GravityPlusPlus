@@ -5,6 +5,10 @@ export default function normalizedAreaSchema(tableName, x, y, category, value) {
       name: tableName,
       values: value,
     },
+    autosize: {
+      type: 'fit',
+      contains: 'padding',
+    },
     width: 300,
     height: 200,
     mark: 'area',

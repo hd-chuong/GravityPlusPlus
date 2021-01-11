@@ -5,6 +5,10 @@ export default function Scatterplot(tableName, x, y, color, shape, value) {
       name: tableName,
       values: value,
     },
+    autosize: {
+      type: 'fit',
+      contains: 'padding',
+    },
     mark: 'point',
     encoding: {
       x: {
