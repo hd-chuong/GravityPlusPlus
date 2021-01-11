@@ -56,6 +56,7 @@ class IntDashboard extends Component{
                             addIntEdge={this.props.addIntEdge}
                             removeIntNode={this.props.removeIntNode}
                             removeIntEdge={this.props.removeIntEdge}
+                            setIntPosition={this.props.setIntPosition}
                             // setVisNode={this.props.setVisNode}   
                         />
                     </div>

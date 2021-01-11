@@ -70,6 +70,9 @@ export default class Graph extends Component {
                 .map(element => element.id)
                 .forEach(e => this.props.onElementsRemove(e))
             }
+            onNodeDragStop={(event, node) => {
+              this.props.onNodeDragStop(node.id, node.position.x, node.position.y);
+            }}
           >
             <Controls />
             <Background color="#aaa" gap={16} />

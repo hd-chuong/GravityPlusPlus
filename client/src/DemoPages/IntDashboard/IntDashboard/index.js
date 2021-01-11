@@ -104,6 +104,7 @@ export default class IntDashboard extends Component {
                                         data={displayedGraph}
                                         onElementClick={this.onElementClick.bind(this)}
                                         onElementsRemove={this.onElementsRemove.bind(this)}
+                                        onNodeDragStop={this.props.setIntPosition}
                                     />                                    
                                 </ReactCSSTransitionGroup>
                             </Col>

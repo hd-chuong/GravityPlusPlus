@@ -29,7 +29,10 @@ const AppMain = ({
   addIntNode,
   addIntEdge,
   removeIntNode,
-  removeIntEdge
+  removeIntEdge,
+  setDataPosition,
+  setVisPosition,
+  setIntPosition,
 }) => {
   return (
     <Fragment>
@@ -59,6 +62,7 @@ const AppMain = ({
                 removeDataNode={removeDataNode}
                 removeDataEdges={removeDataEdges}
                 setDataNode={setDataNode}
+                setDataPosition={setDataPosition}
               />
             </Route>
 
@@ -72,6 +76,7 @@ const AppMain = ({
                 removeVisNode={removeVisNode}
                 removeVisEdge={removeVisEdge}
                 setVisNode={setVisNode}
+                setVisPosition={setVisPosition}
               />
             </Route>
 
@@ -85,6 +90,7 @@ const AppMain = ({
                 addIntEdge={addIntEdge}
                 removeIntNode={removeIntNode}
                 removeIntEdge={removeIntEdge}
+                setIntPosition={setIntPosition}
               />
             </Route>
 

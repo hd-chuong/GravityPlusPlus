@@ -126,6 +126,7 @@ export default class DataDashboard extends Component {
                                     data={this.props.datagraph.datagraph} 
                                     onElementClick={this.updateCurrentData.bind(this)}
                                     onElementsRemove={this.deleteNode}
+                                    onNodeDragStop={this.props.setDataPosition}
                                 />                                    
                             </ReactCSSTransitionGroup>
                         </Col>

@@ -89,6 +89,7 @@ export default class VisDashboard extends Component {
                     data={this.props.visgraph}
                     onElementClick={this.onElementClick.bind(this)}
                     onElementsRemove={this.deleteVisNode.bind(this)}
+                    onNodeDragStop={this.props.setVisPosition}
                   />
                 </ReactCSSTransitionGroup>
               </Col>

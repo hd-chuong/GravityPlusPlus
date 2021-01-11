@@ -44,6 +44,7 @@ class Dashboards extends Component {
                 addDataEdge={this.props.addDataEdge}
                 removeDataEdges={this.props.removeDataEdges}
                 setDataNode={this.props.setDataNode}
+                setDataPosition={this.props.setDataPosition}
               />
             </div>
           </div>

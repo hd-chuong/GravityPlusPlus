@@ -12,6 +12,7 @@ import {
   removeDataNode,
   removeDataEdges,
   setDataNode,
+  setDataPosition,
 } from '../../redux/DataGraphActionCreators';
 
 import {
@@ -20,13 +21,15 @@ import {
   removeVisNode,
   removeVisEdge,
   setVisNode,
+  setVisPosition,
 } from '../../redux/VisGraphActionCreators';
 
 import {
   saveIntNode, 
   addIntEdge,
   removeIntNode,
-  removeIntEdge
+  removeIntEdge,
+  setIntPosition
 } from '../../redux/IntGraphActionCreators';
 
 class Main extends React.Component {
@@ -88,6 +91,9 @@ class Main extends React.Component {
             addIntEdge={this.props.addIntEdge}
             removeIntNode={this.props.removeIntNode}
             removeIntEdge={this.props.removeIntEdge}
+            setDataPosition={this.props.setDataPosition}
+            setVisPosition={this.props.setVisPosition}
+            setIntPosition={this.props.setIntPosition}
           />
           <ResizeDetector handleWidth onResize={this.onResize} />
         </div>
@@ -118,12 +124,14 @@ const mapDispatchToProp = dispatch => ({
   addDataNode: (name, type, source = null, transform = [], format = {}) =>
     dispatch(addDataNode({ name, type, source, transform, format })),
   
-    removeDataNode: id => dispatch(removeDataNode({ id })),
+  removeDataNode: id => 
+    dispatch(removeDataNode({ id })),
 
   removeDataEdges: (id, direction = null) =>
     dispatch(removeDataEdges(id, direction)),
 
-  setDataNode: (id, params) => dispatch(setDataNode({ id, params })),
+  setDataNode: (id, params) => 
+    dispatch(setDataNode({ id, params })),
   
   addDataEdge: (source, target, type, data) =>
     dispatch(addDataEdge({ source, target, type, data })),
@@ -134,13 +142,22 @@ const mapDispatchToProp = dispatch => ({
   addVisEdge: (source, target, type) =>
     dispatch(addVisEdge({ source, target, type })),
   
-  removeVisNode: id => dispatch(removeVisNode({ id })),
-  removeVisEdge: id => dispatch(removeVisEdge({ id })),
-  setVisNode: (id, params) => dispatch(setVisNode({ id, params })),
-  addIntNode: (name, source) => dispatch(saveIntNode({name, source})),
-  addIntEdge: (source, target, signal, binding, label, id) => dispatch(addIntEdge({source, target, signal, binding, label, id})),
-  removeIntNode: id => dispatch(removeIntNode({id})),
-  removeIntEdge: id => dispatch(removeIntEdge({id})),
+  removeVisNode: id => 
+    dispatch(removeVisNode({ id })),
+  removeVisEdge: id => 
+    dispatch(removeVisEdge({ id })),
+  setVisNode: (id, params) => 
+    dispatch(setVisNode({ id, params })),
+  addIntNode: (name, source) => 
+    dispatch(saveIntNode({name, source})),
+  addIntEdge: (source, target, signal, binding, label, id) => 
+    dispatch(addIntEdge({source, target, signal, binding, label, id})),
+  removeIntNode: (id) => dispatch(removeIntNode({id})),
+  removeIntEdge: (id) => dispatch(removeIntEdge({id})),
+  setDataPosition: (id, x, y) => dispatch(setDataPosition({id, x, y})),
+  setVisPosition: (id, x, y) => dispatch(setVisPosition({id, x, y})),
+  setIntPosition: (id, x, y) => dispatch(setIntPosition({id, x, y})),
+
 });
 
 export default withRouter(connect(mapStateToProp, mapDispatchToProp)(Main));

@@ -192,6 +192,7 @@ class Dashboard extends Component {
                 addVisNode={this.props.addVisNode}
                 removeVisNode={this.props.removeVisNode}
                 setVisNode={this.props.setVisNode}
+                setVisPosition={this.props.setVisPosition}
               />
             </div>
           </div>
