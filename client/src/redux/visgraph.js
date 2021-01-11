@@ -144,6 +144,23 @@ export const VisGraph = (
         },
       };
 
+      
+    case ActionTypes.SET_POSITION:
+      const {id: nodeId, x, y} = action.payload;
+      
+      const newNodes = state.visgraph.nodes.map(node => {
+        if (node.id !== nodeId) return node;
+        return {...node, position: {x, y} };
+      });
+
+      return {
+        ...state,
+        visgraph: {
+          edges: state.visgraph.edges,
+          nodes: newNodes
+        }
+      };
+
     default:
       return state;
   }

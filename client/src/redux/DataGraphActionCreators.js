@@ -170,3 +170,8 @@ export const removeDataEdges = ({ id, direction }) => ({
     direction,
   },
 });
+
+export const setDataPosition = payload => ({
+  type: ActionTypes.SET_POSITION,
+  payload,
+});

@@ -9,3 +9,5 @@ export const REMOVE_DATA_NODE = 'REMOVE_DATA_NODE';
 export const REMOVE_DATA_EDGES = 'REMOVE_DATA_EDGES';
 
 export const SET_DATA_NODE = 'SET_DATA_NODE';
+
+export const SET_POSITION = 'SET_POSITION';

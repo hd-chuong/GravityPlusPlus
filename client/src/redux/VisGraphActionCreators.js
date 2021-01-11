@@ -40,3 +40,8 @@ export const setVisNode = payload => ({
   type: ActionTypes.SET_VIS_NODE,
   payload,
 });
+
+export const setVisPosition = payload => ({
+  type: ActionTypes.SET_POSITION,
+  payload,
+});

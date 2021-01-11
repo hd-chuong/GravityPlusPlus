@@ -30,3 +30,7 @@ export const removeIntEdge = payload => ({
     payload,
 });
   
+export const setIntPosition = payload => ({
+    type: ActionTypes.SET_POSITION,
+    payload,
+});

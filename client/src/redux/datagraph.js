@@ -137,6 +137,22 @@ export const DataGraph = (
       } else {
         return state;
       }
+    
+    case ActionTypes.SET_POSITION:
+      const {id: nodeId, x, y} = action.payload;
+      
+      const newNodes = state.datagraph.nodes.map(node => {
+        if (node.id !== nodeId) return node;
+        return {...node, position: {x, y} };
+      });
+
+      return {
+        ...state,
+        datagraph: {
+          edges: state.datagraph.edges,
+          nodes: newNodes
+        }
+      };
     default:
       return state;
   }

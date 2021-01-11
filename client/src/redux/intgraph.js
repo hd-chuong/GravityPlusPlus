@@ -58,6 +58,7 @@ export const IntGraph = (
 
       case ActionTypes.REMOVE_INT_NODE:
         var nodeId = action.payload.id;
+        
         return {
           ...state,
           intgraph: {
@@ -70,6 +71,7 @@ export const IntGraph = (
 
       case ActionTypes.REMOVE_INT_EDGE:
         var edgeId = action.payload.id;
+        
         return {
           ...state,
           intgraph: {
@@ -79,6 +81,23 @@ export const IntGraph = (
             nodes: state.intgraph.nodes,
           },  
         };
+
+      case ActionTypes.SET_POSITION:
+        const {id: nodeId, x, y} = action.payload;
+        
+        const newNodes = state.intgraph.nodes.map(node => {
+          if (node.id !== nodeId) return node;
+          return {...node, position: {x, y} };
+        });
+
+        return {
+          ...state,
+          intgraph: {
+            edges: state.intgraph.edges,
+            nodes: newNodes
+          }
+        };
+
       default:
         return state;  
     }
