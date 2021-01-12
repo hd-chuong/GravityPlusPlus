@@ -72,24 +72,27 @@ class Header extends React.Component {
             <div className="app-header-right">
               <Navbar dark expand="sm">
                 <Nav navbar>
-                  <NavItem className="metismenu-item mr-1" onClick={this.props.save}>
+                  <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }} onClick={this.props.save}>
                     <div className="nav-link">
                       <i className="fa fa-download fa-md mr-1"></i> Save
                     </div>
                   </NavItem>
                   
-                  <ReactFileReader
-                    handleFiles={this.handleFiles.bind(this)}
-                    fileTypes={['.gpp']}
-                  >
+
                     <NavItem className="metismenu-item mr-1">
-                      <div className="nav-link">
+                      <div className="nav-link" style={{ cursor: 'pointer' }}>
+                      
+                        <ReactFileReader
+                        handleFiles={this.handleFiles.bind(this)}
+                        fileTypes={['.gpp']}
+                      >
                         <i className="fa fa-upload fa-md mr-1"></i> Upload
+                      </ReactFileReader>
                       </div>
                     </NavItem>
-                  </ReactFileReader>
+                  
 
-                  <NavItem className="metismenu-item mr-1">
+                  <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }}>
                     <NavLink className="nav-link" to="/story/">
                       <i style={{color: 'yellow'}} className="fa fa-television fa-md mr-1"></i> Watch your story
                     </NavLink>
