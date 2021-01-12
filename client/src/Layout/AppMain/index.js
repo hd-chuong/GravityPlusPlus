@@ -35,6 +35,7 @@ const AppMain = ({
   setDataPosition,
   setVisPosition,
   setIntPosition,
+  loadState,
 }) => {
   return (
     <Fragment>
@@ -53,7 +54,10 @@ const AppMain = ({
       >
         
         <Router>
-          <AppHeader save={() => AsyncJSONDownloadHandler("three-graph.gpp", state)}/>
+          <AppHeader 
+            save={() => AsyncJSONDownloadHandler("three-graph.gpp", state)}
+            load={loadState}
+          />
           <Switch>
             <Route exact path="/data">
               <DataDashboard
