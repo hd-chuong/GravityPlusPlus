@@ -10,8 +10,10 @@ import { IntGraph} from '../redux/intgraph';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+// const persistedState = loadState();
+
 export default function configureStore() {
-  return createStore(
+  const store = createStore(
     combineReducers({
       datasets: Datasets,
       datagraph: DataGraph,
@@ -19,6 +21,8 @@ export default function configureStore() {
       intgraph: IntGraph,
       ...reducers
     }),
+
     composeEnhancers(applyMiddleware(thunk, logger)),
   );
+  return store;
 }

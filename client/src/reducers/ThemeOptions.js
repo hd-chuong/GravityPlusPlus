@@ -121,8 +121,8 @@ export const setBackgroundImage = backgroundImage => ({
 
 export default function reducer(
   state = {
-    backgroundColor: 'bg-asteroid sidebar-text-light',
-    headerBackgroundColor: 'bg-asteroid header-text-light',
+    backgroundColor: 'bg-royal sidebar-text-light',
+    headerBackgroundColor: 'bg-royal header-text-light',
     enableMobileMenuSmall: '',
     enableBackgroundImage: true,
     enableClosedSidebar: false,
