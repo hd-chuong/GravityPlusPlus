@@ -45,6 +45,7 @@
     "extract-text-webpack-plugin": "3.0.0",
     "faker": "^4.1.0",
     "file-loader": "2.0.0",
+    "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "formik": "^2.2.6",
     "fs-extra": "7.0.1",
@@ -127,6 +128,7 @@
     "webpack-split-chunks": "^0.2.1",
     "whatwg-fetch": "2.0.3",
     "window-resize-listener-react": "^1.1.0",
+    "write-json-file": "^4.3.0",
     "yup": "^0.32.8"
   },
   "devDependencies": {
