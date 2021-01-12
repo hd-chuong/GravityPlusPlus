@@ -3,7 +3,7 @@ import React, {Component, Fragment} from 'react';
 import AppHeader from '../../Layout/AppHeader';
 import IntSideBar from '../../Layout/IntSideBar';
 import Dashboard from './IntDashboard';
-
+import configureStore from '../../config/configureStore';
 class IntDashboard extends Component{
     constructor(props) {
         super(props);
@@ -27,7 +27,6 @@ class IntDashboard extends Component{
     {
         return (
             <Fragment>
-            <AppHeader/>
             <div className="app-main">
                 <IntSideBar 
                     toggleNewNodeModal={this.toggleNewNodeModal}

@@ -27,10 +27,10 @@ class Header extends React.Component {
             'header-shadow': enableHeaderShadow,
           })}
           transitionName="HeaderAnimation"
-          // transitionAppear={true}
-          // transitionAppearTimeout={1500}
-          // transitionEnter={false}
-          // transitionLeave={false}
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnter={false}
+          transitionLeave={false}
         >
           <HeaderLogo />
 

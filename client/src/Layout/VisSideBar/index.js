@@ -73,7 +73,6 @@ class VisSideBar extends Component {
                         <i className="metismenu-icon">
                           <input
                             type="checkbox"
-                            className="metismenu-icon"
                             checked={this.props.isTransformationLinks}
                             onChange={this.props.handleTransformationLinks}
                           />
@@ -91,7 +90,6 @@ class VisSideBar extends Component {
                         ></i>
                       ) : (
                         <i className="metismenu-icon">
-                          {' '}
                           <input
                             type="checkbox"
                             checked={this.props.isSequenceRecommended}

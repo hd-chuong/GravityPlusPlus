@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import { connect, useStore } from 'react-redux';
 import cx from 'classnames';
 import { withRouter } from 'react-router-dom';
 import ResizeDetector from 'react-resize-detector';
@@ -45,7 +45,6 @@ class Main extends React.Component {
 
   render() {
     const { width } = this.state;
-
     let {
       colorScheme,
       enableFixedHeader,
@@ -57,7 +56,8 @@ class Main extends React.Component {
       enablePageTabsAlt,
     } = this.props;
 
-    return (
+    console.log(this.props.state);
+    return (  
       <Fragment>
         <div
           className={cx(
@@ -71,6 +71,7 @@ class Main extends React.Component {
           )}
         >
           <AppMain
+            state={this.props.state}
             datasets={this.props.datasets}
             datagraph={this.props.datagraph}
             visgraph={this.props.visgraph}
@@ -113,7 +114,8 @@ const mapStateToProp = state => ({
   datasets: state.datasets,
   datagraph: state.datagraph,
   visgraph: state.visgraph,
-  intgraph: state.intgraph
+  intgraph: state.intgraph,
+  state: state
 });
 
 const mapDispatchToProp = dispatch => ({

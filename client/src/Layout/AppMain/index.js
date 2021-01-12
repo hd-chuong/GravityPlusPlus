@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import React, { Suspense, lazy, Fragment } from 'react';
 
+import AppHeader from '../AppHeader';
+
 import { ToastContainer } from 'react-toastify';
 
 import { Switch, withRouter } from 'react-router-dom';
@@ -49,7 +51,9 @@ const AppMain = ({
           </div>
         }
       >
+        
         <Router>
+          <AppHeader />
           <Switch>
             <Route exact path="/data">
               <DataDashboard

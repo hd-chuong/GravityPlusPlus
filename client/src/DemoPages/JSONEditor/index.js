@@ -10,14 +10,14 @@ const JSONEditor = ({ json, onSpecChange, onSave }) => {
   if (!json)
     return (
       <Card className="main-card mb-3">
-        <CardHeader className="card-header-tab">JSON View</CardHeader>
+        <CardHeader className="card-header-tab">Spec View</CardHeader>
         <CardBody>View Vega specification by choosing a vis node</CardBody>
       </Card>
     );
   return (
     <Card className="main-card mb-3">
       <CardHeader className="card-header-tab">
-        JSON View
+        Spec View
         <Nav>
           <NavItem>
             <Button
