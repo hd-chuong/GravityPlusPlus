@@ -32,6 +32,9 @@ import {
   setIntPosition
 } from '../../redux/IntGraphActionCreators';
 
+import {loadState}
+from '../../redux/AppActionCreators';
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
@@ -94,6 +97,7 @@ class Main extends React.Component {
             setDataPosition={this.props.setDataPosition}
             setVisPosition={this.props.setVisPosition}
             setIntPosition={this.props.setIntPosition}
+            loadState={this.props.loadState}
           />
           <ResizeDetector handleWidth onResize={this.onResize} />
         </div>
@@ -158,7 +162,7 @@ const mapDispatchToProp = dispatch => ({
   setDataPosition: (id, x, y) => dispatch(setDataPosition({id, x, y})),
   setVisPosition: (id, x, y) => dispatch(setVisPosition({id, x, y})),
   setIntPosition: (id, x, y) => dispatch(setIntPosition({id, x, y})),
-
+  loadState: (state) => dispatch(loadState({state})),
 });
 
 export default withRouter(connect(mapStateToProp, mapDispatchToProp)(Main));

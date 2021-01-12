@@ -1,18 +1,25 @@
 import React, { Fragment } from 'react';
 import cx from 'classnames';
-
-import { connect } from 'react-redux';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import HeaderLogo from '../AppLogo';
-
-// import SearchBox from './Components/SearchBox';
-// import UserBox from './Components/UserBox';
-
 import { withRouter } from 'react-router-dom';
 import { Nav, NavItem, Navbar } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import HeaderLogo from '../AppLogo';
+import ReactFileReader from 'react-file-reader';
+import AsyncDataFileHandler from '../../utils/DataFileHandler';
 
+// import SearchBox from './Components/SearchBox';
+// import UserBox from './Components/UserBox';
 class Header extends React.Component {
+  
+  handleFiles(files) {
+    const file = files[0];
+    AsyncDataFileHandler(file).then(data => {
+      this.props.load(data);
+    });
+  }
+
   render() {
     let {
       headerBackgroundColor,
@@ -70,12 +77,17 @@ class Header extends React.Component {
                       <i className="fa fa-download fa-md mr-1"></i> Save
                     </div>
                   </NavItem>
-
-                  <NavItem className="metismenu-item mr-1">
-                    <div className="nav-link">
-                      <i className="fa fa-upload fa-md mr-1"></i> Upload
-                    </div>
-                  </NavItem>
+                  
+                  <ReactFileReader
+                    handleFiles={this.handleFiles.bind(this)}
+                    fileTypes={['.gpp']}
+                  >
+                    <NavItem className="metismenu-item mr-1">
+                      <div className="nav-link">
+                        <i className="fa fa-upload fa-md mr-1"></i> Upload
+                      </div>
+                    </NavItem>
+                  </ReactFileReader>
 
                   <NavItem className="metismenu-item mr-1">
                     <NavLink className="nav-link" to="/story/">
