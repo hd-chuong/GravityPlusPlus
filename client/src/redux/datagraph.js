@@ -153,6 +153,12 @@ export const DataGraph = (
           nodes: newNodes
         }
       };
+
+      case ActionTypes.RESET_DATA_GRAPH:
+        const {datagraph} = action.payload;
+        return {
+          ...state, datagraph
+        }
     default:
       return state;
   }
