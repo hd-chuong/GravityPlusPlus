@@ -107,30 +107,6 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
     });
 };
 
-// export const removeSubgraph = ({id}) => (dispatch) => {
-//     return Axios({
-//         method: "delete",
-//         url: `http://localhost:7473/subgraph/${id}`,
-//     }).then(response =>
-//     {
-//         if (response.statusText !== "OK")
-//         {
-//             var error = new Error('Error ' + response.status + ': ' + response.statusText);
-//             error.response = response;
-//             throw error;
-//         }
-//         else
-//         {
-//             return response.data;
-//         }
-//     }).then(deletedNodeArray => ({
-//         type: ActionTypes.REMOVE_SUBGRAPH_FROM_NODES,
-//         payload: deletedNodeArray
-//     })).catch(error => {
-//         alert("Fail to add new edge: " + error.message);
-//     });
-// }
-
 export const removeDataNode = ({ id }) => dispatch => {
   return Axios({
     method: 'delete',
@@ -171,7 +147,19 @@ export const removeDataEdges = ({ id, direction }) => ({
   },
 });
 
-export const setDataPosition = payload => ({
-  type: ActionTypes.SET_POSITION,
-  payload,
-});
+export const setDataPosition = payload => dispatch => {
+  const {x, y, id} = payload;
+  return Axios({
+    method: 'put',
+    url: `http://localhost:7473/data/nodes/${id}`,
+    data: {x, y}
+  })
+  .then((response) => {
+    dispatch({  
+      type: ActionTypes.SET_POSITION,
+      payload});
+  })    
+  .catch(error => {
+    alert('Fail to add new edge: ' + error.message);
+  });
+};

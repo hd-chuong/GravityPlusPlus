@@ -21,7 +21,7 @@ export const removeVisEdgeByType = payload => ({
   payload,
 });
 
-export const removeAllVisEdgesByTpe = payload => ({
+export const removeAllVisEdgesByType = payload => ({
   type: ActionTypes.REMOVE_ALL_VIS_EDGES_BY_TYPE,
   payload,
 });

@@ -74,7 +74,14 @@ router.route('/nodes/:nodeID')
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
-  });
+  })
+  .put(cors.corsWithOptions, (req, res, next) => {
+    datagraph.setNodeProperty(req.params.nodeID, req.body)
+      .then(result => {
+        res.json(result)
+      }, err => next(err))
+      .catch(err => next(err));
+  })
 
 router.route('/edges')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))

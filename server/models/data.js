@@ -375,4 +375,32 @@ module.exports = class DataGraph {
       });
   }
 
+  setNodeProperty(nodeId, property)
+  {
+    const params = {
+      id: nodeId,
+      // property: SetBuilder("node", property)
+    }
+
+    const cypher = `MATCH (node {id: $id}) SET ` + SetBuilder("node", property);
+    const session = this.neo4jDriver.session();
+    return session.writeTransaction(tx => tx.run(cypher, params))
+      .then(res => {
+        console.log(res);
+        return "UPDATE SUCCESSFUL";
+      })
+      .catch(e => {
+        console.log(e);
+        return "UNSUCCESSFUL";
+      });
+  }
+}
+
+function SetBuilder(varName, params)
+{
+  /*
+  * return "n.k1 = v1, n.k2 = v2" 
+  */
+  const keys = Object.keys(params);
+  return keys.reduce((prev, newKey, index) => prev.concat(`${index === 0 ? "" : ", "} ${varName}.${newKey} = ${JSON.stringify(params[newKey])}`), "")
 }

@@ -32,6 +32,7 @@ export const DataGraph = (
         },
         position: { x, y },
       };
+
       return {
         ...state,
         datagraph: {
@@ -154,11 +155,12 @@ export const DataGraph = (
         }
       };
 
-      case ActionTypes.RESET_DATA_GRAPH:
-        const {datagraph} = action.payload;
-        return {
-          ...state, datagraph
-        }
+    // case ActionTypes.RESET_DATA_GRAPH:
+    //   const {datagraph} = action.payload;
+    //   return {
+    //     ...state, datagraph
+    //   }
+    
     default:
       return state;
   }
