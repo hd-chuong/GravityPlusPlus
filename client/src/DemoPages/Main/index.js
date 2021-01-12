@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect, useStore } from 'react-redux';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 import { withRouter } from 'react-router-dom';
 import ResizeDetector from 'react-resize-detector';
@@ -55,8 +55,7 @@ class Main extends React.Component {
       enableMobileMenu,
       enablePageTabsAlt,
     } = this.props;
-
-    console.log(this.props.state);
+    
     return (  
       <Fragment>
         <div

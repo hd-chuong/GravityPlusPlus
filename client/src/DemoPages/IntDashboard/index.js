@@ -1,9 +1,8 @@
 import React, {Component, Fragment} from 'react';
 // Layout
-import AppHeader from '../../Layout/AppHeader';
 import IntSideBar from '../../Layout/IntSideBar';
 import Dashboard from './IntDashboard';
-import configureStore from '../../config/configureStore';
+
 class IntDashboard extends Component{
     constructor(props) {
         super(props);
