@@ -1,4 +1,6 @@
 import path from 'path';
+import {saveAs} from 'file-saver';
+import { fieldDefs } from 'vega-lite/build/src/encoding';
 
 async function AsyncJSONUploadHandler(file) {
   const temporaryFileReader = new FileReader();
@@ -65,4 +67,17 @@ export default async function AsyncDataFileHandler(file) {
     console.log(`File-reading error: ${exception}`);
   }
   return data;
+}
+
+export async function AsyncJSONDownloadHandler(filename, data)
+{
+  // pretty print node data
+  let serializedValue = JSON.stringify(data, undefined, 2);
+
+  // Create a blob of the data
+  let blobFile = new Blob([serializedValue], {
+    type: "application/json",
+    name: filename
+  });
+  saveAs(blobFile, filename);
 }

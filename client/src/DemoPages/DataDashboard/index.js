@@ -4,7 +4,6 @@ import React, { Component, Fragment } from 'react';
 import DataDashboard from './DataDashboard';
 
 // Layout
-import AppHeader from '../../Layout/AppHeader';
 import AppSidebar from '../../Layout/AppSidebar';
 
 class Dashboards extends Component {
@@ -23,7 +22,6 @@ class Dashboards extends Component {
   render() {
     return (
       <Fragment>
-        <AppHeader />
         <div className="app-main">
           <AppSidebar
             addDataset={this.props.addDataset}

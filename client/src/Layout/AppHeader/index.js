@@ -11,6 +11,7 @@ import HeaderLogo from '../AppLogo';
 import { withRouter } from 'react-router-dom';
 import { Nav, NavItem, Navbar } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+
 class Header extends React.Component {
   render() {
     let {
@@ -27,10 +28,10 @@ class Header extends React.Component {
             'header-shadow': enableHeaderShadow,
           })}
           transitionName="HeaderAnimation"
-          // transitionAppear={true}
-          // transitionAppearTimeout={1500}
-          // transitionEnter={false}
-          // transitionLeave={false}
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnter={false}
+          transitionLeave={false}
         >
           <HeaderLogo />
 
@@ -64,9 +65,21 @@ class Header extends React.Component {
             <div className="app-header-right">
               <Navbar dark expand="sm">
                 <Nav navbar>
-                  <NavItem className="metismenu-item mr-3">
+                  <NavItem className="metismenu-item mr-1" onClick={this.props.save}>
+                    <div className="nav-link">
+                      <i className="fa fa-download fa-md mr-1"></i> Save
+                    </div>
+                  </NavItem>
+
+                  <NavItem className="metismenu-item mr-1">
+                    <div className="nav-link">
+                      <i className="fa fa-upload fa-md mr-1"></i> Upload
+                    </div>
+                  </NavItem>
+
+                  <NavItem className="metismenu-item mr-1">
                     <NavLink className="nav-link" to="/story/">
-                      Watch your story <i style={{color: 'yellow'}} className="fa fa-television fa-lg mr-2"></i>
+                      <i style={{color: 'yellow'}} className="fa fa-television fa-md mr-1"></i> Watch your story
                     </NavLink>
                   </NavItem>
                 </Nav>

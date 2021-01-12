@@ -170,7 +170,6 @@ class Dashboard extends Component {
   render() {
     return (
       <Fragment>
-        <AppHeader />
         <div className="app-main">
           <VisSideBar
             toggleNewNodeModal={this.toggleNewNodeModal}

@@ -1,15 +1,17 @@
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import React, { Suspense, lazy, Fragment } from 'react';
 
+import AppHeader from '../AppHeader';
 import { ToastContainer } from 'react-toastify';
-
 import { Switch, withRouter } from 'react-router-dom';
+import {AsyncJSONDownloadHandler} from "../../utils/DataFileHandler";
 
 const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
 const IntDashboard = lazy(() => import('../../DemoPages/IntDashboard'));
 
 const AppMain = ({
+  state,
   datasets,
   datagraph,
   visgraph,
@@ -49,7 +51,9 @@ const AppMain = ({
           </div>
         }
       >
+        
         <Router>
+          <AppHeader save={() => AsyncJSONDownloadHandler("three-graph.gpp", state)}/>
           <Switch>
             <Route exact path="/data">
               <DataDashboard
