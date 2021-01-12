@@ -3,6 +3,10 @@ const {
   v4: uuidv4
 } = require('uuid');
 
+const {
+  SetQueryBuilder
+} = require("../utils/query");
+
 module.exports = class DataGraph {
   constructor() {
     this.neo4jDriver = null;
@@ -379,10 +383,10 @@ module.exports = class DataGraph {
   {
     const params = {
       id: nodeId,
-      // property: SetBuilder("node", property)
+      // property: SetQueryBuilder("node", property)
     }
 
-    const cypher = `MATCH (node {id: $id}) SET ` + SetBuilder("node", property);
+    const cypher = `MATCH (node {id: $id}) SET ` + SetQueryBuilder("node", property);
     const session = this.neo4jDriver.session();
     return session.writeTransaction(tx => tx.run(cypher, params))
       .then(res => {
@@ -394,13 +398,4 @@ module.exports = class DataGraph {
         return "UNSUCCESSFUL";
       });
   }
-}
-
-function SetBuilder(varName, params)
-{
-  /*
-  * return "n.k1 = v1, n.k2 = v2" 
-  */
-  const keys = Object.keys(params);
-  return keys.reduce((prev, newKey, index) => prev.concat(`${index === 0 ? "" : ", "} ${varName}.${newKey} = ${JSON.stringify(params[newKey])}`), "")
 }
