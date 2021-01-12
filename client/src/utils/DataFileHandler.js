@@ -50,14 +50,17 @@ async function AsyncCSVUploadHandler(file) {
 
 export default async function AsyncDataFileHandler(file) {
   var data = null;
-  var extension = path.basename(file.name).split('.')[1];
-
+  var [extension] = path.basename(file.name).split('.').splice(-1);
+  console.log(extension);
   try {
     switch (extension) {
       case 'csv':
         data = await AsyncCSVUploadHandler(file);
         break;
       case 'json':
+        data = await AsyncJSONUploadHandler(file);
+        break;
+      case 'gpp':
         data = await AsyncJSONUploadHandler(file);
         break;
       default:
@@ -72,7 +75,7 @@ export default async function AsyncDataFileHandler(file) {
 export async function AsyncJSONDownloadHandler(filename, data)
 {
   // pretty print node data
-  let serializedValue = JSON.stringify(data, undefined, 2);
+  let serializedValue = JSON.stringify(data);
 
   // Create a blob of the data
   let blobFile = new Blob([serializedValue], {
