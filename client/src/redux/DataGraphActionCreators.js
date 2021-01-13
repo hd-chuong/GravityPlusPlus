@@ -160,6 +160,6 @@ export const setDataPosition = payload => dispatch => {
       payload});
   })    
   .catch(error => {
-    alert('Fail to add new edge: ' + error.message);
+    alert('Fail to update new position to database: ' + error.message);
   });
 };
