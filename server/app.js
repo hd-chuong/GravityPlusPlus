@@ -8,6 +8,7 @@ var logger = require('morgan');
 // var usersRouter = require('./routes/users');
 var dataRouter = require('./routes/dataRouter');
 var visRouter = require('./routes/visRouter');
+var intRouter = require('./routes/intRouter');
 var app = express();
 
 // view engine setup
@@ -22,9 +23,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // data API
 app.use('/data', dataRouter);
-
 // vis API
 app.use('/vis', visRouter);
+// int API
+app.use('/int', intRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
