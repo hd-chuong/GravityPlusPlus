@@ -131,14 +131,6 @@ router.route('/subgraph/:target')
       }, err => next(err))
       .catch(err => next(err));
   })
-// .delete(cors.cors, (req, res, next) => {
-//   datagraph
-//     .deleteSubgraphFrom(req.params.target)
-//     .then(result => {
-//       res.json(result)
-//     }, err => next(err))
-//     .catch(err => next(err));
-// });
 
 router.route("/nodes/:nodeId/children")
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
