@@ -36,7 +36,6 @@ const {
         spec: JSON.stringify(spec)
       };
       
-      console.log(params)
       return session
         .writeTransaction(tx => tx.run(cypher, params))
         .then(res => {
@@ -91,65 +90,53 @@ const {
         });
     }
   
-    // removeNode(id) {
-    //   const params = {
-    //     id
-    //   };
+    removeNode(id) {
+      const params = {
+        id
+      };
   
-    //   const cypher = `
-    //   MATCH (n: VIS_NODE {id: $id})
-    //   OPTIONAL MATCH(n)-[r]->(children:VIS_NODE)
-    //   DETACH delete n
+      const cypher = `
+      MATCH (n: VIS_NODE {id: $id})
+      DETACH delete n  
+      `;
   
-    //   WITH children, r
-    //   REMOVE children:JOINED:TRANSFORMED
-    //   SET children:VIS_NODE:RAW, children.source = children.name
-    //   DELETE r
-      
-    //   WITH children
-    //   OPTIONAL MATCH (parent:VIS_NODE)-[r: VIS_EDGE]->(children)
-    //   DELETE r
-      
-    //   RETURN children  
-    //   `;
+      const session = this.neo4jDriver.session();
   
-    //   const session = this.neo4jDriver.session();
+      return session.writeTransaction(tx => tx.run(cypher, params))
+        .then(() => {
+          session.close();
+          return 0;
+        })
+        .catch(e => {
+          console.log(e)
+        });
+    }
   
-    //   return session.writeTransaction(tx => tx.run(cypher, params))
-    //     .then(() => {
-    //       session.close();
-    //       return 0;
-    //     })
-    //     .catch(e => {
-    //       console.log(e)
-    //     });
-    // }
+    getAllNodes() {
+      const session = this.neo4jDriver.session();
   
-    // getAllNodes() {
-    //   const session = this.neo4jDriver.session();
-  
-    //   const cypher = `
-    //           MATCH 
-    //               (n:VIS_NODE)  
-    //           RETURN 
-    //               n
-    //       `;
-    //   return session.readTransaction(tx => tx.run(cypher))
-    //     .then(res => {
-    //       session.close();
-    //       return res.records.map(rec => {
-    //         var record = rec["_fields"][0];
-    //         return {
-    //           id: record["properties"]["id"],
-    //           types: record["labels"],
-    //           props: record["properties"]
-    //         }
-    //       });
-    //     })
-    //     .catch(e => {
-    //       console.log(e)
-    //     });
-    // }
+      const cypher = `
+              MATCH 
+                  (n:VIS_NODE)  
+              RETURN 
+                  n
+          `;
+      return session.readTransaction(tx => tx.run(cypher))
+        .then(res => {
+          session.close();
+          return res.records.map(rec => {
+            var record = rec["_fields"][0];
+            return {
+              id: record["properties"]["id"],
+              types: record["labels"],
+              props: record["properties"]
+            }
+          });
+        })
+        .catch(e => {
+          console.log(e)
+        });
+    }
   
     // addEdge(source, target, type, operation) {
     //   const id = uuidv4();
@@ -385,11 +372,10 @@ const {
         // property: SetQueryBuilder("node", property)
       }
   
-      const cypher = `MATCH (node {id: $id}) SET ` + SetQueryBuilder("node", property);
+      const cypher = `MATCH (node {id: $id}) SET ${SetQueryBuilder("node", property)}`;
       const session = this.neo4jDriver.session();
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(res => {
-          console.log(res);
           return "UPDATE SUCCESSFUL";
         })
         .catch(e => {

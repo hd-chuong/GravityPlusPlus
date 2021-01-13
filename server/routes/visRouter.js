@@ -42,30 +42,30 @@ router.route('/nodes')
       .catch(err => next(err));
   });
 
-// router.route('/nodes/:nodeID')
-//   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-//   .get(cors.cors, (req, res, next) => {
-//     datagraph
-//       .getNode(req.params.nodeID)
-//       .then(result => {
-//         res.json(result)
-//       }, err => next(err))
-//       .catch(err => next(err));
-//   })
-//   .delete(cors.corsWithOptions, (req, res, next) => {
-//     datagraph.removeNode(req.params.nodeID)
-//       .then(result => {
-//         res.json(result)
-//       }, err => next(err))
-//       .catch(err => next(err));
-//   })
-//   .put(cors.corsWithOptions, (req, res, next) => {
-//     datagraph.setNodeProperty(req.params.nodeID, req.body)
-//       .then(result => {
-//         res.json(result)
-//       }, err => next(err))
-//       .catch(err => next(err));
-//   })
+router.route('/nodes/:nodeID')
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, (req, res, next) => {
+    visgraph
+      .getNode(req.params.nodeID)
+      .then(result => {
+        res.json(result)
+      }, err => next(err))
+      .catch(err => next(err));
+  })
+  .delete(cors.corsWithOptions, (req, res, next) => {
+    visgraph.removeNode(req.params.nodeID)
+      .then(result => {
+        res.json(result)
+      }, err => next(err))
+      .catch(err => next(err));
+  })
+  .put(cors.corsWithOptions, (req, res, next) => {
+    visgraph.setNodeProperty(req.params.nodeID, req.body)
+      .then(result => {
+        res.json(result)
+      }, err => next(err))
+      .catch(err => next(err));
+  })
 
   // sequence recommendation services
 router.route('/sequenceRecommend')
