@@ -82,10 +82,21 @@ export const removeVisEdge = payload => ({
   payload,
 });
 
-export const setVisNode = payload => ({
-  type: ActionTypes.SET_VIS_NODE,
-  payload,
-});
+export const setVisNode = payload => dispatch => {
+  const {id, params} = payload;
+  return Axios({
+    method: 'put',
+    url: `http://localhost:7473/vis/nodes/${id}`,
+    data:params
+  })
+  .then((response) => dispatch({
+      type: ActionTypes.SET_VIS_NODE,
+      payload,
+    }))    
+  .catch(error => {
+    alert(`Fail to update new position of vis node ${id} to database: ${error.message}`);
+  });
+};
 
 export const setVisPosition = payload => dispatch => {
   const {x, y, id} = payload;

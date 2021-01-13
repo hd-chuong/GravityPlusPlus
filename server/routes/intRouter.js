@@ -95,6 +95,7 @@ router.route('/edges')
 })  
 
 router.route('/edges/:edgeID')
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
 .put(cors.corsWithOptions, (req, res, next) => {
     intgraph
     .setEdgeProperty(req.params.edgeID, req.body)
