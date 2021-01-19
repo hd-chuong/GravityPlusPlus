@@ -54,6 +54,14 @@ const JSONEditor = ({ json, onSpecChange, onSave }) => {
             setEditedJSON(updated_src);
             onSpecChange(updated_src);
           }}
+          onAdd={({ updated_src }) => {
+            setEditedJSON(updated_src);
+            onSpecChange(updated_src);
+          }}
+          onDelete={({ updated_src }) => {
+            setEditedJSON(updated_src);
+            onSpecChange(updated_src);
+          }}
         />
       </CardBody>
     </Card>

@@ -22,9 +22,17 @@ const driver = neo4j.driver(
 var visgraph = new Visgraph();
 visgraph.useDriver(driver);
 
+const addHeader = (req, res, next) => {
+  console.log("session name: ", req.session.name, ". sessionID: ", req.sessionID);
+  res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+}
+
 router.route('/nodes')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+  .get(cors.cors, addHeader, (req, res, next) => {
     visgraph
       .getAllNodes()
       .then(result => {
@@ -32,7 +40,7 @@ router.route('/nodes')
       }, err => next(err))
       .catch(err => next(err));
   })
-  .post(cors.corsWithOptions, (req, res, next) => {
+  .post(cors.corsWithOptions, addHeader, (req, res, next) => {
     const {name, dataSource, spec} = req.body;
     visgraph
       .addNode(name, dataSource, spec)
@@ -44,7 +52,7 @@ router.route('/nodes')
 
 router.route('/nodes/:nodeID')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+  .get(cors.corsWithOptions, addHeader, (req, res, next) => {
     visgraph
       .getNode(req.params.nodeID)
       .then(result => {
@@ -52,14 +60,14 @@ router.route('/nodes/:nodeID')
       }, err => next(err))
       .catch(err => next(err));
   })
-  .delete(cors.corsWithOptions, (req, res, next) => {
+  .delete(cors.corsWithOptions, addHeader, (req, res, next) => {
     visgraph.removeNode(req.params.nodeID)
       .then(result => {
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
   })
-  .put(cors.corsWithOptions, (req, res, next) => {
+  .put(cors.corsWithOptions, addHeader, (req, res, next) => {
     visgraph.setNodeProperty(req.params.nodeID, req.body)
       .then(result => {
         res.json(result)
@@ -70,7 +78,7 @@ router.route('/nodes/:nodeID')
   // sequence recommendation services
 router.route('/sequenceRecommend')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .post(cors.cors, (req, res, next) => {
+  .post(cors.cors, addHeader, (req, res, next) => {
     var charts = req.body.charts;
     const process = fork("./services/sequenceRecommendation.js");
     process.send({

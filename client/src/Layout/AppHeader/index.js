@@ -51,6 +51,11 @@ class Header extends React.Component {
           <Navbar dark expand="sm">
             <Nav navbar>
               <NavItem className="metismenu-item mr-3">
+                <NavLink className="nav-link" to="/home/">
+                  <i className="fa fa-home fa-lg mr-2"></i>Home
+                </NavLink>
+              </NavItem>
+              <NavItem className="metismenu-item mr-3">
                 <NavLink className="nav-link" to="/data/">
                   <i className="fa fa-table fa-lg mr-2"></i>Data
                 </NavLink>

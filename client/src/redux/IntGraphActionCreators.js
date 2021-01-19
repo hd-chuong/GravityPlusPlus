@@ -6,6 +6,7 @@ export const saveIntNode = payload => dispatch => {
         method: 'post',
         url: 'http://localhost:7473/int/nodes',
         data: payload,
+        wihtCredentials: true,
     })
     .then(response => {
         if (response.statusText !== 'OK') {
@@ -39,7 +40,8 @@ export const addIntEdge = ({source, target, signal, binding, label}) => dispatch
     return axios({
         method: 'post',
         url: `http://localhost:7473/int/edges`,
-        data: {source, target, signal, binding, label}
+        data: {source, target, signal, binding, label},
+        withCredentials: true,
     }) 
     .then(response => {
         if (response.statusText !== 'OK') {
@@ -66,7 +68,8 @@ export const removeIntNode = ({id}) => dispatch => {
     return axios({
         method: 'delete',
         url: `http://localhost:7473/int/nodes/${id}`,
-        data: {id}
+        data: {id},
+        withCredentials: true,
     }).then(response => {
         if (response.statusText !== 'OK') {
           var error = new Error(
@@ -91,7 +94,8 @@ export const removeIntEdge = ({id}) => dispatch =>
     return axios({
         method: 'delete',
         url: `http://localhost:7473/int/edges/${id}`,
-        data: {id}
+        data: {id},
+        withCredentials: true,
     }).then(response => {
         if (response.statusText !== 'OK') {
           var error = new Error(
@@ -113,11 +117,30 @@ export const setIntPosition = payload => dispatch => {
     return axios({
       method: 'put',
       url: `http://localhost:7473/int/nodes/${id}`,
-      data: {x, y}
+      data: {x, y},
+      withCredentials: true,
     })
     .then((response) => {
       dispatch({  
         type: ActionTypes.SET_POSITION,
+        payload});
+    })    
+    .catch(error => {
+      alert(`Fail to update new position of int node ${id} to database: ${error.message}`);
+    });
+  };
+
+  export const setIntNode = payload => dispatch => {
+    const {id, params} = payload;
+    return axios({
+      method: 'put',
+      url: `http://localhost:7473/int/nodes/${id}`,
+      data: params,
+      withCredentials: true,
+    })
+    .then((response) => {
+      dispatch({  
+        type: ActionTypes.SET_INT_NODE,
         payload});
     })    
     .catch(error => {

@@ -1,15 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import Vega from '../Vega';
 import {
-  Row,
-  Col,
-  Button,
-  CardHeader,
+  CardTitle,
   Card,
   CardBody,
-  Progress,
-  TabContent,
-  TabPane,
 } from 'reactstrap';
 
 export default class Chart extends Component {
@@ -17,14 +11,18 @@ export default class Chart extends Component {
     if (!this.props.data || !this.props.spec)
       return (
         <Card className="main-card mb-3">
-          <CardHeader>Chart View</CardHeader>
-          <CardBody>View chart by choosing a vis node</CardBody>
+          <CardBody>
+            <CardTitle>Chart View</CardTitle>
+            View chart by choosing a vis node
+          </CardBody>
         </Card>
       );
     return (
-      <Card className="main-card mb-3">
-        <CardHeader>{this.props.title}</CardHeader>
-        <CardBody className="mx-auto">
+      <Card className="main-card mb-2">
+        <CardBody>
+          <CardTitle>{this.props.title}</CardTitle>
+        </CardBody>
+        <CardBody className="mx-auto h-100">
           <Vega spec={this.props.spec} data={this.props.data} signals={this.props.signals}/>
         </CardBody>
       </Card>

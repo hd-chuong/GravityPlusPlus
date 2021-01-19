@@ -10,6 +10,8 @@ var dataRouter = require('./routes/dataRouter');
 var visRouter = require('./routes/visRouter');
 var intRouter = require('./routes/intRouter');
 var appRouter = require('./routes/appControl');
+const bodyParser = require('body-parser');
+const { nextTick } = require('process');
 var app = express();
 
 // view engine setup
@@ -29,11 +31,29 @@ app.use(session({
 * Set cookie: {secure: false} solves the problem that each request changes its id session
 * https://stackoverflow.com/questions/20814940/express-change-session-every-request
 */
-app.use(require("body-parser").json())
-// app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use(bodyParser.json());
+
+// app.use((req, res, next) => {
+//   // console.log(req.body);
+//   // console.log("body ", req.body.isNewProject);
+//   next();
+//   // if (req.session.name || req.body.isNewProject)
+//   // {
+//   //   next();
+//   // }
+//   // else
+//   // {
+//   //   next();
+//   //   // next(new Error("Unknown project name"));
+//   //   // res.sendStatus(401).json({err: "Unknown project name"});
+//   // }
+// })
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://localhost:7472');

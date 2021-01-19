@@ -3,6 +3,13 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     Row, 
     Col,
+    Card,
+    CardTitle,
+    CardBody,
+    Button,
+    Nav,
+    NavItem,
+    CardHeader
 } from 'reactstrap';
 import Graph from '../../DataDashboard/DataGraph';
 import IntNodeInsertionModal from '../IntNodeInsertionModal';
@@ -10,25 +17,31 @@ import IntEdgeInsertionModal from '../IntEdgeInsertionModal';
 import {GetState} from "../../../utils/stateMachine";
 import {GetNodeById} from "../../../utils/graphUtil";
 import Chart from "../../VisDashboard/Chart";
-
+import ReactQuill from 'react-quill';
 
 export default class IntDashboard extends Component {
     constructor(props)
     {
         super(props);
         this.state = {
-            stateLoading: false,
             data: null,
             spec: null,
             signals: [],
-            intNodeId: null
+            intNodeId: null,
+            editorState: '',
         }
         this.updateState = this.updateState.bind(this);
+        this.editorChange = this.editorChange.bind(this);
     }
-    
+
     updateState(nextState)
     {
         this.setState({...nextState});
+    }
+
+    editorChange(editorState)
+    {
+        this.setState({editorState});
     }
 
     updateGraphDisplay(id)
@@ -52,7 +65,6 @@ export default class IntDashboard extends Component {
         // if clicked on edges
         if (!clickedNode) return;
         
-        this.setState({stateLoading: true});
         GetState(
             this.props.datasets, 
             this.props.datagraph, 
@@ -61,7 +73,14 @@ export default class IntDashboard extends Component {
             id, 
             {},
             this.updateState
-        );
+        ).then(() => {
+            const node = GetNodeById(this.props.intgraph, this.state.intNodeId);
+            if (node)
+            {
+                this.editorChange(node.data.note || '' );   
+            }
+            console.log(node);
+        });
     }
     
     onElementsRemove(id)
@@ -80,6 +99,7 @@ export default class IntDashboard extends Component {
 
     render() {
         const displayedGraph = this.updateGraphDisplay(this.state.intNodeId);
+        const currentNode = GetNodeById(this.props.intgraph, this.state.intNodeId);
 
         return (
             <Fragment>
@@ -109,7 +129,7 @@ export default class IntDashboard extends Component {
                                 </ReactCSSTransitionGroup>
                             </Col>
                             
-                            {this.state.data && <Fragment>
+                            {this.state.data && currentNode && <Fragment>
                                 <Col md={6}>
                                     <ReactCSSTransitionGroup
                                         component="div"
@@ -125,20 +145,53 @@ export default class IntDashboard extends Component {
                                             signals={this.state.signals}
                                         />                                   
                                     </ReactCSSTransitionGroup>
-                                    {/* <ReactCSSTransitionGroup
+                                    <ReactCSSTransitionGroup
                                         component="div"
                                         transitionName="TabsAnimation"
                                         transitionAppear={true}
                                         transitionAppearTimeout={0}
                                         transitionEnter={false}
                                         transitionLeave={false}>
-                                        <JSONEditor 
-                                            json={this.state.currentNode && this.state.currentNode.data.spec}
-                                            onSave={(newSpec) => this.props.setVisNode(this.state.currentNode.id, {spec: newSpec})}
-                                            onSpecChange={(newSpec) => this.setState({specDisplayed: newSpec})}
-                                        />                                   
-                                    </ReactCSSTransitionGroup> */}
-                                </Col>  
+                                        <Card>
+                                            <CardHeader className="card-header-tab">                     
+                                            Presentation Note
+                                                <Nav>
+                                                    <NavItem>
+                                                        <Button
+                                                            color="dark"
+                                                            className="float-right"
+                                                            onClick={() => this.editorChange(currentNode.data.note)}
+                                                        > {' '}
+                                                            Reset
+                                                        </Button>
+                                                    </NavItem>
+                                                    <NavItem>
+                                                        <Button
+                                                        color="primary"
+                                                        className="float-right"
+                                                        onClick={() => this.props.setIntNode(this.state.intNodeId, {note: this.state.editorState})}
+                                                        >
+                                                        {' '}
+                                                        Save
+                                                        </Button>
+                                                        {' '}
+                                                    </NavItem>
+                                                </Nav>
+                                            </CardHeader>
+                                        <CardBody>   
+                                            <ReactQuill 
+                                                theme="snow"
+                                                value={this.state.editorState} 
+                                                onChange={this.editorChange}
+                                                modules={modules}
+                                                formats={formats}
+                                                placeholder={'Enter some notes here'}
+                                            />                                  
+                                        </CardBody>
+                                    </Card>
+                                    </ReactCSSTransitionGroup>
+                                </Col>
+                                  
                             </Fragment>
                             }
                         </Row>                       
@@ -173,3 +226,17 @@ const currentNodeStyle =
     background: '#9EE493',
     color: '#333'
 };   
+
+const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+    ],
+  };
+
+const formats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet',
+];

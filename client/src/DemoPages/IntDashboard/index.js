@@ -25,7 +25,6 @@ class IntDashboard extends Component{
     render() 
     {
         return (
-            <Fragment>
             <div className="app-main">
                 <IntSideBar 
                     toggleNewNodeModal={this.toggleNewNodeModal}
@@ -55,12 +54,11 @@ class IntDashboard extends Component{
                             removeIntNode={this.props.removeIntNode}
                             removeIntEdge={this.props.removeIntEdge}
                             setIntPosition={this.props.setIntPosition}
-                            // setVisNode={this.props.setVisNode}   
+                            setIntNode={this.props.setIntNode}   
                         />
                     </div>
                 </div>
             </div>
-        </Fragment>
         )
     }
 };

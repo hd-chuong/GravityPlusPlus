@@ -22,6 +22,7 @@ export const addDataNode = ({
     method: 'post',
     url: 'http://localhost:7473/data/nodes',
     data: newNode,
+    withCredentials: true
   })
     .then(response => {
       if (response.statusText !== 'OK') {
@@ -80,7 +81,8 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
     return Axios({
         method: "post",
         url: "http://localhost:7473/data/edges",
-        data: newEdge
+        data: newEdge,
+        withCredentials: true
     }).then(response => {
         if (response.statusText !== "OK") {
             var error = new Error('Error ' + response.status + ': ' + response.statusText);
@@ -111,6 +113,7 @@ export const removeDataNode = ({ id }) => dispatch => {
   return Axios({
     method: 'delete',
     url: `http://localhost:7473/data/nodes/${id}`,
+    withCredentials: true,
   })
     .then(response => {
       if (response.statusText !== 'OK') {
@@ -152,9 +155,9 @@ export const setDataPosition = payload => dispatch => {
   return Axios({
     method: 'put',
     url: `http://localhost:7473/data/nodes/${id}`,
-    data: {x, y}
-  })
-  .then((response) => {
+    data: {x, y},
+    withCredentials: true,
+  }).then((response) => {
     dispatch({  
       type: ActionTypes.SET_POSITION,
       payload});

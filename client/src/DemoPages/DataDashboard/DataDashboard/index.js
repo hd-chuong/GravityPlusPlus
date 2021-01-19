@@ -30,6 +30,7 @@ export default class DataDashboard extends Component {
         Axios({
             method: "get",
             url: `http://localhost:7473/data/nodes/${dataNodeId}/children`,
+            withCredentials: true,
         })
         .then(response => 
         {
@@ -73,9 +74,7 @@ export default class DataDashboard extends Component {
         this.setState(({currentDataId: dataNodeId}));
         calculateDataset(dataNodeId, this.props.datasets.datasets)
         .then(({data, params, spec}) => {
-
             this.setState({currentData: data, params, spec});
-
         }).catch(error => {
             alert("Unable to view the data: " + error.message);    
         });
@@ -147,7 +146,7 @@ export default class DataDashboard extends Component {
                                 {/*
                                     Will make these become a separate class now
                                 */}
-                                <Card className="main-card mb-3">
+                                {/* <Card className="main-card mb-3">
                                     <CardHeader>
                                         Params control    
                                     </CardHeader>
@@ -167,7 +166,7 @@ export default class DataDashboard extends Component {
                                                 ))
                                         }
                                     </CardBody>
-                                </Card>
+                                </Card> */}
                             </ReactCSSTransitionGroup>
                         </Col>
                     </Row>

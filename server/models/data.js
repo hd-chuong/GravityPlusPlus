@@ -390,7 +390,6 @@ module.exports = class DataGraph {
     const session = this.neo4jDriver.session();
     return session.writeTransaction(tx => tx.run(cypher, params))
       .then(res => {
-        console.log(res);
         return "UPDATE SUCCESSFUL";
       })
       .catch(e => {

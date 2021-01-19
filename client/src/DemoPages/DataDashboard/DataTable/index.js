@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Row, Col, Button, CardHeader, Card, CardBody } from 'reactstrap';
+import { Row, Col, Button, CardHeader, Card, CardBody, CardTitle } from 'reactstrap';
 
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 
@@ -20,8 +20,11 @@ export default class DataTable extends Component {
     if (this.props.tableData === null || this.props.tableData === undefined)
       return (
         <Card className="main-card mb-3">
-          <div className="card-header">Table View</div>
-          <CardBody>Please select a data node to view the dataset</CardBody>
+          
+          <CardBody>
+          <CardTitle>Table View</CardTitle>
+            Please select a data node to view the dataset
+            </CardBody>
         </Card>
       );
     const headers = AttributeExtractor(this.props.tableData[0]);

@@ -12,6 +12,7 @@ export const addVisNode = ({ name, dataSource, spec }) => dispatch => {
     method: 'post',
     url: 'http://localhost:7473/vis/nodes',
     data: newNode,
+    withCredentials: true,
   })
   .then(response => {
     if (response.statusText !== 'OK') {
@@ -53,7 +54,8 @@ export const removeVisNode = payload => dispatch => {
   return Axios({
     method: 'delete',
     url: `http://localhost:7473/vis/nodes/${payload.id}`,
-    data: payload
+    data: payload,
+    withCredentials: true,
   })
   .then(response => {
     if (response.statusText !== 'OK') {
@@ -87,7 +89,8 @@ export const setVisNode = payload => dispatch => {
   return Axios({
     method: 'put',
     url: `http://localhost:7473/vis/nodes/${id}`,
-    data:params
+    data: params,
+    withCredentials: true,
   })
   .then((response) => dispatch({
       type: ActionTypes.SET_VIS_NODE,
@@ -103,7 +106,8 @@ export const setVisPosition = payload => dispatch => {
   return Axios({
     method: 'put',
     url: `http://localhost:7473/vis/nodes/${id}`,
-    data: {x, y}
+    data: {x, y},
+    withCredentials: true,
   })
   .then((response) => {
     dispatch({  

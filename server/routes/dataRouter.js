@@ -19,13 +19,21 @@ driver = neo4j.driver(
 var datagraph = new Datagraph();
 datagraph.useDriver(driver);
 
+const addHeader = (req, res, next) => {
+  console.log("session name: ", req.session.name, ". sessionID: ", req.sessionID);
+  res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+}
+
 router.route('/')
-  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+ .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.corsWithOptions, addHeader, (req, res, next) => {
     result = {
       nodes: [],
       edges: []
-    }
+    };
     datagraph
       .getAllNodes()
       .then(allNodes => {
@@ -37,11 +45,11 @@ router.route('/')
         res.json(result);
       }, err => next(err))
       .catch(err => next(err));
-  });
+});
 
 router.route('/nodes')
-  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+ .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, addHeader, (req, res, next) => {
     datagraph
       .getAllNodes()
       .then(result => {
@@ -49,7 +57,7 @@ router.route('/nodes')
       }, err => next(err))
       .catch(err => next(err));
   })
-  .post(cors.corsWithOptions, (req, res, next) => {
+  .post(cors.corsWithOptions, addHeader, (req, res, next) => {
     datagraph
       .addNode(req.body.name, req.body.type, req.body.source, req.body.transform, req.body.format)
       .then(result => {
@@ -59,8 +67,8 @@ router.route('/nodes')
   });
 
 router.route('/nodes/:nodeID')
-  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+ .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, addHeader, (req, res, next) => {
     datagraph
       .getNode(req.params.nodeID)
       .then(result => {
@@ -68,24 +76,24 @@ router.route('/nodes/:nodeID')
       }, err => next(err))
       .catch(err => next(err));
   })
-  .delete(cors.corsWithOptions, (req, res, next) => {
+  .delete(cors.corsWithOptions, addHeader, (req, res, next) => {
     datagraph.removeNode(req.params.nodeID)
       .then(result => {
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
   })
-  .put(cors.corsWithOptions, (req, res, next) => {
+  .put(cors.corsWithOptions, addHeader, (req, res, next) => {
     datagraph.setNodeProperty(req.params.nodeID, req.body)
-      .then(result => {
-        res.json(result)
-      }, err => next(err))
-      .catch(err => next(err));
-  })
+    .then(result => {
+      res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
+  });
 
 router.route('/edges')
-  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+ .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, addHeader, (req, res, next) => {
     datagraph
       .getAllEdges()
       .then(result => {
@@ -93,7 +101,7 @@ router.route('/edges')
       }, err => next(err))
       .catch(err => next(err));
   })
-  .post(cors.corsWithOptions, (req, res, next) => {
+  .post(cors.corsWithOptions, addHeader, (req, res, next) => {
     datagraph
       .addEdge(
         req.body.source,
@@ -109,8 +117,8 @@ router.route('/edges')
   });
 
 router.route('/edges/:source/:target')
-  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+ .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, addHeader, (req, res, next) => {
     datagraph
       .getEdge(
         req.params.source, req.params.target
@@ -123,18 +131,18 @@ router.route('/edges/:source/:target')
 
 router.route('/subgraph/:target')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+  .get(cors.cors, addHeader, (req, res, next) => {
     datagraph
       .getSubgraphTo(req.params.target)
       .then(result => {
-        res.json(result)
+        res.json(result);
       }, err => next(err))
       .catch(err => next(err));
   })
 
 router.route("/nodes/:nodeId/children")
-  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+ .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, addHeader, (req, res, next) => {
     datagraph
       .getChildren(req.params.nodeId)
       .then(result => {

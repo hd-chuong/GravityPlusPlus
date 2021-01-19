@@ -22,9 +22,17 @@ const driver = neo4j.driver(
 var intgraph = new Intgraph();
 intgraph.useDriver(driver);
 
+const addHeader = (req, res, next) => {
+  console.log("session name: ", req.session.name, ". sessionID: ", req.sessionID);
+  res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+}
+
 router.route('/nodes')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+  .get(cors.cors, addHeader, (req, res, next) => {
     intgraph
       .getAllNodes()
       .then(result => {
@@ -32,7 +40,7 @@ router.route('/nodes')
       }, err => next(err))
       .catch(err => next(err));
   })
-  .post(cors.corsWithOptions, (req, res, next) => {
+  .post(cors.corsWithOptions, addHeader, (req, res, next) => {
     const {name, source} = req.body;
     intgraph
       .addNode(name, source)
@@ -44,7 +52,7 @@ router.route('/nodes')
 
 router.route('/nodes/:nodeID')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, (req, res, next) => {
+  .get(cors.cors, addHeader, (req, res, next) => {
     intgraph
       .getNode(req.params.nodeID)
       .then(result => {
@@ -52,14 +60,14 @@ router.route('/nodes/:nodeID')
       }, err => next(err))
       .catch(err => next(err));
   })
-  .delete(cors.corsWithOptions, (req, res, next) => {
+  .delete(cors.corsWithOptions, addHeader, (req, res, next) => {
     intgraph.removeNode(req.params.nodeID)
       .then(result => {
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
   })
-  .put(cors.corsWithOptions, (req, res, next) => {
+  .put(cors.corsWithOptions, addHeader, (req, res, next) => {
     intgraph.setNodeProperty(req.params.nodeID, req.body)
       .then(result => {
         res.json(result)
@@ -69,7 +77,7 @@ router.route('/nodes/:nodeID')
 
 router.route('/edges')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req, res, next) => {
+.get(cors.cors, addHeader, (req, res, next) => {
     intgraph
     .getAllEdges()
     .then(result => {
@@ -77,7 +85,7 @@ router.route('/edges')
     }, err => next(err))
     .catch(err => next(err));
 })
-.post(cors.corsWithOptions, (req, res, next) => {
+.post(cors.corsWithOptions, addHeader, (req, res, next) => {
     const {source, target, signal, binding, label} = req.body;
     intgraph
     .addEdge(
@@ -96,7 +104,7 @@ router.route('/edges')
 
 router.route('/edges/:edgeID')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.put(cors.corsWithOptions, (req, res, next) => {
+.put(cors.corsWithOptions, addHeader, (req, res, next) => {
     intgraph
     .setEdgeProperty(req.params.edgeID, req.body)
     .then(result => {
@@ -104,7 +112,7 @@ router.route('/edges/:edgeID')
         }, err => next(err))
     .catch(err => next(err));
 })
-.delete(cors.corsWithOptions, (req, res, next) => {
+.delete(cors.corsWithOptions, addHeader, (req, res, next) => {
     intgraph
     .removeEdge(req.params.edgeID)
     .then(result => {

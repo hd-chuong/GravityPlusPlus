@@ -77,7 +77,7 @@ export default class Vega extends React.PureComponent {
   }
 
   render() {
-    return <div className={this.props.className} ref={this.state.id} />;
+    return <div className={this.props.className} ref={this.state.id} style={{height: 600, width: 600}}/>;
   }
 }
 

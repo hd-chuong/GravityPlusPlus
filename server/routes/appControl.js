@@ -7,9 +7,10 @@ var path = require('path');
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.all('*', (req,res,next)=> {
+router.all('*', (req,res,next) => {
+  console.log(req.sessionID);
   next();
-})
+});
 
 router.route('/')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
@@ -22,9 +23,6 @@ router.route('/')
   })  
   .post((req, res, next) => {
     const {name} = req.body;
-    // console.log("id", req.sessionID);
-
-    console.log(req.cookies);
     const dir = __dirname + `/../data/${name}`;
 
     if (!fs.existsSync(dir))
@@ -38,9 +36,7 @@ router.route('/')
       res.json({error: "Name already exists"}); 
       // next(new Error(`Project with ${name} has already existed.`));
     }
-    
-    console.log(req.sessionID);
-    // console.log(req.session);
+
   })
 
 router.route('/:projectName')
