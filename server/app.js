@@ -18,17 +18,29 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(session({
-  secret: 'ABCD',
-  cookie: {maxAge: 100000},
-  saveUninitialized: false,
+  secret: 'max-secret',
+  cookie: {maxAge: 1000000, secure: false},
+  saveUninitialized: true,
   rolling: true,
   resave: true, 
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+/*
+* Set cookie: {secure: false} solves the problem that each request changes its id session
+* https://stackoverflow.com/questions/20814940/express-change-session-every-request
+*/
+app.use(require("body-parser").json())
+// app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // app API
 app.use('/app', appRouter);
