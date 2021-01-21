@@ -64,7 +64,9 @@ const AppMain = ({
           />
           <Switch>
             <Route exact path="/home">
-                <Home/>
+                <Home
+                  load={loadState}
+                />
             </Route>
             
             <Route exact path="/data">
@@ -119,7 +121,8 @@ const AppMain = ({
                 intgraph={intgraph.intgraph}
               />
             </Route>
-            <Redirect to="/data" />
+            
+            <Redirect to="/home" />
           </Switch>
           <ToastContainer />
         </Router>

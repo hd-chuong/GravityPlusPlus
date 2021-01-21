@@ -7,28 +7,64 @@ const {
   SetQueryBuilder
 } = require("../utils/query");
 
+const {after} = require('underscore');
+const {toNumber} =require('neo4j-driver/lib/integer.js');
 module.exports = class DataGraph {
   constructor() {
-    this.neo4jDriver = null;
+    this.dbName = "";
   }
 
   useDriver(neo4jDriver) {
     this.neo4jDriver = neo4jDriver;
   }
 
+  useDatabase(name)
+  {
+    //
+    // should close the new session
+    //    
+    const newSession = this.neo4jDriver.session();
+    
+    return newSession
+      .readTransaction(tx => tx.run(`SHOW DATABASES`))
+      .then(res => {
+        const dbLists = res.records.map(record => record._fields[0]);     
+        
+        if (dbLists.includes(name)) 
+        {
+          this.dbName = name;
+        }
+        else 
+        {
+          throw new Error("Can not find the database");
+        }
+
+      }).catch(e => {
+        console.log(e);
+      }).finally(() => {
+        newSession.close();
+      });
+  }
+
+  getSession()
+  {
+    return this.neo4jDriver.session({database: this.dbName});
+  }
+
   addNode(name, type, source, transform, format) {
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
+    
     const cypher = `
-            CREATE 
-                (node:DATA_NODE:${type} { id: $id, 
+            CREATE (node:DATA_NODE:${type} { id: $id, 
                                         name: $name, 
                                         source: $source, 
                                         transform: $transform, 
                                         createdAt: datetime(),
                                         format: $format }) 
             RETURN 
-                node
+              node
         `;
+
     const params = {
       name,
       type,
@@ -59,7 +95,7 @@ module.exports = class DataGraph {
   }
 
   getNode(id) {
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     const cypher = `
             MATCH 
@@ -98,23 +134,23 @@ module.exports = class DataGraph {
     };
 
     const cypher = `
-    MATCH (n: DATA_NODE {id: $id})
-    OPTIONAL MATCH(n)-[r]->(children:DATA_NODE)
-    DETACH delete n
+      MATCH (n: DATA_NODE {id: $id})
+      OPTIONAL MATCH(n)-[r]->(children:DATA_NODE)
+      DETACH delete n
 
-    WITH children, r
-    REMOVE children:JOINED:TRANSFORMED
-    SET children:DATA_NODE:RAW, children.source = children.name
-    DELETE r
-    
-    WITH children
-    OPTIONAL MATCH (parent:DATA_NODE)-[r: DATA_EDGE]->(children)
-    DELETE r
-    
-    RETURN children  
+      WITH children, r
+      REMOVE children:JOINED:TRANSFORMED
+      SET children:DATA_NODE:RAW, children.source = children.name
+      DELETE r
+      
+      WITH children
+      OPTIONAL MATCH (parent:DATA_NODE)-[r: DATA_EDGE]->(children)
+      DELETE r
+      
+      RETURN children  
     `;
 
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     return session.writeTransaction(tx => tx.run(cypher, params))
       .then(() => {
@@ -127,7 +163,7 @@ module.exports = class DataGraph {
   }
 
   getAllNodes() {
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     const cypher = `
             MATCH 
@@ -163,18 +199,18 @@ module.exports = class DataGraph {
     };
 
     const cypher = `
-            MATCH (a:DATA_NODE),(b:DATA_NODE)
-            WHERE 
-                a.id = $source 
-            AND 
-                b.id = $target
-            CREATE 
-                (a)-[r:DATA_EDGE {id: $id, type: $type, operation: $operation}]->(b)
-            RETURN 
-                r, a.id as source_id, b.id as target_id
-        `;
+        MATCH (a:DATA_NODE),(b:DATA_NODE)
+        WHERE 
+            a.id = $source 
+        AND 
+            b.id = $target
+        CREATE 
+            (a)-[r:DATA_EDGE {id: $id, type: $type, operation: $operation}]->(b)
+        RETURN 
+            r, a.id as source_id, b.id as target_id
+    `;
 
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     return session.writeTransaction(tx => tx.run(cypher, params))
       .then(res => {
@@ -199,7 +235,7 @@ module.exports = class DataGraph {
 
   getEdge(source, target) {
     // only return one directed edge now
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     const cypher = `
             MATCH 
@@ -238,7 +274,7 @@ module.exports = class DataGraph {
   }
 
   getAllEdges() {
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     const cypher = `
                 MATCH 
@@ -266,8 +302,62 @@ module.exports = class DataGraph {
   }
 
   getGraph() {
-    this.getAllEdges();
-    this.getAllNodes();
+    const graph = {
+      edges: [],
+      nodes: []
+    }
+
+    return this.getAllNodes().then(res => {
+      
+      graph.nodes = res.map(node => {
+        let {id, types, props} = node;
+        let {transform, name, format, source, x, y} = props;
+        
+        
+        transform = JSON.parse(transform);
+        format = JSON.parse(format);
+        x = toNumber(x);
+        y = toNumber(y);
+        
+        console.log(x, y);
+
+        return { 
+          id: id,
+          type: types.includes("RAW") ? "input" : "default",
+          data: {
+            label: name,
+            type: types.filter(type => type !== "DATA_NODE"),
+            source,
+            transform,
+            format
+          },
+          position: {
+            x: x || Math.random() * 100 , 
+            y: y || Math.random * 100
+          }
+        } 
+      });
+      return this.getAllEdges();
+    })
+    .then(res => {
+      graph.edges = res.map(edge => {
+        const {source, target, id, props} = edge;
+        let {type, operation} = props;
+        operation = JSON.parse(operation);
+
+        return {
+          source,
+          target,
+          id,
+          arrowHeadType: "arrowclosed",
+          data: {
+            type: type,
+            ...operation
+          }
+        }
+      });
+      return graph;
+    });
   }
 
   getSubgraphTo(target) {
@@ -286,7 +376,7 @@ module.exports = class DataGraph {
         OPTIONAL MATCH (node)<-[r]-(x)
         RETURN node, collect(r) as edge, collect(x.id) as source_id ORDER BY node.createdAt DESC;
       `;
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     return session.readTransaction(tx => tx.run(cypher, params))
       .then(res => {
@@ -319,7 +409,7 @@ module.exports = class DataGraph {
       (p:DATA_NODE {id: $id})-[r:DATA_EDGE]->(dest:DATA_NODE)
       return dest.id as id, dest.name as name
     `;
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
     return session.readTransaction(tx => tx.run(cypher, params))
       .then(res => {
         console.log(res.records);
@@ -360,7 +450,7 @@ module.exports = class DataGraph {
         with node
         DETACH DELETE node;
     `;
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
 
     return session.readTransaction(tx => tx.run(fetchIdCypher, params))
       .then(res => {
@@ -387,7 +477,7 @@ module.exports = class DataGraph {
     }
 
     const cypher = `MATCH (node {id: $id}) SET ` + SetQueryBuilder("node", property);
-    const session = this.neo4jDriver.session();
+    const session = this.getSession();
     return session.writeTransaction(tx => tx.run(cypher, params))
       .then(res => {
         return "UPDATE SUCCESSFUL";

@@ -17,7 +17,7 @@ export const addDataNode = ({
   transform,
   format,
 }) => dispatch => {
-  const newNode = { name, type, source, transform, format };
+  const newNode = { name, type, source, transform, format};
   return Axios({
     method: 'post',
     url: 'http://localhost:7473/data/nodes',

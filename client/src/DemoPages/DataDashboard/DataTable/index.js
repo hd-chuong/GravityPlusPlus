@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
-
 import { Row, Col, Button, CardHeader, Card, CardBody, CardTitle } from 'reactstrap';
-
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 
 const MAX_ROWS_DISPLAYED = 5;
@@ -20,7 +18,6 @@ export default class DataTable extends Component {
     if (this.props.tableData === null || this.props.tableData === undefined)
       return (
         <Card className="main-card mb-3">
-          
           <CardBody>
           <CardTitle>Table View</CardTitle>
             Please select a data node to view the dataset
@@ -35,31 +32,33 @@ export default class DataTable extends Component {
 
     return (
       <Card className="main-card mb-3">
-        <CardHeader>{this.props.label}</CardHeader>
-        <div className="table-responsive">
-          <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-            <thead>
-              <tr>
-                {headers.map(key => (
-                  <th key={key} className="text-center">
-                    {key}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map(datum => (
-                <tr>
-                  {headers.map(key => (
-                    <td key={key} className="text-center">
-                      {JSON.stringify(datum[key])}
-                    </td>
+          <CardHeader>{this.props.label}</CardHeader>
+          <CardBody>      
+            <div className="table-responsive">
+              <table className="align-middle mb-0 table table-borderless table-striped table-hover">
+                <thead>
+                  <tr>
+                    {headers.map(key => (
+                      <th key={key} className="text-center">
+                        {key}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map(datum => (
+                    <tr>
+                      {headers.map(key => (
+                        <td key={key} className="text-center">
+                          {JSON.stringify(datum[key])}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                </tbody>
+              </table>
+            </div>
+        </CardBody>
       </Card>
     );
   }

@@ -1,14 +1,15 @@
-
 // business logic layer
 const {
     v4: uuidv4
   } = require('uuid');
+
+const {
+  SetQueryBuilder
+} = require("../utils/query");
   
-  const {
-    SetQueryBuilder
-  } = require("../utils/query");
-  
-  module.exports = class VisGraph {
+const {toNumber} =require('neo4j-driver/lib/integer.js');
+
+module.exports = class VisGraph {
     constructor() {
       this.neo4jDriver = null;
     }
@@ -16,9 +17,42 @@ const {
     useDriver(neo4jDriver) {
       this.neo4jDriver = neo4jDriver;
     }
+    
+    useDatabase(name)
+    {
+      //
+      // should close the new session
+      //    
+      const newSession = this.neo4jDriver.session();
+      
+      return newSession
+        .readTransaction(tx => tx.run(`SHOW DATABASES`))
+        .then(res => {
+          const dbLists = res.records.map(record => record._fields[0]);     
+          
+          if (dbLists.includes(name)) 
+          {
+            this.dbName = name;
+          }
+          else 
+          {
+            throw new Error("Can not find the database");
+          }
+  
+        }).catch(e => {
+          console.log(e);
+        }).finally(() => {
+          newSession.close();
+        });
+    }
+  
+    getSession()
+    {
+      return this.neo4jDriver.session({database: this.dbName});
+    }
   
     addNode(name, dataSource, spec) {
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
       const cypher = `
               CREATE 
                   (node:VIS_NODE { id: $id, 
@@ -57,7 +91,7 @@ const {
     }
   
     getNode(id) {
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       const cypher = `
               MATCH 
@@ -100,7 +134,7 @@ const {
       DETACH delete n  
       `;
   
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(() => {
@@ -113,7 +147,7 @@ const {
     }
   
     getAllNodes() {
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       const cypher = `
               MATCH 
@@ -160,7 +194,7 @@ const {
     //               r, a.id as source_id, b.id as target_id
     //       `;
   
-    //   const session = this.neo4jDriver.session();
+    //   const session = this.getSession();
   
     //   return session.writeTransaction(tx => tx.run(cypher, params))
     //     .then(res => {
@@ -185,7 +219,7 @@ const {
   
     // getEdge(source, target) {
     //   // only return one directed edge now
-    //   const session = this.neo4jDriver.session();
+    //   const session = this.getSession();
   
     //   const cypher = `
     //           MATCH 
@@ -224,7 +258,7 @@ const {
     // }
   
     // getAllEdges() {
-    //   const session = this.neo4jDriver.session();
+    //   const session = this.getSession();
   
     //   const cypher = `
     //               MATCH 
@@ -251,10 +285,44 @@ const {
     //     });
     // }
   
-    // getGraph() {
-    //   this.getAllEdges();
-    //   this.getAllNodes();
-    // }
+    getGraph() {
+      const graph = {
+        edges: [],
+        nodes: []
+      }
+  
+      return this.getAllNodes().then(res => {
+        graph.nodes = res.map(node => {
+          let {id, types, props} = node;
+          let {name, dataSource, spec, x, y} = props;
+          spec = JSON.parse(spec);
+
+          x = (x && toNumber(x)) || Math.random() * 100;
+          y = (y && toNumber(y)) || Math.random() * 100;
+          return {
+            id, 
+            type: "default",
+            data: {
+              label: name,
+              dataSource,
+              spec
+            },
+            position: {x, y}
+          };
+        });
+        
+        return this.getAllEdges();
+      })
+      .then(res => {
+        graph.edges = res;
+        return graph;
+      });
+    }
+
+    getAllEdges()
+    {
+      return [];
+    }
   
     // getSubgraphTo(target) {
     //   const params = {
@@ -272,7 +340,7 @@ const {
     //       OPTIONAL MATCH (node)<-[r]-(x)
     //       RETURN node, collect(r) as edge, collect(x.id) as source_id ORDER BY node.createdAt DESC;
     //     `;
-    //   const session = this.neo4jDriver.session();
+    //   const session = this.getSession();
   
     //   return session.readTransaction(tx => tx.run(cypher, params))
     //     .then(res => {
@@ -305,7 +373,7 @@ const {
     //     (p:VIS_NODE {id: $id})-[r:VIS_EDGE]->(dest:VIS_NODE)
     //     return dest.id as id, dest.name as name
     //   `;
-    //   const session = this.neo4jDriver.session();
+    //   const session = this.getSession();
     //   return session.readTransaction(tx => tx.run(cypher, params))
     //     .then(res => {
     //       console.log(res.records);
@@ -346,7 +414,7 @@ const {
     //       with node
     //       DETACH DELETE node;
     //   `;
-    //   const session = this.neo4jDriver.session();
+    //   const session = this.getSession();
   
     //   return session.readTransaction(tx => tx.run(fetchIdCypher, params))
     //     .then(res => {
@@ -373,7 +441,7 @@ const {
       }
   
       const cypher = `MATCH (node {id: $id}) SET ${SetQueryBuilder("node", property)}`;
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(res => {
           return "UPDATE SUCCESSFUL";

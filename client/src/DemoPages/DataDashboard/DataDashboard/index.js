@@ -9,7 +9,6 @@ import DataGraph from '../DataGraph';
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 import calculateDataset from '../../../utils/dataGeneration';
 import {describeParams} from "../../../utils/describeParams";
-
 export default class DataDashboard extends Component {
     constructor(props) 
     {
@@ -170,7 +169,6 @@ export default class DataDashboard extends Component {
                             </ReactCSSTransitionGroup>
                         </Col>
                     </Row>
-
                     <DataNodeInsertionModal 
                         datasets={this.props.datasets} 
                         isOpen={this.props.isNewNodeModalOpen} 
@@ -184,6 +182,8 @@ export default class DataDashboard extends Component {
                         updateCurrentData={this.updateCurrentData}
                         currentData={this.state.currentData}              
                     />
+
+                    
                 </ReactCSSTransitionGroup>
             </Fragment>
         )

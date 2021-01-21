@@ -22,12 +22,22 @@ const driver = neo4j.driver(
 var visgraph = new Visgraph();
 visgraph.useDriver(driver);
 
-const addHeader = (req, res, next) => {
-  console.log("session name: ", req.session.name, ". sessionID: ", req.sessionID);
+const addHeader = async (req, res, next) => {
+  console.log("session name: ", req.session.name, "session id: ", req.sessionID);
   res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+  
+  if (req.session.name)
+  {
+    const result = await visgraph.useDatabase(req.session.name); 
+    next();
+  }
+  else 
+  {
+    console.log("Unknown dataname");
+    next(new Error("Unknown database name"));
+  }
 }
 
 router.route('/nodes')

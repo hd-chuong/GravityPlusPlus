@@ -19,12 +19,20 @@ driver = neo4j.driver(
 var datagraph = new Datagraph();
 datagraph.useDriver(driver);
 
-const addHeader = (req, res, next) => {
-  console.log("session name: ", req.session.name, ". sessionID: ", req.sessionID);
+const addHeader = async (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+  if (req.session.name)
+  {
+    const result = await datagraph.useDatabase(req.session.name); 
+    next();
+  }
+  else 
+  {
+    console.log("Unknown dataname");
+    next(new Error("Unknown database name"));
+  }
 }
 
 router.route('/')
@@ -34,6 +42,7 @@ router.route('/')
       nodes: [],
       edges: []
     };
+
     datagraph
       .getAllNodes()
       .then(allNodes => {
@@ -67,7 +76,7 @@ router.route('/nodes')
   });
 
 router.route('/nodes/:nodeID')
- .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, addHeader, (req, res, next) => {
     datagraph
       .getNode(req.params.nodeID)

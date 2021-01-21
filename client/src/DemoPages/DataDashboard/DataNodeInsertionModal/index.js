@@ -17,6 +17,7 @@ import { JoinSpecsBuilder } from '../../../utils/VegaSpecsBuilder';
 import classnames from 'classnames';
 import calculateDataset from '../../../utils/dataGeneration';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
+import {toast} from 'react-toastify';
 
 class DataNodeInsertionModal extends React.Component {
   constructor(props) {
@@ -40,12 +41,12 @@ class DataNodeInsertionModal extends React.Component {
 
   handleSubmitRaw() {
     if (this.rawNodeName.value === '') {
-      alert('You must provide a node name');
+      toast.warn('You must provide a node name', toastOptions);
       return;
     }
 
     if (this.rawDataset.value === '') {
-      alert('You must select a dataset');
+      toast.warn('You must select a dataset', toastOptions);
       return;
     }
     let format = { type: 'json' };
@@ -54,7 +55,7 @@ class DataNodeInsertionModal extends React.Component {
       this.state.format !== 'json' &&
       !(this.property && this.property.value)
     ) {
-      alert('You must select an attribute to parse value');
+      toast.warn('You must select an attribute to parse value', toastOptions);
       return;
     }
     if (this.state.format === 'geojson') {
@@ -74,7 +75,7 @@ class DataNodeInsertionModal extends React.Component {
     );
 
     this.setState({ format: 'json' });
-
+    toast.success("Successfully create a original data node", toastOptions);
     this.props.toggle();
   }
 
@@ -101,7 +102,7 @@ class DataNodeInsertionModal extends React.Component {
     } = rightNode;
 
     if (joinNodeName === '') {
-      alert('You must provide a node name');
+      toast.warn('You must provide a node name', toastOptions);
       return;
     }
 
@@ -125,7 +126,7 @@ class DataNodeInsertionModal extends React.Component {
 
   async handleSubmitTransform() {
     if (this.sourceNode.value === '') {
-      alert('You must provide a node name');
+      toast.warn('You must provide a node name', toastOptions);
       return;
     }
     var spec = this.state.spec;
@@ -418,4 +419,14 @@ class DataNodeInsertionModal extends React.Component {
   }
 }
 
+const toastOptions = {
+  position: toast.POSITION.TOP_CENTER, 
+  hideProgressBar: true,
+  autoClose: 1500,
+  delay: 200,
+  pauseOnHover: true,
+  pauseOnFocusLoss: false,
+}
+
 export default DataNodeInsertionModal;
+
