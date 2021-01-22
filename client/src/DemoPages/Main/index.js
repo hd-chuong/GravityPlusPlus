@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import { withRouter } from 'react-router-dom';
@@ -29,7 +29,8 @@ import {
   addIntEdge,
   removeIntNode,
   removeIntEdge,
-  setIntPosition
+  setIntPosition,
+  setIntNode
 } from '../../redux/IntGraphActionCreators';
 
 import {loadState}
@@ -60,7 +61,6 @@ class Main extends React.Component {
     } = this.props;
     
     return (  
-      <Fragment>
         <div
           className={cx(
             'app-container app-theme-' + colorScheme,
@@ -97,11 +97,11 @@ class Main extends React.Component {
             setDataPosition={this.props.setDataPosition}
             setVisPosition={this.props.setVisPosition}
             setIntPosition={this.props.setIntPosition}
+            setIntNode={this.props.setIntNode}
             loadState={this.props.loadState}
           />
           <ResizeDetector handleWidth onResize={this.onResize} />
         </div>
-      </Fragment>
     );
   }
 }
@@ -162,6 +162,7 @@ const mapDispatchToProp = dispatch => ({
   setDataPosition: (id, x, y) => dispatch(setDataPosition({id, x, y})),
   setVisPosition: (id, x, y) => dispatch(setVisPosition({id, x, y})),
   setIntPosition: (id, x, y) => dispatch(setIntPosition({id, x, y})),
+  setIntNode: (id, params) => dispatch(setIntNode({id, params})),
   loadState: (state) => dispatch(loadState({state})),
 });
 

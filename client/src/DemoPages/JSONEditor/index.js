@@ -2,8 +2,19 @@ import React from 'react';
 import { useState } from 'react';
 import ReactJson from 'react-json-view';
 import { Card, CardBody, CardHeader, Nav, Button, NavItem } from 'reactstrap';
-
+import {toast} from 'react-toastify';
+import toastOptions from '../config/toastOptions';
 const JSONEditor = ({ json, onSpecChange, onSave }) => {
+  const resetEditor = () => {
+    toast.info("Reset spec", toastOptions);
+    setEditedJSON(initialJSON);
+    onSpecChange(initialJSON);
+  };
+  
+  const saveEditor = () => {
+    onSave(editedJSON);
+    setInitialJSON(editedJSON);
+  }
   const [initialJSON, setInitialJSON] = useState(json);
   const [editedJSON, setEditedJSON] = useState(json);
 
@@ -23,10 +34,7 @@ const JSONEditor = ({ json, onSpecChange, onSave }) => {
             <Button
               color="dark"
               className="float-right"
-              onClick={() => {
-                setEditedJSON(initialJSON);
-                onSpecChange(initialJSON);
-              }}
+              onClick={resetEditor}
             >
               {' '}
               Reset
@@ -36,10 +44,7 @@ const JSONEditor = ({ json, onSpecChange, onSave }) => {
             <Button
               color="primary"
               className="float-right"
-              onClick={() => {
-                onSave(editedJSON);
-                setInitialJSON(editedJSON);
-              }}
+              onClick={saveEditor}
             >
               {' '}
               Save
@@ -51,6 +56,14 @@ const JSONEditor = ({ json, onSpecChange, onSave }) => {
         <ReactJson
           src={editedJSON}
           onEdit={({ updated_src }) => {
+            setEditedJSON(updated_src);
+            onSpecChange(updated_src);
+          }}
+          onAdd={({ updated_src }) => {
+            setEditedJSON(updated_src);
+            onSpecChange(updated_src);
+          }}
+          onDelete={({ updated_src }) => {
             setEditedJSON(updated_src);
             onSpecChange(updated_src);
           }}

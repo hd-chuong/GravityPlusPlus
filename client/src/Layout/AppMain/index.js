@@ -5,10 +5,12 @@ import AppHeader from '../AppHeader';
 import { ToastContainer } from 'react-toastify';
 import { Switch, withRouter } from 'react-router-dom';
 import {AsyncJSONDownloadHandler} from "../../utils/DataFileHandler";
+import Home from '../../DemoPages/Home';
 
 const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
 const IntDashboard = lazy(() => import('../../DemoPages/IntDashboard'));
+const Story = lazy(() => import('../../DemoPages/Story'));
 
 const AppMain = ({
   state,
@@ -35,7 +37,9 @@ const AppMain = ({
   setDataPosition,
   setVisPosition,
   setIntPosition,
+  setIntNode,
   loadState,
+  
 }) => {
   return (
     <Fragment>
@@ -59,6 +63,12 @@ const AppMain = ({
             load={loadState}
           />
           <Switch>
+            <Route exact path="/home">
+                <Home
+                  load={loadState}
+                />
+            </Route>
+            
             <Route exact path="/data">
               <DataDashboard
                 datasets={datasets}
@@ -99,10 +109,20 @@ const AppMain = ({
                 removeIntNode={removeIntNode}
                 removeIntEdge={removeIntEdge}
                 setIntPosition={setIntPosition}
+                setIntNode={setIntNode}
               />
             </Route>
 
-            <Redirect to="/data" />
+            <Route exact path="/story">
+              <Story
+                datasets={datasets}
+                datagraph={datagraph.datagraph}
+                visgraph={visgraph.visgraph}
+                intgraph={intgraph.intgraph}
+              />
+            </Route>
+            
+            <Redirect to="/home" />
           </Switch>
           <ToastContainer />
         </Router>

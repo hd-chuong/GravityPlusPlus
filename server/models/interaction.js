@@ -6,7 +6,9 @@ const {
 const {
     SetQueryBuilder
 } = require("../utils/query");
-  
+
+const {toNumber} =require('neo4j-driver/lib/integer.js');
+
 module.exports = class IntGraph {
     constructor() {
       this.neo4jDriver = null;
@@ -15,9 +17,42 @@ module.exports = class IntGraph {
     useDriver(neo4jDriver) {
       this.neo4jDriver = neo4jDriver;
     }
+
+    useDatabase(name)
+    {
+      //
+      // should close the new session
+      //    
+      const newSession = this.neo4jDriver.session();
+      
+      return newSession
+        .readTransaction(tx => tx.run(`SHOW DATABASES`))
+        .then(res => {
+          const dbLists = res.records.map(record => record._fields[0]);     
+          
+          if (dbLists.includes(name)) 
+          {
+            this.dbName = name;
+          }
+          else 
+          {
+            throw new Error("Can not find the database");
+          }
+  
+        }).catch(e => {
+          console.log(e);
+        }).finally(() => {
+          newSession.close();
+        });
+    }
+  
+    getSession()
+    {
+      return this.neo4jDriver.session({database: this.dbName});
+    }
   
     addNode(name, source) {
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
       const cypher = `
               CREATE 
                   (node:INT_NODE { id: $id, 
@@ -54,7 +89,7 @@ module.exports = class IntGraph {
     }
   
     getNode(id) {
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       const cypher = `
               MATCH 
@@ -97,7 +132,7 @@ module.exports = class IntGraph {
         DETACH delete n
       `;
   
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(() => {
@@ -119,7 +154,7 @@ module.exports = class IntGraph {
         DETACH delete edge
       `;
   
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(() => {
@@ -132,7 +167,7 @@ module.exports = class IntGraph {
     }
   
     getAllNodes() {
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       const cypher = `
               MATCH 
@@ -184,7 +219,7 @@ module.exports = class IntGraph {
                   r, a.id as source_id, b.id as target_id
           `;
   
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(res => {
@@ -209,7 +244,7 @@ module.exports = class IntGraph {
   
     getEdge(id) {
       // only return one directed edge now
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       const cypher = `
             MATCH (n)-[r:INT_EDGE {id: $id}]->(m) return r 
@@ -239,7 +274,7 @@ module.exports = class IntGraph {
     }
   
     getAllEdges() {
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
   
       const cypher = `
                   MATCH 
@@ -267,9 +302,54 @@ module.exports = class IntGraph {
     }
   
     getGraph() {
-      this.getAllEdges();
-      this.getAllNodes();
+      const graph = {
+        edges: [],
+        nodes: []
+      }
+  
+      return this.getAllNodes().then(res => {
+        graph.nodes = res.map(node => {
+          let {id, props} = node;
+          let {name, source, x, y} = props;
+
+          x = (x && parseInt(x)) || Math.random() * 100;
+          y = (y && parseInt(y)) || Math.random() * 100;
+          return {
+            id,
+            type: "default",
+            data: {
+              label: name,
+              source: JSON.parse(source),
+            },
+            position: {
+              x, y
+            }
+          }
+        });
+        return this.getAllEdges();
+      })
+      .then(res => {
+        graph.edges = res.map(edge => {
+          const {source, target, id, props} = edge;
+          let {binding, label, signal} = props;
+          
+          binding = JSON.parse(binding);
+          signal = JSON.parse(signal);
+
+          return {
+            source,
+            target,
+            id,
+            label,
+            data: {
+              binding, signal
+            }
+          }
+        });
+        return graph;
+      });
     }
+  
     
     setNodeProperty(nodeId, property)
     {
@@ -279,7 +359,7 @@ module.exports = class IntGraph {
       }
   
       const cypher = `MATCH (node {id: $id}) SET ` + SetQueryBuilder("node", property);
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(res => {
           return "UPDATE SUCCESSFUL";
@@ -297,7 +377,7 @@ module.exports = class IntGraph {
       }
   
       const cypher = `MATCH (source)-[edge {id: $id}]->(target) SET ` + SetQueryBuilder("edge", property);
-      const session = this.neo4jDriver.session();
+      const session = this.getSession();
       return session.writeTransaction(tx => tx.run(cypher, params))
         .then(res => {
           console.log(res);

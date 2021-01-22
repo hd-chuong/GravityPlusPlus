@@ -12,6 +12,7 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
+import 'react-quill/dist/quill.snow.css';
 
 const store = configureStore();
 const rootElement = document.getElementById('root');

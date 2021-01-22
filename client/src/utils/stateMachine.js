@@ -24,7 +24,7 @@ export function GetGraphIds(datagraph, visgraph, intgraph, intNodeId)
 export function GetState(datasets, datagraph, visgraph, intgraph, intNodeId, params, setter)
 {
     const {dataId, visId, intId} = GetGraphIds(datagraph, visgraph, intgraph, intNodeId);
-    
+
     return calculateDataset(dataId, datasets, params).then(({data, params, spec}) => {
         return data;
     }).then((data) => {

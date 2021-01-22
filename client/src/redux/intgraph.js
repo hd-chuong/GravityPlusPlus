@@ -17,7 +17,7 @@ export const IntGraph = (
             type: uiType,
             data: {
               label: action.payload.name,
-              // visualisation source
+              // intualisation source
               source: action.payload.source,
             },
             position: { x, y },
@@ -80,6 +80,22 @@ export const IntGraph = (
             ),
             nodes: state.intgraph.nodes,
           },  
+        };
+
+      case ActionTypes.SET_INT_NODE:
+        var {id: nodeId, params} = action.payload;
+  
+        var newNodes = state.intgraph.nodes.map(node => {
+          if (node.id !== nodeId) return node;
+          return { ...node, data: { ...node.data, ...params } };
+        });
+  
+        return {
+          ...state,
+          intgraph: {
+            edges: state.intgraph.edges,
+            nodes: newNodes,
+          },
         };
 
       case ActionTypes.SET_POSITION:

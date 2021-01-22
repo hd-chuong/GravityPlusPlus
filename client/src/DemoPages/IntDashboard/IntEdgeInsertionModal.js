@@ -15,6 +15,7 @@ import nanoid from "../../utils/nanoid";
 import ParamTable from "../Components/ParamTable";
 import AttributeExtractor from '../../utils/AttributeExtractor';
 import {GetNodeById} from '../../utils/graphUtil';
+import Creatable from 'react-select/creatable';
 
 const IntEdgeInsertionModal = (props) => {
   const [source, setSource] = useState(null);
@@ -117,6 +118,8 @@ const IntEdgeInsertionModal = (props) => {
     reset();
   }
 
+  const attributes = sourceData ? Object.keys(sourceData[0]) : [];
+
   return (
     <span className="d-inline-block">
       <Modal
@@ -204,7 +207,7 @@ const IntEdgeInsertionModal = (props) => {
             
             <Row className="form-group">
               <Col md={6}>
-                {viewSource && <Vega className="mx-auto" data={sourceData} spec={sourceSpec} signals={[{signal, eventHandler}]}/>}
+                {viewSource && sourceData && sourceSpec && <Vega className="mx-auto" data={sourceData} spec={sourceSpec} signals={[{signal, eventHandler}]}/>}
               </Col>
               <Col md={6}>
                 {interactionData && <ParamTable 
@@ -234,7 +237,11 @@ const IntEdgeInsertionModal = (props) => {
                       <Label>{param.description}</Label>
                     </Col>
                     <Col md={4}>
-                      <Input type="text" onChange={(e) => setBinding({...binding, [param.name]: e.target.value}) }></Input>
+                      {/* <Input type="text" onChange={(e) => setBinding({...binding, [param.name]: e.target.value}) }></Input> */}
+                      <Creatable 
+                        options={attributes.map(attr => ({value: attr, label: attr}))}
+                        onChange={(pair) => setBinding({...binding, [param.name]: pair.value}) }
+                      />
                     </Col>
                   </Row>
                   ))}

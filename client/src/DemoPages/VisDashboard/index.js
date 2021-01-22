@@ -140,6 +140,7 @@ class Dashboard extends Component {
                 id: node.id,
               })),
             },
+            withCredentials: true,
           })
             .then(response => {
               this.setState({ loadRecommendedSequence: false });

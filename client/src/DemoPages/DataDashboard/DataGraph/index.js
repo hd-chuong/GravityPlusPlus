@@ -5,7 +5,7 @@ import ReactFlow, {
   Background,
   removeElements,
 } from 'react-flow-renderer';
-import { Card, CardBody, CardHeader } from 'reactstrap';
+import { Card, CardBody, CardHeader, CardTitle } from 'reactstrap';
 
 // examples of data to be passed into react flow
 // const elements = [
@@ -58,9 +58,11 @@ export default class Graph extends Component {
     const elements = [...this.props.data.nodes, ...this.props.data.edges];
     return (
       <Card className="main-card mb-3">
-        <div className="card-header"> Graph view </div>
-        <div style={{ height: 600 }}>
+        <CardBody>
+        <CardTitle> Graph view </CardTitle>
+        <div style={{ height: this.props.height || 600 }}>
           <ReactFlow
+            // onLoad={onLoad}
             elements={elements}
             onElementClick={(event, element) => {
               this.props.onElementClick(element.id);
@@ -71,14 +73,22 @@ export default class Graph extends Component {
                 .forEach(e => this.props.onElementsRemove(e))
             }
             onNodeDragStop={(event, node) => {
+              if (!this.props.onNodeDragStop) return;
               this.props.onNodeDragStop(node.id, node.position.x, node.position.y);
             }}
+            // defaultPosition={this.props.defaultPosition}
           >
             <Controls />
             <Background color="#aaa" gap={16} />
           </ReactFlow>
         </div>
+        </CardBody>
       </Card>
     );
   }
 }
+
+// const onLoad = (reactFlowInstance) => {
+//   console.log("on load");
+//   reactFlowInstance.fitView();
+// };

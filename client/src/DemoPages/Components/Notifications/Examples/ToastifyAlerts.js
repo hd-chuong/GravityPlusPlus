@@ -109,10 +109,6 @@ function getType(type) {
       return 'toast.success';
     case 'error':
       return 'toast.error';
-    case 'info':
-      return 'toast.info';
-    case 'warning':
-      return 'toast.warn';
   }
 }
 
@@ -203,19 +199,6 @@ class ToastifyAlerts extends Component {
                 <CardBody>
                   <CardTitle>Toastify Configurator</CardTitle>
                   <Row>
-                    <Col md="2">
-                      <div>
-                        <h5>Color States</h5>
-                        <div>
-                          <Radio
-                            options={toast.TYPE}
-                            name="type"
-                            checked={this.state.type}
-                            onChange={this.handleRadioOrSelect}
-                          />
-                        </div>
-                      </div>
-                    </Col>
                     <Col md="4">
                       <h5>Options</h5>
                       <div>{this.renderFlags()}</div>
@@ -258,24 +241,6 @@ class ToastifyAlerts extends Component {
                   </Row>
                 </CardBody>
                 <CardFooter>
-                  <div>
-                    <Button
-                      size="sm"
-                      className="text-danger"
-                      onClick={this.clearAll}
-                      color="link"
-                    >
-                      Clear All
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="text-primary"
-                      onClick={this.handleReset}
-                      color="link"
-                    >
-                      Reset
-                    </Button>
-                  </div>
                   <div className="ml-auto">
                     <Button size="lg" color="success" onClick={this.showToast}>
                       Show Toast

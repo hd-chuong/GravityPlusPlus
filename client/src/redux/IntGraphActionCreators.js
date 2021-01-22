@@ -1,11 +1,12 @@
 import * as ActionTypes from './IntGraphActionTypes';
 import axios from 'axios';
 
-export const saveIntNode = payload => dispatch => {
+export const saveIntNode = ({name, source}) => dispatch => {
     return axios({
-        method: 'post',
-        url: 'http://localhost:7473/int/nodes',
-        data: payload,
+      method: 'post',
+      url: `http://localhost:7473/int/nodes`,
+      data: {source, name},
+      withCredentials: true,
     })
     .then(response => {
         if (response.statusText !== 'OK') {
@@ -22,11 +23,11 @@ export const saveIntNode = payload => dispatch => {
         var id = data.id;
         dispatch({
             type: ActionTypes.ADD_INT_NODE,
-            payload: {...payload, id},
+            payload: {name, source, id},
         });
     })
     .catch(error => {
-        alert('Redux fails to add new node: ' + error.message);
+        alert('Redux failed to add new node: ' + error.message);
     });    
 };
 
@@ -39,7 +40,8 @@ export const addIntEdge = ({source, target, signal, binding, label}) => dispatch
     return axios({
         method: 'post',
         url: `http://localhost:7473/int/edges`,
-        data: {source, target, signal, binding, label}
+        data: {source, target, signal, binding, label},
+        withCredentials: true,
     }) 
     .then(response => {
         if (response.statusText !== 'OK') {
@@ -58,7 +60,7 @@ export const addIntEdge = ({source, target, signal, binding, label}) => dispatch
         dispatch(saveIntEdge(newEdge));
     })
     .catch(error => {
-        alert(`Fail to add new edge: ${error.message}`);
+        alert(`Failed to add new edge: ${error.message}`);
     });
 }
 
@@ -66,7 +68,8 @@ export const removeIntNode = ({id}) => dispatch => {
     return axios({
         method: 'delete',
         url: `http://localhost:7473/int/nodes/${id}`,
-        data: {id}
+        data: {id},
+        withCredentials: true,
     }).then(response => {
         if (response.statusText !== 'OK') {
           var error = new Error(
@@ -82,7 +85,7 @@ export const removeIntNode = ({id}) => dispatch => {
         payload: {id}
     }))
     .catch(error => {
-        alert(`Fail to delete node ${id} in database: ${error.message}`);
+        alert(`Failed to delete node ${id} in database: ${error.message}`);
       });
 };
 
@@ -91,7 +94,8 @@ export const removeIntEdge = ({id}) => dispatch =>
     return axios({
         method: 'delete',
         url: `http://localhost:7473/int/edges/${id}`,
-        data: {id}
+        data: {id},
+        withCredentials: true,
     }).then(response => {
         if (response.statusText !== 'OK') {
           var error = new Error(
@@ -113,7 +117,8 @@ export const setIntPosition = payload => dispatch => {
     return axios({
       method: 'put',
       url: `http://localhost:7473/int/nodes/${id}`,
-      data: {x, y}
+      data: {x, y},
+      withCredentials: true,
     })
     .then((response) => {
       dispatch({  
@@ -121,6 +126,24 @@ export const setIntPosition = payload => dispatch => {
         payload});
     })    
     .catch(error => {
-      alert(`Fail to update new position of int node ${id} to database: ${error.message}`);
+      alert(`Failed to update new position of int node ${id} to database: ${error.message}`);
+    });
+  };
+
+  export const setIntNode = payload => dispatch => {
+    const {id, params} = payload;
+    return axios({
+      method: 'put',
+      url: `http://localhost:7473/int/nodes/${id}`,
+      data: params,
+      withCredentials: true,
+    })
+    .then((response) => {
+      dispatch({  
+        type: ActionTypes.SET_INT_NODE,
+        payload});
+    })    
+    .catch(error => {
+      alert(`Failed to update new position of int node ${id} to database: ${error.message}`);
     });
   };

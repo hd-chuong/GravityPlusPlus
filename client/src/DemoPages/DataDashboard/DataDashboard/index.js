@@ -4,12 +4,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Row, Col, Card, CardHeader, Input, CardBody } from 'reactstrap';
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
-
+import {toast} from 'react-toastify';
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 import calculateDataset from '../../../utils/dataGeneration';
 import {describeParams} from "../../../utils/describeParams";
-
+import toastOptions from '../../config/toastOptions';
 export default class DataDashboard extends Component {
     constructor(props) 
     {
@@ -30,6 +30,7 @@ export default class DataDashboard extends Component {
         Axios({
             method: "get",
             url: `http://localhost:7473/data/nodes/${dataNodeId}/children`,
+            withCredentials: true,
         })
         .then(response => 
         {
@@ -64,7 +65,7 @@ export default class DataDashboard extends Component {
             this.props.removeDataNode(dataNodeId);
         })
         .catch(error => {
-            alert("Unable to delete the data: " + error.message);    
+            toast.error("Unable to delete the data node: " + error.message, toastOptions);    
         });
     }
 
@@ -73,11 +74,9 @@ export default class DataDashboard extends Component {
         this.setState(({currentDataId: dataNodeId}));
         calculateDataset(dataNodeId, this.props.datasets.datasets)
         .then(({data, params, spec}) => {
-
             this.setState({currentData: data, params, spec});
-
         }).catch(error => {
-            alert("Unable to view the data: " + error.message);    
+            toast.error("Unable to view the data: " + error.message, toastOptions);    
         });
     }
 
@@ -98,7 +97,7 @@ export default class DataDashboard extends Component {
             .then(({data, params, spec}) => {
                 this.setState({currentData: data, params, spec});
             }).catch(error => {
-                alert("Unable to view the data: " + error.message);    
+                toast.error("Unable to view the data: " + error.message, toastOptions);    
             });
         });
     }
@@ -147,7 +146,7 @@ export default class DataDashboard extends Component {
                                 {/*
                                     Will make these become a separate class now
                                 */}
-                                <Card className="main-card mb-3">
+                                {/* <Card className="main-card mb-3">
                                     <CardHeader>
                                         Params control    
                                     </CardHeader>
@@ -167,11 +166,10 @@ export default class DataDashboard extends Component {
                                                 ))
                                         }
                                     </CardBody>
-                                </Card>
+                                </Card> */}
                             </ReactCSSTransitionGroup>
                         </Col>
                     </Row>
-
                     <DataNodeInsertionModal 
                         datasets={this.props.datasets} 
                         isOpen={this.props.isNewNodeModalOpen} 
@@ -185,6 +183,8 @@ export default class DataDashboard extends Component {
                         updateCurrentData={this.updateCurrentData}
                         currentData={this.state.currentData}              
                     />
+
+                    
                 </ReactCSSTransitionGroup>
             </Fragment>
         )

@@ -1,7 +1,8 @@
 import * as ActionTypes from './DataGraphActionTypes';
 import Axios from 'axios';
 import nanoid from '../utils/nanoid';
-
+import {toast} from 'react-toastify';
+import toastOptions from '../DemoPages/config/toastOptions';
 export const saveDataNode = payload => ({
   type: ActionTypes.ADD_DATA_NODE,
   payload,
@@ -17,11 +18,12 @@ export const addDataNode = ({
   transform,
   format,
 }) => dispatch => {
-  const newNode = { name, type, source, transform, format };
+  const newNode = { name, type, source, transform, format};
   return Axios({
     method: 'post',
     url: 'http://localhost:7473/data/nodes',
     data: newNode,
+    withCredentials: true
   })
     .then(response => {
       if (response.statusText !== 'OK') {
@@ -44,10 +46,11 @@ export const addDataNode = ({
         type = 'RAW';
       }
       dispatch(saveDataNode({ id, name, type, source, transform, format }));
+      toast.success("Successfully create a original data node", toastOptions);
       return id;
     })
     .catch(error => {
-      alert('Redux fails to add new node: ' + error.message);
+      alert('Redux failed to add new node: ' + error.message);
     });
 };
 
@@ -80,7 +83,8 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
     return Axios({
         method: "post",
         url: "http://localhost:7473/data/edges",
-        data: newEdge
+        data: newEdge,
+        withCredentials: true
     }).then(response => {
         if (response.statusText !== "OK") {
             var error = new Error('Error ' + response.status + ': ' + response.statusText);
@@ -103,7 +107,7 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
       );
     })
     .catch(error => {
-      alert('Fail to add new edge: ' + error.message);
+      alert('Failed to add new edge: ' + error.message);
     });
 };
 
@@ -111,6 +115,7 @@ export const removeDataNode = ({ id }) => dispatch => {
   return Axios({
     method: 'delete',
     url: `http://localhost:7473/data/nodes/${id}`,
+    withCredentials: true,
   })
     .then(response => {
       if (response.statusText !== 'OK') {
@@ -130,7 +135,7 @@ export const removeDataNode = ({ id }) => dispatch => {
       }),
     )
     .catch(error => {
-      alert('Fail to delete a node: ' + error.message);
+      alert('Failed to delete a node: ' + error.message);
     });
 };
 
@@ -152,14 +157,14 @@ export const setDataPosition = payload => dispatch => {
   return Axios({
     method: 'put',
     url: `http://localhost:7473/data/nodes/${id}`,
-    data: {x, y}
-  })
-  .then((response) => {
+    data: {x, y},
+    withCredentials: true,
+  }).then((response) => {
     dispatch({  
       type: ActionTypes.SET_POSITION,
       payload});
   })    
   .catch(error => {
-    alert('Fail to update new position to database: ' + error.message);
+    alert('Failed to update new position to database: ' + error.message);
   });
 };
