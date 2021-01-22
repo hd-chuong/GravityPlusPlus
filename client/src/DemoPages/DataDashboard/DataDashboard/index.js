@@ -4,11 +4,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Row, Col, Card, CardHeader, Input, CardBody } from 'reactstrap';
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
-
+import {toast} from 'react-toastify';
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 import calculateDataset from '../../../utils/dataGeneration';
 import {describeParams} from "../../../utils/describeParams";
+import toastOptions from '../../config/toastOptions';
 export default class DataDashboard extends Component {
     constructor(props) 
     {
@@ -64,7 +65,7 @@ export default class DataDashboard extends Component {
             this.props.removeDataNode(dataNodeId);
         })
         .catch(error => {
-            alert("Unable to delete the data: " + error.message);    
+            toast.error("Unable to delete the data node: " + error.message, toastOptions);    
         });
     }
 
@@ -75,7 +76,7 @@ export default class DataDashboard extends Component {
         .then(({data, params, spec}) => {
             this.setState({currentData: data, params, spec});
         }).catch(error => {
-            alert("Unable to view the data: " + error.message);    
+            toast.error("Unable to view the data: " + error.message, toastOptions);    
         });
     }
 
@@ -96,7 +97,7 @@ export default class DataDashboard extends Component {
             .then(({data, params, spec}) => {
                 this.setState({currentData: data, params, spec});
             }).catch(error => {
-                alert("Unable to view the data: " + error.message);    
+                toast.error("Unable to view the data: " + error.message, toastOptions);    
             });
         });
     }

@@ -297,8 +297,8 @@ module.exports = class VisGraph {
           let {name, dataSource, spec, x, y} = props;
           spec = JSON.parse(spec);
 
-          x = (x && toNumber(x)) || Math.random() * 100;
-          y = (y && toNumber(y)) || Math.random() * 100;
+          x = (x && parseInt(x)) || Math.random() * 100;
+          y = (y && parseInt(y)) || Math.random() * 100;
           return {
             id, 
             type: "default",

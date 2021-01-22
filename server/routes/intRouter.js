@@ -7,9 +7,6 @@ var Intgraph = require('../models/interaction');
 // cors.cors for all GET methods
 // cors.corsWithOptions for all other
 const cors = require('./cors');
-const {
-  fork
-} = require("child_process");
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -23,7 +20,6 @@ var intgraph = new Intgraph();
 intgraph.useDriver(driver);
 
 const addHeader = async (req, res, next) => {
-  console.log(req.session);
   console.log("session name: ", req.session.name, "session id: ", req.sessionID);
   res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -43,14 +39,6 @@ const addHeader = async (req, res, next) => {
 
 router.route('/nodes')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .get(cors.cors, addHeader, (req, res, next) => {
-    intgraph
-      .getAllNodes()
-      .then(result => {
-        res.json(result)
-      }, err => next(err))
-      .catch(err => next(err));
-  })
   .post(cors.corsWithOptions, addHeader, (req, res, next) => {
     const {name, source} = req.body;
     intgraph
@@ -59,7 +47,16 @@ router.route('/nodes')
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
+  })
+  .get(cors.cors, addHeader, (req, res, next) => {
+    intgraph
+      .getAllNodes()
+      .then(result => {
+        res.json(result)
+      }, err => next(err))
+      .catch(err => next(err));
   });
+
 
 router.route('/nodes/:nodeID')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))

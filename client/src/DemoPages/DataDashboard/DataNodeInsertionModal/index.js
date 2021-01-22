@@ -18,7 +18,7 @@ import classnames from 'classnames';
 import calculateDataset from '../../../utils/dataGeneration';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
 import {toast} from 'react-toastify';
-
+import toastOptions from '../../config/toastOptions';
 class DataNodeInsertionModal extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +75,6 @@ class DataNodeInsertionModal extends React.Component {
     );
 
     this.setState({ format: 'json' });
-    toast.success("Successfully create a original data node", toastOptions);
     this.props.toggle();
   }
 
@@ -417,15 +416,6 @@ class DataNodeInsertionModal extends React.Component {
       </span>
     );
   }
-}
-
-const toastOptions = {
-  position: toast.POSITION.TOP_CENTER, 
-  hideProgressBar: true,
-  autoClose: 1500,
-  delay: 200,
-  pauseOnHover: true,
-  pauseOnFocusLoss: false,
 }
 
 export default DataNodeInsertionModal;

@@ -1,6 +1,7 @@
 import * as ActionTypes from './VisGraphActionTypes';
 import Axios from 'axios';
-
+import {toast} from 'react-toastify';
+import toastOptions from '../DemoPages/config/toastOptions';
 export const saveVisNode = payload => ({
   type: ActionTypes.ADD_VIS_NODE,
   payload,
@@ -31,7 +32,7 @@ export const addVisNode = ({ name, dataSource, spec }) => dispatch => {
     return id;
   })
   .catch(error => {
-    alert('Redux fails to add new node: ' + error.message);
+    alert('Redux failed to add new node: ' + error.message);
   });
 };
 
@@ -73,9 +74,10 @@ export const removeVisNode = payload => dispatch => {
       type: ActionTypes.REMOVE_VIS_NODE,
       payload
     });
+    toast.success("Successfully delete visualisation node", toastOptions);
   })
   .catch(error => {
-    alert(`Fail to delete node ${id} in database: ${error.message}`);
+    toast.success(`Failed to delete node ${id} in database: ${error.message}`, toastOptions);
   });
 };
 
@@ -92,12 +94,15 @@ export const setVisNode = payload => dispatch => {
     data: params,
     withCredentials: true,
   })
-  .then((response) => dispatch({
+  .then((response) => {
+    dispatch({
       type: ActionTypes.SET_VIS_NODE,
       payload,
-    }))    
+    });
+    toast.success("Successfully updated the visualisation node", toastOptions);
+  })    
   .catch(error => {
-    alert(`Fail to update new position of vis node ${id} to database: ${error.message}`);
+    toast.error(`Failed to update vis node ${id} to database: ${error.message}`, toastOptions);
   });
 };
 
@@ -115,6 +120,6 @@ export const setVisPosition = payload => dispatch => {
       payload});
   })    
   .catch(error => {
-    alert(`Fail to update new position of vis node ${id} to database: ${error.message}`);
+    alert(`Failed to update new position of vis node ${id} to database: ${error.message}`);
   });
 };

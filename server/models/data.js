@@ -316,8 +316,8 @@ module.exports = class DataGraph {
         
         transform = JSON.parse(transform);
         format = JSON.parse(format);
-        x = toNumber(x);
-        y = toNumber(y);
+        x = parseInt(x) || Math.random() * 100 ;
+        y = parseInt(y) || Math.random() * 100;
         
         console.log(x, y);
 
@@ -332,8 +332,8 @@ module.exports = class DataGraph {
             format
           },
           position: {
-            x: x || Math.random() * 100 , 
-            y: y || Math.random * 100
+            x, 
+            y
           }
         } 
       });
