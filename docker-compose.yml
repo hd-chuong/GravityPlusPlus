@@ -23,8 +23,9 @@ services:
     volumes:
       - ./server/routes:/srv/app/server/routes
       - ./server/models:/srv/app/server/models
-      - ./server/app.js:/srv/app/server/app.js
       - ./server/services:/srv/app/server/services
+      - ./server/data:/srv/app/server/data
+      - ./server/app.js:/srv/app/server/app.js
     networks:
       - db-server
       - client-server

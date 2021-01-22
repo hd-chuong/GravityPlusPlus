@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 var neo4j = require('neo4j-driver');
-var Visgraph = require('../models/visualisation');
+var Intgraph = require('../models/interaction');
 
 // cors.cors for all GET methods
 // cors.corsWithOptions for all other
@@ -19,13 +19,13 @@ const driver = neo4j.driver(
   neo4j.auth.basic("neo4j", "test")
 );
 
-var visgraph = new Visgraph();
-visgraph.useDriver(driver);
+var intgraph = new Intgraph();
+intgraph.useDriver(driver);
 
 router.route('/nodes')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, (req, res, next) => {
-    visgraph
+    intgraph
       .getAllNodes()
       .then(result => {
         res.json(result)
@@ -33,9 +33,9 @@ router.route('/nodes')
       .catch(err => next(err));
   })
   .post(cors.corsWithOptions, (req, res, next) => {
-    const {name, dataSource, spec} = req.body;
-    visgraph
-      .addNode(name, dataSource, spec)
+    const {name, source} = req.body;
+    intgraph
+      .addNode(name, source)
       .then(result => {
         res.json(result)
       }, err => next(err))
@@ -45,7 +45,7 @@ router.route('/nodes')
 router.route('/nodes/:nodeID')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .get(cors.cors, (req, res, next) => {
-    visgraph
+    intgraph
       .getNode(req.params.nodeID)
       .then(result => {
         res.json(result)
@@ -53,36 +53,64 @@ router.route('/nodes/:nodeID')
       .catch(err => next(err));
   })
   .delete(cors.corsWithOptions, (req, res, next) => {
-    visgraph.removeNode(req.params.nodeID)
+    intgraph.removeNode(req.params.nodeID)
       .then(result => {
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
   })
   .put(cors.corsWithOptions, (req, res, next) => {
-    visgraph.setNodeProperty(req.params.nodeID, req.body)
+    intgraph.setNodeProperty(req.params.nodeID, req.body)
       .then(result => {
         res.json(result)
       }, err => next(err))
       .catch(err => next(err));
   })
 
-  // sequence recommendation services
-router.route('/sequenceRecommend')
-  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-  .post(cors.cors, (req, res, next) => {
-    var charts = req.body.charts;
-    const process = fork("./services/sequenceRecommendation.js");
-    process.send({
-      charts
-    });
+router.route('/edges')
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
+    intgraph
+    .getAllEdges()
+    .then(result => {
+    res.json(result)
+    }, err => next(err))
+    .catch(err => next(err));
+})
+.post(cors.corsWithOptions, (req, res, next) => {
+    const {source, target, signal, binding, label} = req.body;
+    intgraph
+    .addEdge(
+    source,
+    target,
+    signal,
+    binding, 
+    label
+    )
+    .then((newEdge) => {
+        res.json(newEdge)
+    },
+    err => next(err))
+    .catch(err => next(err))
+})  
 
-    // listen for message from forked process
-    process.on("message", (message) => {
-      console.log(message.result);
-      res.json(message.result);
-    });
-  });
-
+router.route('/edges/:edgeID')
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.put(cors.corsWithOptions, (req, res, next) => {
+    intgraph
+    .setEdgeProperty(req.params.edgeID, req.body)
+    .then(result => {
+        res.json(result)
+        }, err => next(err))
+    .catch(err => next(err));
+})
+.delete(cors.corsWithOptions, (req, res, next) => {
+    intgraph
+    .removeEdge(req.params.edgeID)
+    .then(result => {
+        res.json(result)
+        }, err => next(err))
+    .catch(err => next(err));
+});
 
 module.exports = router;
