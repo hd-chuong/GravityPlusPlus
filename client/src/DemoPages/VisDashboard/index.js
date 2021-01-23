@@ -4,7 +4,6 @@ import React, { Component, Fragment } from 'react';
 import VisDashboard from './VisDashboard';
 
 // Layout
-import AppHeader from '../../Layout/AppHeader';
 import VisSideBar from '../../Layout/VisSideBar';
 import Axios from 'axios';
 import _ from 'lodash';
@@ -22,10 +21,13 @@ class Dashboard extends Component {
 
       loadRecommendedSequence: false,
       loadTransformationLinks: false,
+
+      cost: NaN
     };
     this.toggleNewNodeModal = this.toggleNewNodeModal.bind(this);
     this.handleRecommendedSequence = this.handleRecommendedSequence.bind(this);
     this.handleTransformationLinks = this.handleTransformationLinks.bind(this);
+    this.setRecommendedPath = this.setRecommendedPath.bind(this);
   }
 
   toggleNewNodeModal() {
@@ -117,11 +119,33 @@ class Dashboard extends Component {
     );
   }
 
+  setRecommendedPath(i)
+  {
+    const sequences = JSON.parse(sessionStorage.getItem("sequences"));
+    const {cost, sequence} = sequences[i];
+    
+    const removedEdgeIDs = this.props.visgraph.edges.filter(
+            edge => edge.data.type === 'RECOMMENDED',
+          );
+    removedEdgeIDs.forEach(node => {
+      this.props.removeVisEdge(node.id);
+    });
+
+    sequence.forEach((node, i) => {
+      if (i !== 0) {
+        this.props.addVisEdge(sequence[i - 1], node, 'RECOMMENDED');
+      }
+    });
+    // set state for cost
+    this.setState({cost});
+
+  }
   handleRecommendedSequence() {
     this.setState(
       { recommendedSequence: !this.state.recommendedSequence },
       () => {
-        if (!this.state.recommendedSequence) {
+        if (!this.state.recommendedSequence) 
+        {
           const removedEdgeIDs = this.props.visgraph.edges.filter(
             edge => edge.data.type === 'RECOMMENDED',
           );
@@ -142,28 +166,27 @@ class Dashboard extends Component {
             },
             withCredentials: true,
           })
-            .then(response => {
-              this.setState({ loadRecommendedSequence: false });
-              if (response.statusText !== 'OK') {
-                var error = new Error(
-                  'Error ' + response.status + ': ' + response.statusText,
-                );
-                error.response = response;
-                console.log(err);
-                throw error;
-              } else {
-                return response.data;
-              }
-            })
-            .then(sequence => {
-              // sequence in the form of a
-              sequence.forEach((node, i) => {
-                if (i !== 0) {
-                  this.props.addVisEdge(sequence[i - 1], node, 'RECOMMENDED');
-                }
-              });
-            })
-            .catch(err => console.trace(err));
+          .then(response => {
+            this.setState({ loadRecommendedSequence: false });
+            if (response.statusText !== 'OK') {
+              var error = new Error(
+                'Error ' + response.status + ': ' + response.statusText,
+              );
+              error.response = response;
+              console.log(err);
+              throw error;
+            } else {
+              return response.data;
+            }
+          })
+          .then(sequence => {
+            // sequence
+            console.log("recommend sequence ", sequence);
+            sessionStorage.setItem("sequences", JSON.stringify(sequence));
+            
+            this.setRecommendedPath(0);
+          })
+          .catch(err => console.trace(err));
         }
       },
     );
@@ -180,6 +203,8 @@ class Dashboard extends Component {
             isTransformationLinks={this.state.transformationLinks}
             loadRecommendedSequence={this.state.loadRecommendedSequence}
             loadTransformationLinks={this.state.loadTransformationLinks}
+            cost={this.state.cost}
+            setRecommendedPath={this.setRecommendedPath}
           />
           <div className="app-main__outer">
             <div className="app-main__inner">

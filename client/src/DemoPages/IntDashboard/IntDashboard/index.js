@@ -18,6 +18,8 @@ import {GetState} from "../../../utils/stateMachine";
 import {GetNodeById} from "../../../utils/graphUtil";
 import Chart from "../../VisDashboard/Chart";
 import ReactQuill from 'react-quill';
+import { toast } from 'react-toastify';
+import toastOptions from '../../config/toastOptions';
 
 export default class IntDashboard extends Component {
     constructor(props)
@@ -42,6 +44,12 @@ export default class IntDashboard extends Component {
     editorChange(editorState)
     {
         this.setState({editorState});
+    }
+
+    reset = () => {
+        const currentNode = GetNodeById(this.props.intgraph, this.state.intNodeId);
+        this.editorChange(currentNode.data.note)
+        toast.info("Reset note", toastOptions);
     }
 
     updateGraphDisplay(id)
@@ -160,7 +168,7 @@ export default class IntDashboard extends Component {
                                                         <Button
                                                             color="dark"
                                                             className="float-right"
-                                                            onClick={() => this.editorChange(currentNode.data.note)}
+                                                            onClick={this.reset.bind(this)}
                                                         > {' '}
                                                             Reset
                                                         </Button>

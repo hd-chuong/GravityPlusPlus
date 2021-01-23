@@ -56,8 +56,12 @@ export default class VisDashboard extends Component {
         this.state.currentNode.data.dataSource,
         this.props.datasets.datasets,
       ).then(({data}) => {
-        this.setState({ currentNodeData: data });
-        this.setState({ dataPrepared: true });
+        this.setState({ 
+          currentNodeData: data 
+        });
+        this.setState({ 
+          dataPrepared: true 
+        });
       });
       this.setState({ specDisplayed: this.state.currentNode.data.spec });
     });

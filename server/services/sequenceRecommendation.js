@@ -10,16 +10,32 @@ async function RecommendSequence(charts, options = {
 
     console.warn("Start looking for the best path...");
     const solve = gs.sequence(cleanedCharts, options);
-    var bestSequence = solve[0].sequence;
+    console.log("Found paths");
+    let sequences = solve.slice(0, 10).map(seq => {
+      const { sequence, sequenceCost} = seq; 
+      return {sequence, cost: sequenceCost};
+    });
+  
+    sequences = sequences.map(seq => ({
+      cost: seq.cost, 
+      sequence: seq.sequence.filter(order => order !== 0).map(order => order - 1) 
+    }));
 
-    console.log("Found a path");
-    //
-    // node 0 is null, need removing
-    //
-    bestSequence = bestSequence.filter(order => order !== 0).map(order => order - 1);
-    const orderedIDs = [];
-    bestSequence.forEach(order => orderedIDs.push(IDs[order]));
-    return orderedIDs;
+    return sequences.map(sequence => ({
+      cost: sequence.cost, 
+      sequence: sequence.sequence.reduce((currentSeq, nextValue) => currentSeq.concat(IDs[nextValue]), []) 
+    }));
+
+    // var bestSequence = solve[0].sequence;
+
+    // console.log("Found a path");
+    // //
+    // // node 0 is null, need removing
+    // //
+    // bestSequence = bestSequence.filter(order => order !== 0).map(order => order - 1);
+    // const orderedIDs = [];
+    // bestSequence.forEach(order => orderedIDs.push(IDs[order]));
+    // return orderedIDs;
   } catch (e) {
     console.log(`Errors catched when finding the best path: ${e}`);
     return [];
