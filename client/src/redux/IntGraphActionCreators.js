@@ -61,7 +61,7 @@ export const addIntEdge = ({source, target, signal, binding, label}) => dispatch
         const id = data.id;
         const newEdge = {id, source, target, signal, binding, label};
         dispatch(saveIntEdge(newEdge));
-        toast.success(`Successfully added node ${name}`, toastOptions);    
+        toast.success(`Successfully added new edge`, toastOptions);    
     })
     .catch(error => {
         toast.error(`Failed to add new edge: ${error.message}`, toastOptions);

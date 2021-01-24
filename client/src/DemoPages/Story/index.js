@@ -61,8 +61,8 @@ export default class Story extends Component{
             onrendered: function(canvas) {
                 console.log("print this.canvas2d: ", this.canvas2d);
                 const context = this.canvas2d.getContext('2d');
-                context.clearRect(0, 0, canvas2d.width, canvas2d.height);
-                context.drawImage(canvas, 0, 0, canvas2d.width, canvas2d.height);
+                context.clearRect(0, 0, this.canvas2d.width, this.canvas2d.height);
+                context.drawImage(canvas, 0, 0, this.canvas2d.width, this.canvas2d.height);
                 if(this.state.isStoppedRecording) {
                     return;
                 }

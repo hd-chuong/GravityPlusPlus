@@ -173,7 +173,7 @@ class Dashboard extends Component {
                 'Error ' + response.status + ': ' + response.statusText,
               );
               error.response = response;
-              console.log(err);
+              console.log(error);
               throw error;
             } else {
               return response.data;

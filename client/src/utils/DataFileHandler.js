@@ -1,6 +1,5 @@
 import path from 'path';
 import {saveAs} from 'file-saver';
-import { fieldDefs } from 'vega-lite/build/src/encoding';
 
 async function AsyncJSONUploadHandler(file) {
   const temporaryFileReader = new FileReader();
