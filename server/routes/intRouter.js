@@ -12,15 +12,15 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 // inside a docker container, please use
-// driver = neo4j.driver(
-//   "bolt://gravity-neo4j",
-//   neo4j.auth.basic("neo4j", "test")
-// );
-
 driver = neo4j.driver(
-  "bolt://0.0.0.0:7687",
+  "bolt://gravity-neo4j",
   neo4j.auth.basic("neo4j", "test")
 );
+
+// driver = neo4j.driver(
+//   "bolt://0.0.0.0:7687",
+//   neo4j.auth.basic("neo4j", "test")
+// );
 
 var intgraph = new Intgraph();
 intgraph.useDriver(driver);

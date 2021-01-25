@@ -12,18 +12,17 @@ var Intgraph = require('../models/interaction');
 const {after} = require('underscore');
 // neo4j driver
 var neo4j = require('neo4j-driver');
-const { isNull } = require('util');
 
 // inside a docker container, please use
-// driver = neo4j.driver(
-//   "bolt://gravity-neo4j",
-//   neo4j.auth.basic("neo4j", "test")
-// );
-
 driver = neo4j.driver(
-  "bolt://0.0.0.0:7687",
+  "bolt://gravity-neo4j",
   neo4j.auth.basic("neo4j", "test")
 );
+
+// driver = neo4j.driver(
+//   "bolt://0.0.0.0:7687",
+//   neo4j.auth.basic("neo4j", "test")
+// );
 
 var datagraph = new Datagraph();
 datagraph.useDriver(driver);
@@ -160,9 +159,6 @@ router.route('/:projectName')
     });
     finished();
   });
-
-
 });
-
 
 module.exports = router;
