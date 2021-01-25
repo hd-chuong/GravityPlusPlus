@@ -23,9 +23,15 @@ export default class Chart extends Component {
           <CardTitle>{this.props.title}</CardTitle>
         </CardBody>
         <CardBody className="mx-auto h-100">
-          <Vega spec={this.props.spec} data={this.props.data} signals={this.props.signals}/>
+          <Vega spec={{...this.props.spec, title: {text: this.props.title, ...titleSetting}}} data={this.props.data} signals={this.props.signals}/>
         </CardBody>
       </Card>
     );
   }
+}
+
+const titleSetting = {
+  align: "center",
+  fontSize: 20,
+  fontWeight: "bold"
 }

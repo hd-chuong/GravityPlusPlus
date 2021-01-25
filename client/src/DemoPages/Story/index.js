@@ -8,7 +8,8 @@ import {
     CardTitle,
     CardBody,
     Modal,
-    ModalBody
+    ModalBody,
+    Progress
 } from 'reactstrap';
 
 import {GetNodeById, GetOutgoingEdgesFromId} from "../../utils/graphUtil";
@@ -230,7 +231,6 @@ export default class Story extends Component{
     }
     render() 
     {
-        console.log(this.state.isPublishing, this.state.currentSceneIndex);
         const displayedGraph = this.updateGraphDisplay(this.state.intNodeId);
         const currentNode = GetNodeById(this.props.intgraph, this.state.intNodeId);   
         const graphDefaultPosition = currentNode? [currentNode.position.x, currentNode.position.y] : [0, 0]; 
@@ -350,6 +350,7 @@ export default class Story extends Component{
                                 </p>
                             </Col>
                             </Row>
+                            <Progress className="mb-2" color="success" value={(this.state.currentSceneIndex * 100) / this.props.intgraph.nodes.length} />
                         </ModalBody>
                     </Modal>
                 </div>

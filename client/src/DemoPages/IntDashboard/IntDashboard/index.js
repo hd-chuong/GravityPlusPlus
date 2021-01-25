@@ -67,9 +67,7 @@ export default class IntDashboard extends Component {
 
     onElementClick(id)
     {
-        const clickedNode = this.props.intgraph.nodes.filter(
-            node => node.id === id,
-        )[0];
+        const clickedNode = GetNodeById(this.props.intgraph, id);
         // if clicked on edges
         if (!clickedNode) return;
         
