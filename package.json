@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "glob": "^7.1.6",
-    "js-beautify": "^1.13.0"
+    "js-beautify": "^1.13.4"
   },
   "devDependencies": {
     "prettier": "2.2.1"
