@@ -1,13 +1,11 @@
 export default function Scatterplot(tableName, x, y, color, shape, value) {
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+    width: "container",
+    height: "container",
     data: {
       name: tableName,
       values: value,
-    },
-    autosize: {
-      type: 'fit',
-      contains: 'padding',
     },
     mark: 'point',
     encoding: {
