@@ -126,15 +126,15 @@ const VisForm = props => {
 
 const OwnSchema = ({ formik }) => {
   return (
-    <Fragment>
-      <Row className="form-group">
+    <FormGroup>
+      <Row>
         <Label md={3}>Enter the visualisation title</Label>
         <Col md={9}>
           <Input type="text" onChange={formik.handleChange} name="title" />
         </Col>
       </Row>
 
-      <Row className="form-group">
+      {/* <Row className="form-group">
         <Field
           component="input"
           type="radio"
@@ -143,13 +143,13 @@ const OwnSchema = ({ formik }) => {
           disabled
         />{' '}
         Write my own visualisation schema
-      </Row>
+      </Row> */}
 
-      <Row className="form-group">
+      <Row>
         <Field type="radio" name="useOurTemplate" value={true} /> Use our
         template (recommended)
       </Row>
-    </Fragment>
+    </FormGroup>
   );
 };
 
