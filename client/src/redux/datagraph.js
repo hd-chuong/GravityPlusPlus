@@ -58,6 +58,7 @@ export const DataGraph = (
         arrowHeadType: 'arrowclosed',
         data: action.payload.data,
         style,
+        type: edgeType
       };
 
       return {
