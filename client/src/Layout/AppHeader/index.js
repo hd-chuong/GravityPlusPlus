@@ -77,7 +77,7 @@ class Header extends React.Component {
             <div className="app-header-right">
               <Navbar dark expand="sm">
                 <Nav navbar>
-                  <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }} onClick={this.props.save}>
+                  {/* <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }} onClick={this.props.save}>
                     <div className="nav-link">
                       <i className="fa fa-download fa-md mr-1"></i> Save
                     </div>
@@ -94,7 +94,7 @@ class Header extends React.Component {
                         <i className="fa fa-upload fa-md mr-1"></i> Upload
                       </ReactFileReader>
                       </div>
-                    </NavItem>
+                    </NavItem> */}
                   
 
                   <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }}>

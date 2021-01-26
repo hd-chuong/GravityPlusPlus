@@ -14,10 +14,17 @@ const {
 const router = express.Router();
 router.use(bodyParser.json());
 
-const driver = neo4j.driver(
+// // inside a docker container, please use
+driver = neo4j.driver(
   "bolt://gravity-neo4j",
   neo4j.auth.basic("neo4j", "test")
 );
+
+// // for express to communicate with Neo4j from inside a docker container, use bolt://0.0.0.0:7687 
+// driver = neo4j.driver(
+//   "bolt://0.0.0.0:7687",
+//   neo4j.auth.basic("neo4j", "test")
+// );
 
 var visgraph = new Visgraph();
 visgraph.useDriver(driver);

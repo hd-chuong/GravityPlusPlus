@@ -76,6 +76,9 @@ export default class Graph extends Component {
               if (!this.props.onNodeDragStop) return;
               this.props.onNodeDragStop(node.id, node.position.x, node.position.y);
             }}
+            onSelectionContextMenu={
+              (event, node) => {console.log(" right click at node: ", node)}
+            }
             // defaultPosition={this.props.defaultPosition}
           >
             <Controls />

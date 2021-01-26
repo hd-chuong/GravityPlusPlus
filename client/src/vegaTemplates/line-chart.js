@@ -2,10 +2,8 @@ export default function lineChartSchema(tableName, x, y, category, value) {
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
     description: 'Line Chart',
-    autosize: {
-      type: 'fit',
-      contains: 'padding',
-    },
+    width: "container",
+    height: "container",
     data: {
       name: tableName,
       values: value,

@@ -7,7 +7,11 @@ import {
     Card,
     CardTitle,
     CardBody,
+    Modal,
+    ModalBody,
+    Progress
 } from 'reactstrap';
+
 import {GetNodeById, GetOutgoingEdgesFromId} from "../../utils/graphUtil";
 import {GetState} from "../../utils/stateMachine";
 import Graph from "../DataDashboard/DataGraph";
@@ -15,6 +19,9 @@ import ReactQuill from "react-quill";
 import Chart from "../VisDashboard/Chart";
 import html2canvas from 'html2canvas';
 import RecordRTC from 'recordrtc';
+import {jsPDF} from 'jspdf';
+import {toast} from 'react-toastify';
+import toastOptions from '../config/toastOptions';
 
 // Layout
 export default class Story extends Component{
@@ -28,6 +35,8 @@ export default class Story extends Component{
             editorState: '',
             isRecordingStarted: false,
             isStoppedRecording: false, 
+            isPublishing: false,
+            currentSceneIndex: 0
         }
 
         this.onElementClick = this.onElementClick.bind(this);
@@ -61,8 +70,8 @@ export default class Story extends Component{
             onrendered: function(canvas) {
                 console.log("print this.canvas2d: ", this.canvas2d);
                 const context = this.canvas2d.getContext('2d');
-                context.clearRect(0, 0, canvas2d.width, canvas2d.height);
-                context.drawImage(canvas, 0, 0, canvas2d.width, canvas2d.height);
+                context.clearRect(0, 0, this.canvas2d.width, this.canvas2d.height);
+                context.drawImage(canvas, 0, 0, this.canvas2d.width, this.canvas2d.height);
                 if(this.state.isStoppedRecording) {
                     return;
                 }
@@ -89,8 +98,7 @@ export default class Story extends Component{
         if (!clickedNode) return;
 
         this.setState({stateLoading: true});
-
-        GetState(
+        return GetState(
             this.props.datasets.datasets, 
             this.props.datagraph, 
             this.props.visgraph, 
@@ -99,6 +107,7 @@ export default class Story extends Component{
             {},
             this.updateState
         );
+
     }
 
     updateGraphDisplay(id)
@@ -174,6 +183,52 @@ export default class Story extends Component{
         });
     }
 
+    publishPDF()
+    {
+        var doc = new jsPDF("landscape");
+        doc.setFontSize(20);
+        const allNodes = this.props.intgraph.nodes;
+        if (allNodes.length === 0)
+        {
+            toast.warn("No nodes available to export.", toastOptions);
+            return;
+        }
+        let callback = (i) => {
+            return new Promise(resolve => {
+                this.setState({isPublishing: true, currentSceneIndex: i});
+                this.onElementClick(allNodes[i].id)
+                .then(() => {
+                    setTimeout(() => {
+                        var node = findDOMNode(this.presentation.current);
+                        var canvas = node.getElementsByTagName("canvas")[0];
+                        var img = canvas.toDataURL("image/png", 1);
+                        doc.addImage(img, 'JPEG', 20, 20);
+                        doc.addPage();
+
+                        if (i === allNodes.length - 1)
+                        {
+                            this.setState({isPublishing: false});
+                            doc.save("abc.pdf");
+                            toast.success("Successfully all scenes exported to PDF.", toastOptions);
+                        }
+
+                        resolve();
+                    }, 1000);
+                })
+            }) 
+        };
+        callback = callback.bind(this);
+
+        const createChain = () => {
+            let chain = Promise.resolve();
+            for (let i = 0; i < allNodes.length; ++i)
+            {    
+                chain = chain.then(() => callback(i));
+            }
+            return chain;
+        }
+        createChain();
+    }
     render() 
     {
         const displayedGraph = this.updateGraphDisplay(this.state.intNodeId);
@@ -225,10 +280,9 @@ export default class Story extends Component{
                                             <Col>
                                                 <Card className="mb-2">
                                                     <CardBody>
-                                                        <CardTitle>Video Recording</CardTitle>
-                                                        <span onClick={this.startRecord.bind(this)}><i className="fa fa-video-camera" aria-hidden="true"></i> <small> Record</small>{' '}</span>
-                                                        <span onClick={this.stopRecord.bind(this)}><i className="fa fa-stop" aria-hidden="true"></i>  <small> Stop</small></span>
-
+                                                        <CardTitle>Presentation Control</CardTitle>
+                                                        <p>Video recording <span onClick={this.startRecord.bind(this)}><i className="fa fa-video-camera" aria-hidden="true"></i> <small> Record</small>{' '}</span> <span onClick={this.stopRecord.bind(this)}><i className="fa fa-stop" aria-hidden="true"></i>  <small> Stop</small></span> </p>
+                                                        <p>Publish <span onClick={this.publishPDF.bind(this)}><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Save as PDF</span></p>
                                                     </CardBody>
                                                 </Card>
                                             </Col>
@@ -285,7 +339,20 @@ export default class Story extends Component{
                                     </ReactCSSTransitionGroup>
                                 </Col>
                             </Row>              
-                    </ReactCSSTransitionGroup> 
+                    </ReactCSSTransitionGroup>
+                    <Modal isOpen={this.state.isPublishing}>
+                        <ModalBody>
+                            <Row>
+                            <Col md={3}><i className="fa fa-spin fa-cog fa-2x" aria-hidden="true"></i></Col>
+                            <Col>
+                                <p>
+                                    Exporting scene {this.state.currentSceneIndex} out of {this.props.intgraph.nodes.length} to pdf.
+                                </p>
+                            </Col>
+                            </Row>
+                            <Progress className="mb-2" color="success" value={(this.state.currentSceneIndex * 100) / this.props.intgraph.nodes.length} />
+                        </ModalBody>
+                    </Modal>
                 </div>
             </div>
         </div>

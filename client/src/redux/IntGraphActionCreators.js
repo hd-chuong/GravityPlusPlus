@@ -1,5 +1,7 @@
 import * as ActionTypes from './IntGraphActionTypes';
 import axios from 'axios';
+import {toast} from 'react-toastify';
+import toastOptions from '../DemoPages/config/toastOptions';
 
 export const saveIntNode = ({name, source}) => dispatch => {
     return axios({
@@ -25,9 +27,10 @@ export const saveIntNode = ({name, source}) => dispatch => {
             type: ActionTypes.ADD_INT_NODE,
             payload: {name, source, id},
         });
+        toast.success(`Successfully added node ${name}`, toastOptions);
     })
     .catch(error => {
-        alert('Redux failed to add new node: ' + error.message);
+        toast.error('Redux failed to add new node: ' + error.message, toastOptions);
     });    
 };
 
@@ -58,9 +61,10 @@ export const addIntEdge = ({source, target, signal, binding, label}) => dispatch
         const id = data.id;
         const newEdge = {id, source, target, signal, binding, label};
         dispatch(saveIntEdge(newEdge));
+        toast.success(`Successfully added new edge`, toastOptions);    
     })
     .catch(error => {
-        alert(`Failed to add new edge: ${error.message}`);
+        toast.error(`Failed to add new edge: ${error.message}`, toastOptions);
     });
 }
 
@@ -85,7 +89,7 @@ export const removeIntNode = ({id}) => dispatch => {
         payload: {id}
     }))
     .catch(error => {
-        alert(`Failed to delete node ${id} in database: ${error.message}`);
+        toast.error(`Failed to delete node ${id} in database: ${error.message}`, toastOptions);
       });
 };
 
@@ -126,7 +130,7 @@ export const setIntPosition = payload => dispatch => {
         payload});
     })    
     .catch(error => {
-      alert(`Failed to update new position of int node ${id} to database: ${error.message}`);
+      toast.error(`Failed to update new position of int node ${id} to database: ${error.message}`, toastOptions);
     });
   };
 
@@ -142,8 +146,9 @@ export const setIntPosition = payload => dispatch => {
       dispatch({  
         type: ActionTypes.SET_INT_NODE,
         payload});
+        toast.success("Successfully update interaction node.", toastOptions);
     })    
     .catch(error => {
-      alert(`Failed to update new position of int node ${id} to database: ${error.message}`);
+      toast.error(`Failed to update new position of int node ${id} to database: ${error.message}`, toastOptions);
     });
   };
