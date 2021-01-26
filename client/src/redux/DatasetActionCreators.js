@@ -5,7 +5,7 @@ export const addDataset = ({ name, dataset }) => dispatch => {
     url: 'http://localhost:7473/dataset',
     withCredentials: true,
     method: 'post',
-    data: {name, dataset}
+    data: [{name, dataset}]
   }).then(() => {
     dispatch({
       type: ActionTypes.ADD_DATASET,

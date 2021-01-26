@@ -27,11 +27,16 @@ const addHeader = async (req, res, next) => {
 router.route('/')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .post(cors.corsWithOptions, addHeader, (req, res, next) => {
-    const {dataset, name} = req.body;
     const projName = req.session.name;
-    fs.writeFile(__dirname + `/../data/${projName}/data/${uuiv4()}.json`, JSON.stringify({dataset, name}), (err) => {
+    
+    for (const {dataset, name} of req.body)
+    {
+      // asynchronous
+      fs.writeFile(__dirname + `/../data/${projName}/data/${uuiv4()}.json`, JSON.stringify({dataset, name}), (err) => {
         if (err) throw err;
     });
+    }
+
     res.sendStatus(200);
   });  
 

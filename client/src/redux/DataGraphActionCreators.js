@@ -46,11 +46,11 @@ export const addDataNode = ({
         type = 'RAW';
       }
       dispatch(saveDataNode({ id, name, type, source, transform, format }));
-      toast.success("Successfully create a original data node", toastOptions);
+      toast.success("Successfully create a data node", toastOptions);
       return id;
     })
     .catch(error => {
-      alert('Redux failed to add new node: ' + error.message);
+      toast.error('Redux failed to add new node: ' + error.message, toastOptions);
     });
 };
 
@@ -66,7 +66,7 @@ export const saveDataEdge = ({ id, source, target, type, data }) => ({
 });
 
 export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
-
+  
     if (type === "TRANSFORM" && data.type === "filter"  && data.threshold === null)
     {
       data.useParams = true;
@@ -98,10 +98,10 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
     .then(responseData => {
       dispatch(
         saveDataEdge({
-          source: source,
-          target: target,
-          type: type,
-          data: data,
+          source,
+          target,
+          type,
+          data,
           id: responseData.id,
         }),
       );
@@ -128,12 +128,13 @@ export const removeDataNode = ({ id }) => dispatch => {
         return response.data;
       }
     })
-    .then(() =>
+    .then(() => {
       dispatch({
         type: ActionTypes.REMOVE_DATA_NODE,
         payload: { id },
-      }),
-    )
+      }) 
+      toast.success("Successfully delete data node.", toastOptions);
+    })
     .catch(error => {
       alert('Failed to delete a node: ' + error.message);
     });

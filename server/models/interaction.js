@@ -7,8 +7,6 @@ const {
     SetQueryBuilder
 } = require("../utils/query");
 
-const {toNumber} =require('neo4j-driver/lib/integer.js');
-
 module.exports = class IntGraph {
     constructor() {
       this.neo4jDriver = null;
@@ -51,7 +49,7 @@ module.exports = class IntGraph {
       return this.neo4jDriver.session({database: this.dbName});
     }
   
-    addNode(name, source) {
+    addNode(name, source, id) {
       const session = this.getSession();
       const cypher = `
               CREATE 
@@ -63,7 +61,7 @@ module.exports = class IntGraph {
                   node
           `;
       const params = {
-        id: uuidv4(),
+        id: id || uuidv4(),
         name,
         source: JSON.stringify(source),
       };
@@ -192,11 +190,11 @@ module.exports = class IntGraph {
         });
     }
   
-    addEdge(source, target, signal, binding, label) {
+    addEdge(source, target, signal, binding, label, id) {
       const params = {
         source,
         target,
-        id: uuidv4(),
+        id: id || uuidv4(),
         signal: JSON.stringify(signal),
         binding: JSON.stringify(binding),
         label
@@ -350,7 +348,25 @@ module.exports = class IntGraph {
       });
     }
   
-    
+    setGraph(intgraph)
+    {
+      const {nodes, edges} = intgraph;
+
+      for (const node of nodes)
+      {
+        const {id, data} = node;
+        const {label, source} = data;
+        this.addNode(label, source, id);
+      }
+
+      for (const edge of edges)
+      {
+        const {id, source, target, data, label} = edge;
+        const {signal, binding, } = data; 
+        this.addEdge(source, target, signal, binding, label, id);
+      }
+    }
+
     setNodeProperty(nodeId, property)
     {
       const params = {

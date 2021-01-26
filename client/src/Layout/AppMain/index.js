@@ -5,13 +5,12 @@ import AppHeader from '../AppHeader';
 import { ToastContainer } from 'react-toastify';
 import { Switch, withRouter } from 'react-router-dom';
 import {AsyncJSONDownloadHandler} from "../../utils/DataFileHandler";
-import Home from '../../DemoPages/Home';
 
 const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
 const IntDashboard = lazy(() => import('../../DemoPages/IntDashboard'));
 const Story = lazy(() => import('../../DemoPages/Story'));
-
+const Home = lazy(() => import('../../DemoPages/Home'))
 const AppMain = ({
   state,
   datasets,

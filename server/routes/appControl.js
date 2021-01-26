@@ -159,6 +159,37 @@ router.route('/:projectName')
     });
     finished();
   });
+})
+.post(cors.corsWithOptions, addHeader, (req, res, next) => {
+
+  const {datagraph: dgraph, visgraph: vgraph, intgraph: igraph} = req.body;
+  const {projectName: projName} = req.params;
+  
+  req.session.name = projName;
+
+  const finished = after(3, () => res.json(req.session));
+
+  // get the datagraph
+  datagraph.useDatabase(projName).then(() => {
+    datagraph.setGraph(dgraph) //.then((dgraph) => {
+      // state.datagraph.datagraph = dgraph;
+      finished();
+    });
+
+  // get visgraph
+  visgraph.useDatabase(projName).then(() => {
+    visgraph.setGraph(vgraph) //.then((vgraph) => {
+      // state.visgraph.visgraph = vgraph;
+    finished();
+    //})
+  });
+
+  // get intgraph
+  intgraph.useDatabase(projName).then(() => {
+    intgraph.setGraph(igraph) //.then((igraph) => {
+      finished();
+    // })
+  });
 });
 
 module.exports = router;

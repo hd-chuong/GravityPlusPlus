@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import {Row, Col, CardBody, CardTitle} from 'reactstrap';
+import {Row, Col, CardBody, CardTitle, Pag} from 'reactstrap';
 import PageTitle from '../../Layout/AppMain/PageTitle';
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
+import AsyncDataFileHandler from '../../utils/DataFileHandler';
+import ReactFileReader from 'react-file-reader';
 
 class Home extends React.Component {
     constructor(props)
@@ -12,6 +14,48 @@ class Home extends React.Component {
         this.state = {
             projects: []
         }
+    }
+
+    handleUpload(files) {
+        // asking for name
+        const name = prompt("Please enter project name");
+
+        const file = files[0];
+        
+        // step one, create a empty database
+
+        return axios({
+            url: 'http://localhost:7473/app',
+            withCredentials: true,
+            method: 'post',
+            data: {name: name, isNewProject: true}
+        }).then(() => {
+            AsyncDataFileHandler(file).then(data => { 
+                // upload datasets
+                // array of datasets. Each record has data and name
+                const {datasets} = data.datasets;
+                return axios({
+                    url: 'http://localhost:7473/dataset',
+                    withCredentials: true,
+                    method: 'post',
+                    data: datasets,
+                }).then(() => {
+                    return data;
+                })  
+            }).then(({datagraph, intgraph, visgraph}) => {
+                // upload graph to database
+                return axios({
+                    url: `http://localhost:7473/app/${name}`,
+                    withCredentials: true,
+                    method: 'post',
+                    data: {
+                        datagraph: datagraph.datagraph, 
+                        visgraph: visgraph.visgraph, 
+                        intgraph: intgraph.intgraph
+                    }
+                })
+            });
+        });        
     }
 
     componentDidMount()
@@ -53,6 +97,8 @@ class Home extends React.Component {
         .then(data => {
             const {name, error} = data.data;
             if (name) {
+                // empty project
+                this.props.load(emptyProj);
                 this.props.history.push('/data');
             }
             if (error) this.newProject();
@@ -63,7 +109,7 @@ class Home extends React.Component {
     }
 
     render() {
-
+        const projects = this.state.projects.map(proj => ({name: proj}))
         return (
             <div className="app-main">
                 <div className="app-main__outer">
@@ -76,25 +122,24 @@ class Home extends React.Component {
                             transitionEnter={false}
                             transitionLeave={false}
                         >
-                            {/* <PageTitle
-                                heading="Gravity++"
-                                subheading="Graph-based storytelling"
-                                icon="pe-7s-graph1 icon-gradient bg-mean-fruit"
-                            /> */}
-
                             <Row>     
                                 <Col md={4}>
                                     <CardBody>    
                                         <div onClick={this.newProject.bind(this)}>     
-                                        <PageTitle
-                                            heading="Create new project"
-                                            icon="pe-7s-plus icon-gradient bg-mean-fruit"
-                                        />
+                                            <PageTitle
+                                                heading="Create new project"
+                                                icon="pe-7s-plus icon-gradient bg-mean-fruit"
+                                            />
                                         </div>
-                                        <PageTitle
-                                            heading="Upload graph from your system"
-                                            icon="pe-7s-upload icon-gradient bg-mean-fruit"
-                                        />
+                                        <ReactFileReader
+                                                handleFiles={this.handleUpload.bind(this)}
+                                                fileTypes={['.gpp']}
+                                        >
+                                            <PageTitle
+                                                heading="Upload graph from your system"
+                                                icon="pe-7s-upload icon-gradient bg-mean-fruit"
+                                            />
+                                        </ReactFileReader>
                                     </CardBody>
                                 </Col>    
                                 <Col md={6}>
@@ -107,6 +152,12 @@ class Home extends React.Component {
                                                 />
                                             </div>
                                         ))}
+                                        {/* <ReactTable 
+                                            data={projects}
+                                            // columns={[{Header: "name", accessor: "name"}]}
+                                            defaultPageSize={10}
+                                            className="-striped -highlight"
+                                        /> */}
                                     </CardBody>
                                 </Col>
                             </Row>
@@ -118,4 +169,24 @@ class Home extends React.Component {
     }
 }
 
+const emptyProj = {
+    datasets: {
+      datasets: [],
+      errMess: null
+    },
+    datagraph: {
+      datagraph: {edges: [], nodes: []},
+      errMess: null
+    },
+    visgraph: {
+      visgraph: {edges: [], nodes: []},
+      errMess: null
+    },
+    intgraph: {
+      intgraph: {edges: [], nodes: []},
+      errMess: null
+    }
+  };
+
 export default withRouter(Home);
+
