@@ -23,25 +23,39 @@ export default class Vega extends React.PureComponent {
   {
     const { spec, data, signals} = this.props;
 
-    // do a deep copy of spec
-    const copiedSpec = JSON.parse(JSON.stringify(spec));
+    console.log(spec, data);
+
+    if (Array.isArray(spec) && spec.length === data.length) {
+      copiedSpec = JSON.parse(JSON.stringify(concatTemplates));      
+      spec.forEach((spec, i) => {        
+        var singleSpec = JSON.parse(JSON.stringify(spec));
+
+        singleSpec.width = "container";
+        delete singleSpec.height;
+        delete singleSpec.$schema;
+        delete singleSpec.description;
+
+        AttachDataToSpec(
+          singleSpec, 
+          JSON.parse(JSON.stringify(data[i]))
+        );
+
+        copiedSpec.vconcat.push(singleSpec);
+      })
+    }
+    else 
+    {  
+      // do a deep copy of spec
+      var copiedSpec = JSON.parse(JSON.stringify(spec));
+      AttachDataToSpec(copiedSpec, JSON.parse(JSON.stringify(data)));
+    }
     // do a deep copy of data
-    AttachDataToSpec(copiedSpec, JSON.parse(JSON.stringify(data)));
- 
+    
     var config = {
-      actions: { compiled: false, editor: false, source: false },
+      actions: { compiled: true, editor: false, source: false },
       tooltip: handler.call,
       config: { mark: { tooltip: true } },
     };
-
-    // var signal = null;
-    // var eventHandler = null;
-
-    // if (this.props.hasOwnProperty("signals"))
-    // {
-    //   signal = this.props.signal.signal;
-    //   eventHandler = this.props.signal.eventHandler;
-    // }
 
     vegaEmbed(this.refs[this.state.id], copiedSpec, {
       ...config, patch: (copiedSpec) => {
@@ -54,6 +68,8 @@ export default class Vega extends React.PureComponent {
           const signalNames = signals.map(signal => signal.signal);
           copiedSpec.signals.push(...signalNames);
         }
+
+        console.log(copiedSpec);
         return copiedSpec;
       }
     }).then(result => {
@@ -77,7 +93,7 @@ export default class Vega extends React.PureComponent {
   }
 
   render() {
-    return <div className={this.props.className} ref={this.state.id} style={{height: 600, width: 600}}/>;
+    return <div className={this.props.className} ref={this.state.id} style={{height: 500, width: 500}}/>;
   }
 }
 
@@ -88,7 +104,6 @@ const AttachDataToSpec = (spec, data) => {
     {
       let item = spec.data[i];
       if (item.values) item.values = data;
-      return;
     }
   }
   else {
@@ -96,4 +111,11 @@ const AttachDataToSpec = (spec, data) => {
     spec.data.values = data;
     return;
   }
+}
+
+const concatTemplates = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "vconcat": [],
+    "width": "container",
+    "height": "container",
 }
