@@ -51,7 +51,7 @@ module.exports = class VisGraph {
       return this.neo4jDriver.session({database: this.dbName});
     }
   
-    addNode(name, dataSource, spec) {
+    addNode(name, dataSource, spec, id) {
       const session = this.getSession();
       const cypher = `
               CREATE 
@@ -64,7 +64,7 @@ module.exports = class VisGraph {
                   node
           `;
       const params = {
-        id: uuidv4(),
+        id: id || uuidv4(),
         name,
         dataSource,
         spec: JSON.stringify(spec)
@@ -319,6 +319,18 @@ module.exports = class VisGraph {
       });
     }
 
+    setGraph(visgraph) {
+      const {nodes, edges} = visgraph;
+
+      for (const node of nodes)
+      {
+        const {id, data} = node;
+        const {label: name, dataSource, spec} = data;
+        this.addNode(name, dataSource, spec, id);
+      }
+
+      // there is no edge for visgraph
+    }
     getAllEdges()
     {
       return [];

@@ -7,8 +7,6 @@ const {
   SetQueryBuilder
 } = require("../utils/query");
 
-const {after} = require('underscore');
-const {toNumber} =require('neo4j-driver/lib/integer.js');
 module.exports = class DataGraph {
   constructor() {
     this.dbName = "";
@@ -51,7 +49,7 @@ module.exports = class DataGraph {
     return this.neo4jDriver.session({database: this.dbName});
   }
 
-  addNode(name, type, source, transform, format) {
+  addNode(name, type, source, transform, format, id) {
     const session = this.getSession();
     
     const cypher = `
@@ -68,7 +66,7 @@ module.exports = class DataGraph {
     const params = {
       name,
       type,
-      id: uuidv4(),
+      id: id || uuidv4(),
       source,
       transform: JSON.stringify(transform),
       format: JSON.stringify(format)
@@ -188,8 +186,8 @@ module.exports = class DataGraph {
       });
   }
 
-  addEdge(source, target, type, operation) {
-    const id = uuidv4();
+  addEdge(source, target, type, operation, id) {
+    id = id || uuidv4();
     const params = {
       source,
       target,
@@ -316,7 +314,7 @@ module.exports = class DataGraph {
         
         transform = JSON.parse(transform);
         format = JSON.parse(format);
-        x = parseInt(x) || Math.random() * 100 ;
+        x = parseInt(x) || Math.random() * 100;
         y = parseInt(y) || Math.random() * 100;
         
         console.log(x, y);
@@ -360,6 +358,27 @@ module.exports = class DataGraph {
     });
   }
 
+  setGraph(datagraph)
+  {
+    const {nodes, edges} = datagraph;
+    // set nodes
+    for (const node of nodes)
+    {
+      const {id, data} = node;
+      const {label, type, source, transform, format} = data;
+      this.addNode(label, type, source, transform, format, id);
+    }
+
+    // set edges
+    for (const edge of edges)
+    {
+      const {id, source, target, data, type} = edge;
+      // data is stored in operation
+      console.log(id, source, target, data, type);
+      this.addEdge(source, target, type, data, id); 
+    }
+
+  }
   getSubgraphTo(target) {
     const params = {
       id: target
