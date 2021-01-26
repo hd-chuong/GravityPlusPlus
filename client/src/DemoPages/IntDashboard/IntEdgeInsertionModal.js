@@ -67,7 +67,8 @@ const IntEdgeInsertionModal = (props) => {
     const visSpecs = GetVisSpecs(intNodeId);
     const markTypes = visSpecs.map(spec => ExtractMarkTypes(spec.marks));
     // will change here to accomodate multiple visualisations
-    return markTypes[0];
+    console.log(markTypes);
+    return markTypes;
   }; 
 
   const getDataId = (intNodeId) => {
@@ -191,9 +192,12 @@ const IntEdgeInsertionModal = (props) => {
               <Label md={3}>Choose vis element</Label>
               <Col md={9}>
                 <Select
-                  options={GetVisElements(source).map(mark => ({
-                    value: mark.type,
-                    label: mark.style
+                  options={GetVisElements(source).map((mark, i) => ({
+                    label: `View ${i+1}`,
+                    options: mark.map(element => ({
+                      value: element.type,
+                      label: element.style
+                    }))
                   }))
                   }
                   onChange={(val) => {
