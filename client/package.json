@@ -105,6 +105,7 @@
     "react-simple-maps": "^0.12.1",
     "react-sizeme": "^2.5.2",
     "react-sliding-side-panel": "^2.0.3",
+    "react-table": "^7.6.3",
     "react-toastify": "^4.5.2",
     "react-tooltip": "^4.2.13",
     "react-transition-group": "^2.5.3",

@@ -208,7 +208,7 @@ export default class Story extends Component{
                         if (i === allNodes.length - 1)
                         {
                             this.setState({isPublishing: false});
-                            doc.save("abc.pdf");
+                            doc.save("export.pdf");
                             toast.success("Successfully all scenes exported to PDF.", toastOptions);
                         }
 
@@ -233,6 +233,7 @@ export default class Story extends Component{
     {
         const displayedGraph = this.updateGraphDisplay(this.state.intNodeId);
         const currentNode = GetNodeById(this.props.intgraph, this.state.intNodeId);   
+        const title = currentNode ? currentNode.data.label : "";
         const graphDefaultPosition = currentNode? [currentNode.position.x, currentNode.position.y] : [0, 0]; 
 
         return (
@@ -259,7 +260,7 @@ export default class Story extends Component{
                                             <Chart
                                                 id="presentation-chart"
                                                 ref={this.presentation}
-                                                title={"Current Scene"}
+                                                title={title}
                                                 data={this.state.data}
                                                 spec={this.state.spec}  
                                                 signals={this.state.signals}

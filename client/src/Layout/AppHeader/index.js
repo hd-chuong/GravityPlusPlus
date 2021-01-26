@@ -6,19 +6,10 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import HeaderLogo from '../AppLogo';
-import ReactFileReader from 'react-file-reader';
-import AsyncDataFileHandler from '../../utils/DataFileHandler';
 
 // import SearchBox from './Components/SearchBox';
 // import UserBox from './Components/UserBox';
 class Header extends React.Component {
-  
-  handleFiles(files) {
-    const file = files[0];
-    AsyncDataFileHandler(file).then(data => {
-      this.props.load(data);
-    });
-  }
 
   render() {
     let {
@@ -77,24 +68,12 @@ class Header extends React.Component {
             <div className="app-header-right">
               <Navbar dark expand="sm">
                 <Nav navbar>
-                  {/* <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }} onClick={this.props.save}>
+                  <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }} onClick={this.props.save}>
                     <div className="nav-link">
                       <i className="fa fa-download fa-md mr-1"></i> Save
                     </div>
                   </NavItem>
-                  
-
-                    <NavItem className="metismenu-item mr-1">
-                      <div className="nav-link" style={{ cursor: 'pointer' }}>
-                      
-                        <ReactFileReader
-                        handleFiles={this.handleFiles.bind(this)}
-                        fileTypes={['.gpp']}
-                      >
-                        <i className="fa fa-upload fa-md mr-1"></i> Upload
-                      </ReactFileReader>
-                      </div>
-                    </NavItem> */}
+                 
                   
 
                   <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }}>

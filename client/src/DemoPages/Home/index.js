@@ -3,8 +3,6 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Row, Col, CardBody, CardTitle, Pag} from 'reactstrap';
 import PageTitle from '../../Layout/AppMain/PageTitle';
 import {withRouter} from 'react-router-dom';
-// import ReactTable from "react-table";
-// import "react-table/react-table.css";
 import axios from 'axios';
 import AsyncDataFileHandler from '../../utils/DataFileHandler';
 import ReactFileReader from 'react-file-reader';
@@ -57,9 +55,7 @@ class Home extends React.Component {
                     }
                 })
             });
-        });
-
-        
+        });        
     }
 
     componentDidMount()

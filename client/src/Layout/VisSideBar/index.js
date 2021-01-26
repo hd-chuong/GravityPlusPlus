@@ -33,7 +33,6 @@ class VisSideBar extends Component {
 
     return (
       <Fragment>
-        {/* <div className="sidebar-mobile-overlay" onClick={this.toggleMobileSidebar}/> */}
         <ReactCSSTransitionGroup
           component="div"
           className={cx('app-sidebar', backgroundColor)}
@@ -59,65 +58,6 @@ class VisSideBar extends Component {
                   </li>
                 </ul>
               </div>
-{/* 
-              <h5 className="app-sidebar__heading">
-                Connect nodes with
-              </h5> */}
-
-              {/* <div className="metismenu vertical-nav-menu" style={{width: '100%', wordBreak: 'break-word'}}>
-                <ul className="metismenu-container">
-                  <li className="metismenu-item" style={{ cursor: 'pointer' }}>
-                    <div className="metismenu-link" target="_blank">
-                      {this.props.loadTransformationLinks ? (
-                        <i className="metismenu-icon fa fa-spin fa-circle-o-notch" aria-hidden="true"/>
-                      ) : (
-                        <i className="metismenu-icon">
-                          <input
-                            type="checkbox"
-                            checked={this.props.isTransformationLinks}
-                            onChange={this.props.handleTransformationLinks}
-                          />
-                        </i>
-                      )}{' '}
-                      Same dataset and encoding 
-                    </div>
-                  </li>
-
-                  <li className="metismenu-item" style={{ cursor: 'pointer' }}>
-                    <div className="metismenu-link" target="_blank">
-                      {this.props.loadTransformationLinks ? (
-                        <i className="metismenu-icon fa fa-spin fa-circle-o-notch" aria-hidden="true"/>
-                      ) : (
-                        <i className="metismenu-icon">
-                          <input
-                            type="checkbox"
-                            checked={this.props.isTransformationLinks}
-                            onChange={this.props.handleTransformationLinks}
-                          />
-                        </i>
-                      )}{' '}
-                      Same dataset, different encoding 
-                    </div>
-                  </li>
-
-                  <li className="metismenu-item" style={{ cursor: 'pointer' }}>
-                    <div className="metismenu-link" target="_blank">
-                      {this.props.loadTransformationLinks ? (
-                        <i className="metismenu-icon fa fa-spin fa-circle-o-notch" aria-hidden="true"/>
-                      ) : (
-                        <i className="metismenu-icon">
-                          <input
-                            type="checkbox"
-                            checked={this.props.isTransformationLinks}
-                            onChange={this.props.handleTransformationLinks}
-                          />
-                        </i>
-                      )}{' '}
-                      Data derived from other nodes 
-                    </div>
-                  </li>
-                </ul>
-              </div> */}
  
               <div>
                 <h5 className="app-sidebar__heading" style={{ cursor: 'pointer' }} onClick={this.props.handleRecommendedSequence}>
@@ -129,7 +69,7 @@ class VisSideBar extends Component {
                 
               </div>
 
-              <div className="metismenu vertical-nav-menu">              
+              {sessionStorage.getItem("sequences") && <div className="metismenu vertical-nav-menu">              
                 <ul className="metismenu-container">
                   <li className="metismenu-item" style={{ cursor: 'pointer' }}>
                     <div className="metismenu-link">
@@ -153,68 +93,7 @@ class VisSideBar extends Component {
                     </div>
                   </li>
                 </ul>
-              </div>
-{/* 
-              <div className="metismenu vertical-nav-menu">
-                <ul className="metismenu-container">
-                  <li className="metismenu-item" style={{ cursor: 'pointer' }}>
-                    <div className="metismenu-link" target="_blank">
-                      {this.props.loadTransformationLinks ? (
-                        <i className="metismenu-icon fa fa-spin fa-circle-o-notch" aria-hidden="true"/>
-                      ) : (
-                        <i className="metismenu-icon">
-                          <input
-                            type="checkbox"
-                            checked={this.props.isTransformationLinks}
-                            onChange={this.props.handleTransformationLinks}
-                          />
-                        </i>
-                      )}{' '}
-                      Transformation Links
-                    </div>
-                  </li>
-                </ul>
-              </div> */}
-
-              {/* <div className="metismenu vertical-nav-menu">
-                <ul className="metismenu-container">
-                  <li className="metismenu-item" style={{ cursor: 'pointer' }}>
-                    <div className="metismenu-link" target="_blank">
-                      {this.props.loadTransformationLinks ? (
-                        <i className="metismenu-icon fa fa-spin fa-circle-o-notch" aria-hidden="true"/>
-                      ) : (
-                        <i className="metismenu-icon">
-                          <input
-                            type="checkbox"
-                            checked={this.props.isTransformationLinks}
-                            onChange={this.props.handleTransformationLinks}
-                          />
-                        </i>
-                      )}{' '}
-                      Transformation Links
-                    </div>
-                  </li>
-                  {/* <li className="metismenu-item" style={{ cursor: 'pointer' }}>
-                    <div className="metismenu-link" target="_blank">
-                      {this.props.loadRecommendedSequence ? (
-                        <i
-                          className="metismenu-icon fa fa-spin fa-circle-o-notch"
-                          aria-hidden="true"
-                        ></i>
-                      ) : (
-                        <i className="metismenu-icon">
-                          <input
-                            type="checkbox"
-                            checked={this.props.isSequenceRecommended}
-                            onChange={this.props.handleRecommendedSequence}
-                          />
-                        </i>
-                      )}{' '}
-                      GraphScape Path
-                    </div>
-                  </li>
-                </ul>
-              </div> */}
+              </div>}
             </div>
           </PerfectScrollbar>
         </ReactCSSTransitionGroup>
