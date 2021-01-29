@@ -125,6 +125,7 @@
     "sw-precache-webpack-plugin": "0.11.5",
     "url-loader": "0.5.9",
     "uuid": "^8.3.1",
+    "validator": "^13.5.2",
     "vega": "^5.19.1",
     "vega-embed": "^6.14.2",
     "vega-lite": "^4.17.0",
