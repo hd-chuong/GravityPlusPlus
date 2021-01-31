@@ -148,6 +148,10 @@ router.route('/:projectName')
       console.log("cannot read the folder, something goes wrong with glob", err);
     }
     
+    // note: when after argument === 0, it does not automatically invoke finished.
+    // have to place a conditional check
+    
+    if (files.length === 0) finished();
     const readAllJSONFiles = after(files.length, () => finished());
     files.forEach(function(file) {
       fs.readFile(file, 'utf8', function (err, data) { // Read each file
