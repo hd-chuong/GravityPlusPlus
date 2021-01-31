@@ -148,16 +148,18 @@ router.route('/:projectName')
       console.log("cannot read the folder, something goes wrong with glob", err);
     }
     
+    const readAllJSONFiles = after(files.length, () => finished());
     files.forEach(function(file) {
-      
       fs.readFile(file, 'utf8', function (err, data) { // Read each file
         if (err) {
           console.error(`Can not read ${file}.json`);
         }
+        console.log(JSON.parse(data).name);
         state.datasets.datasets.push(JSON.parse(data));
+        readAllJSONFiles();
       });
     });
-    finished();
+    
   });
 })
 .post(cors.corsWithOptions, addHeader, (req, res, next) => {
