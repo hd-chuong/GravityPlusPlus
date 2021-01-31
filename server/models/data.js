@@ -317,7 +317,6 @@ module.exports = class DataGraph {
         x = parseInt(x) || Math.random() * 100;
         y = parseInt(y) || Math.random() * 100;
         
-        console.log(x, y);
 
         return { 
           id: id,

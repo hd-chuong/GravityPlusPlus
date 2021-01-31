@@ -32,7 +32,7 @@ app.use(session({
 * https://stackoverflow.com/questions/20814940/express-change-session-every-request
 */
 
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '150mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

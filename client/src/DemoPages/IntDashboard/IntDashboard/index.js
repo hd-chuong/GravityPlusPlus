@@ -49,7 +49,7 @@ export default class IntDashboard extends Component {
     reset = () => {
         const currentNode = GetNodeById(this.props.intgraph, this.state.intNodeId);
         this.editorChange(currentNode.data.note)
-        toast.info("Reset note", toastOptions);
+        toast.info("Reset presentation note.", toastOptions);
     }
 
     updateGraphDisplay(id)
@@ -79,14 +79,14 @@ export default class IntDashboard extends Component {
             id, 
             {},
             this.updateState
-        ).then(() => {
-            const node = GetNodeById(this.props.intgraph, this.state.intNodeId);
-            if (node)
-            {
-                this.editorChange(node.data.note || '' );   
-            }
-            console.log(node);
-        });
+        );
+        
+        // update the editor note
+        const intNode = GetNodeById(this.props.intgraph, this.state.intNodeId);
+        if (intNode)
+        {
+            this.editorChange(intNode.data.note || '' );   
+        }
     }
     
     onElementsRemove(id)
@@ -147,7 +147,10 @@ export default class IntDashboard extends Component {
                                         <Chart 
                                             title={"Preview"}
                                             data={this.state.data}
-                                            spec={this.state.spec}
+                                            spec={this.state.spec.map(spec => ({
+                                                ...spec, 
+                                                title: {text: "Preview", ...titleSetting} })) 
+                                            }
                                             signals={this.state.signals}
                                         />                                   
                                     </ReactCSSTransitionGroup>
@@ -246,3 +249,9 @@ const formats = [
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet',
 ];
+
+const titleSetting = {
+    align: "center",
+    fontSize: 20,
+    fontWeight: "bold"
+  }

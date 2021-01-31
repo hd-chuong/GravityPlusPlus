@@ -196,25 +196,23 @@ export default class Story extends Component{
         let callback = (i) => {
             return new Promise(resolve => {
                 this.setState({isPublishing: true, currentSceneIndex: i});
-                this.onElementClick(allNodes[i].id)
-                .then(() => {
-                    setTimeout(() => {
-                        var node = findDOMNode(this.presentation.current);
-                        var canvas = node.getElementsByTagName("canvas")[0];
-                        var img = canvas.toDataURL("image/png", 1);
-                        doc.addImage(img, 'JPEG', 20, 20);
-                        doc.addPage();
+                this.onElementClick(allNodes[i].id);
+                setTimeout(() => {
+                    var node = findDOMNode(this.presentation.current);
+                    var canvas = node.getElementsByTagName("canvas")[0];
+                    var img = canvas.toDataURL("image/png", 1);
+                    doc.addImage(img, 'JPEG', 20, 20);
+                    doc.addPage();
 
-                        if (i === allNodes.length - 1)
-                        {
-                            this.setState({isPublishing: false});
-                            doc.save("export.pdf");
-                            toast.success("Successfully all scenes exported to PDF.", toastOptions);
-                        }
+                    if (i === allNodes.length - 1)
+                    {
+                        this.setState({isPublishing: false});
+                        doc.save("export.pdf");
+                        toast.success("Successfully all scenes exported to PDF.", toastOptions);
+                    }
 
-                        resolve();
-                    }, 1000);
-                })
+                    resolve();
+                }, 1000);
             }) 
         };
         callback = callback.bind(this);
