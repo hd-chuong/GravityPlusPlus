@@ -23,14 +23,17 @@ export default class Vega extends React.PureComponent {
   {
     const { spec, data, signals} = this.props;
 
-    console.log(spec, data);
+    // console.log(spec, data);
+    var copiedSpec = {};
 
     if (Array.isArray(spec) && spec.length === data.length) {
       copiedSpec = JSON.parse(JSON.stringify(concatTemplates));      
       spec.forEach((spec, i) => {        
         var singleSpec = JSON.parse(JSON.stringify(spec));
 
-        singleSpec.width = "container";
+        console.log(spec, data[i]);
+        // singleSpec.width = "container";
+        if (singleSpec.data) delete singleSpec.data.name;
         delete singleSpec.height;
         delete singleSpec.$schema;
         delete singleSpec.description;
@@ -39,7 +42,7 @@ export default class Vega extends React.PureComponent {
           singleSpec, 
           JSON.parse(JSON.stringify(data[i]))
         );
-
+      
         copiedSpec.vconcat.push(singleSpec);
       })
     }
@@ -50,7 +53,8 @@ export default class Vega extends React.PureComponent {
       AttachDataToSpec(copiedSpec, JSON.parse(JSON.stringify(data)));
     }
     // do a deep copy of data
-    
+    // console.log(copiedSpec);
+
     var config = {
       actions: { compiled: true, editor: false, source: false },
       tooltip: handler.call,
@@ -69,7 +73,7 @@ export default class Vega extends React.PureComponent {
           copiedSpec.signals.push(...signalNames);
         }
 
-        console.log(copiedSpec);
+        // console.log(copiedSpec);
         return copiedSpec;
       }
     }).then(result => {
@@ -83,7 +87,7 @@ export default class Vega extends React.PureComponent {
   }
 
   componentDidMount() 
-  {
+  {    
     this.updateChart();  
   }
 

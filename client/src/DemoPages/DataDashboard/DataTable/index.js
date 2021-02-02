@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col, Button, CardHeader, Card, CardBody, CardTitle } from 'reactstrap';
+import { Row, Col, Button, CardHeader, Card, CardBody, CardTitle, Alert } from 'reactstrap';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
+import MUIDataTable from 'mui-datatables';
 
-const MAX_ROWS_DISPLAYED = 5;
+const MAX_ROWS_DISPLAYED = 20000;
 
 export default class DataTable extends Component {
   constructor(props) {
@@ -24,60 +25,59 @@ export default class DataTable extends Component {
             </CardBody>
         </Card>
       );
-    const headers = AttributeExtractor(this.props.tableData[0]);
-    const data = this.props.tableData.slice(
-      0,
-      Math.min(MAX_ROWS_DISPLAYED, this.props.tableData.length),
-    );
+    let headers = AttributeExtractor(this.props.tableData[0]);
+    
+    headers = headers.map(h => ({name: h, label: h, options: {filter: true, sort: true}}));
+
+    const data = this.props.tableData.slice(0, MAX_ROWS_DISPLAYED);
 
     return (
-      <Card className="main-card mb-3">
-          <CardHeader>{this.props.label}</CardHeader>
-          <CardBody>      
-            <div className="table-responsive">
-              <table className="align-middle mb-0 table table-borderless table-striped table-hover">
-                <thead>
-                  <tr>
-                    {headers.map(key => (
-                      <th key={key} className="text-center">
-                        {key}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map(datum => (
-                    <tr>
-                      {headers.map(key => (
-                        <td key={key} className="text-center">
-                          {JSON.stringify(datum[key])}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+      <Card className="mb-3" style={tableStyle}> 
+        <CardBody>
+        <div style={{width: "100%"}}>
+          <MUIDataTable 
+            
+            title={this.props.label} 
+            data={data}  
+            columns={headers}
+            options={options}
+          />
+        </div>
+        {this.props.tableData.length > MAX_ROWS_DISPLAYED && <Alert color="warning">
+          For the best performance, only the first {MAX_ROWS_DISPLAYED} out of {this.props.tableData.length} rows are displayed in the table.
+        </Alert> }
         </CardBody>
       </Card>
     );
   }
 }
 
-function replacer(key, value) {
-  // Filtering out properties
+// function replacer(key, value) {
+//   // Filtering out properties
 
-  if (Array.isArray(value)) {
-    return '[ ... ]';
-  }
+//   if (Array.isArray(value)) {
+//     return '[ ... ]';
+//   }
 
-  if (typeof value === 'object') {
-    return '{...}';
-  }
+//   if (typeof value === 'object') {
+//     return '{...}';
+//   }
 
-  if (typeof value === 'string') {
-    if (value.length > 10) return value.slice(0, 10) + '...';
-    else return value;
+//   if (typeof value === 'string') {
+//     if (value.length > 10) return value.slice(0, 10) + '...';
+//     else return value;
+//   }
+//   return value;
+// }
+
+const options = {
+  filterType: 'multiselect',
+  toolbar: {
+    search: "Search",
+    viewColumns: "View Columns..."
   }
-  return value;
+}
+
+const tableStyle= {
+  width: "100%"
 }
