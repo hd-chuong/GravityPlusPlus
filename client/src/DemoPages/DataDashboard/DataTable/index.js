@@ -32,22 +32,17 @@ export default class DataTable extends Component {
     const data = this.props.tableData.slice(0, MAX_ROWS_DISPLAYED);
 
     return (
-      <Card className="mb-3" style={tableStyle}> 
-        <CardBody>
-        <div style={{width: "100%"}}>
-          <MUIDataTable 
-            
-            title={this.props.label} 
-            data={data}  
-            columns={headers}
-            options={options}
-          />
-        </div>
+      <div style={{maxWidth: 1500}}> 
+        <MUIDataTable 
+          title={this.props.label} 
+          data={data}  
+          columns={headers}
+          options={options}
+        />
         {this.props.tableData.length > MAX_ROWS_DISPLAYED && <Alert color="warning">
           For the best performance, only the first {MAX_ROWS_DISPLAYED} out of {this.props.tableData.length} rows are displayed in the table.
         </Alert> }
-        </CardBody>
-      </Card>
+      </div>
     );
   }
 }
