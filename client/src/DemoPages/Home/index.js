@@ -14,8 +14,7 @@ import axios from 'axios';
 import AsyncDataFileHandler from '../../utils/DataFileHandler';
 import ReactFileReader from 'react-file-reader';
 import validator from 'validator';
-import reactFileReader from 'react-file-reader';
-import { toast } from 'react-toastify';
+import Cookie from 'js-cookie';
 class Home extends React.Component {
     constructor(props)
     {
@@ -24,7 +23,9 @@ class Home extends React.Component {
             projects: [],
             newProjModal: false,
             uploadProjModal: false,
-            newProjName: ""
+            uploadPending: false,
+            newProjName: "",
+            messagePending: ""
         };
         this.loadProject = this.loadProject.bind(this);
     }
@@ -50,12 +51,12 @@ class Home extends React.Component {
     handleUpload(files) {
         // asking for name
         const file = files[0];
-        console.log(this.state.newProjName);
 
         // step one, create a empty database
         
+        this.setState({uploadPending: true});
         var readData;
-        toast.info("Create blank database");
+        this.setState({messagePending: "Create blank database"});
         
         return axios({
             url: 'http://localhost:7473/app',
@@ -63,15 +64,13 @@ class Home extends React.Component {
             method: 'post',
             data: {name: this.state.newProjName, isNewProject: true}
         }).then(() => {
-            
-            toast.info("Reading files");
-            
+            this.setState({messagePending: "Reading files"});            
             return AsyncDataFileHandler(file);
         }).then(data => { 
             // upload datasets
             // array of datasets. Each record has data and name
             
-            toast.info("Send dataset files to storage");
+            this.setState({messagePending:"Send dataset files to storage"});
             const {datasets} = data.datasets;
             readData = data;
             return axios({
@@ -81,10 +80,10 @@ class Home extends React.Component {
                 data: datasets,
             })
         }).then(() => { 
-            toast.info("Send graph structure to neo4j");
+            this.setState({messagePending:"Send graph structure to neo4j"});
             // upload graph to database
             const {datagraph, intgraph, visgraph} = readData;
-
+        
             return axios({
                 url: `http://localhost:7473/app/${this.state.newProjName}`,
                 withCredentials: true,
@@ -96,22 +95,12 @@ class Home extends React.Component {
                 }
             })
         }).then(() => {
-            toast.info("Loading project");
+            this.setState({messagePending: "Loading project"});
             setTimeout(() => {
                 this.loadProject(this.state.newProjName);
+                this.setState({messagePending: "", uploadPending: false});
             }, 1000);
         });        
-    }
-
-    componentDidUpdate() {
-        // axios({
-        //     url: 'http://localhost:7473/app',
-        //     withCredentials: true,
-        //     method: 'get'
-        // })
-        // .then(result => {
-        //     this.setState({projects: result.data});
-        // });
     }
 
     componentDidMount()
@@ -128,12 +117,14 @@ class Home extends React.Component {
 
     loadProject(name)
     {
+        this.setState({uploadPending: true, messagePending: `Loading project ${name}...`});
+
         return axios({
             url: `http://localhost:7473/app/${name}`,
             withCredentials: true,
             method: 'get'
         }).then(response => {
-            toast.info("Start loading...");
+            Cookie.set("project_name", name);
             const {datasets, datagraph, intgraph, visgraph} = response.data;
             this.props.load({datasets, datagraph, intgraph, visgraph});
             this.props.history.push('/data');
@@ -143,6 +134,9 @@ class Home extends React.Component {
 
     newProject()
     {
+        this.setState({uploadPending: true});
+        this.setState({messagePending: "Create blank database"});
+ 
         // const name = prompt("Please enter project name");
         if (!validateName(this.state.newProjName, this.state.projects))
         {
@@ -156,12 +150,12 @@ class Home extends React.Component {
         })
         .then(data => {
             const {name, error} = data.data;
-            if (name) {
-                // empty project
-                this.props.load(emptyProj);
-                this.props.history.push('/data');
-            }
-            if (error) this.newProject();
+            setTimeout(() => {
+                this.loadProject(this.state.newProjName);
+                this.setState({uploadPending: false});
+                this.setState({messagePending: ""});
+
+            }, 1000);
         })
         .catch(err => {
             console.log(err);
@@ -250,7 +244,7 @@ class Home extends React.Component {
                         </Modal>
 
                         <Modal isOpen={this.state.uploadProjModal} toggle={this.toggleUpload.bind(this)}>
-                            <ModalHeader>Upload Project</ModalHeader>
+                            <ModalHeader>Load Project</ModalHeader>
                             <ModalBody>
                                 <Row className="form-group">
                                     <Label md={3}>Project name</Label>
@@ -283,16 +277,17 @@ class Home extends React.Component {
                             </ModalBody>
                         </Modal>
 
-                                {/* <Col md={3}><i className="fa fa-spin fa-cog fa-2x" aria-hidden="true"></i></Col>
+                        <Modal isOpen={this.state.uploadPending}>
+                            <ModalBody>
+                                <Row>
+                                <Col md={3}><i className="fa fa-spin fa-cog fa-2x" aria-hidden="true"></i></Col>
                                 <Col>
-                                    <p>
-                                        Exporting scene {this.state.currentSceneIndex} out of {this.props.intgraph.nodes.length} to pdf.
-                                    </p>
-                                </Col> */}
-                            
-                                                                
+                                    <p>{this.state.messagePending}</p>
+                                </Col>
+                                </Row>
                                 {/* <Progress className="mb-2" color="success" value={(this.state.currentSceneIndex * 100) / this.props.intgraph.nodes.length} /> */}
-
+                            </ModalBody>
+                        </Modal>
                     </div>
                 </div>
             </div>
@@ -312,6 +307,10 @@ const RenderNewProjMessage = ({name, projects}) => {
     {
         return <Alert color="warning">Project name should contain at least 3 characters.</Alert>;
     }
+    if (name === "system")
+    {
+        return <Alert color="warning">Project name must not be neo4j or system.</Alert>;
+    }
     if (!validator.isAlpha(name))
     {
         return <Alert color="warning">Project name should contain only A-Z and a-z characters.</Alert>
@@ -322,25 +321,6 @@ const RenderNewProjMessage = ({name, projects}) => {
     if (isDuplicatedName) return <Alert color="warning">Project "{name}" already exists.</Alert>
     return null;
 }
-
-const emptyProj = {
-    datasets: {
-      datasets: [],
-      errMess: null
-    },
-    datagraph: {
-      datagraph: {edges: [], nodes: []},
-      errMess: null
-    },
-    visgraph: {
-      visgraph: {edges: [], nodes: []},
-      errMess: null
-    },
-    intgraph: {
-      intgraph: {edges: [], nodes: []},
-      errMess: null
-    }
-  };
 
 const validateName = (name, projects) => {
     if (!(typeof name === 'string' || name instanceof String)) 
@@ -356,6 +336,10 @@ const validateName = (name, projects) => {
     if (!validator.isAlpha(name))
     {
         // toast.error("Project name should only contain a-z and A-Z characters.", toastOptions);
+        return false;
+    }
+    if (name === "neo4j" || name === "system")
+    {
         return false;
     }
 

@@ -10,6 +10,7 @@ import {
   Button,
   Progress,
   FormGroup,
+  ModalBody,
 } from 'reactstrap';
 
 import Scrollbar from 'react-perfect-scrollbar';
@@ -126,8 +127,8 @@ const VisForm = props => {
 
 const OwnSchema = ({ formik }) => {
   return (
-    <FormGroup>
-      <Row>
+    <ModalBody>
+      <Row className="form-group">
         <Label md={3}>Enter the visualisation title</Label>
         <Col md={9}>
           <Input type="text" onChange={formik.handleChange} name="title" />
@@ -145,11 +146,11 @@ const OwnSchema = ({ formik }) => {
         Write my own visualisation schema
       </Row> */}
 
-      <Row>
+      <Row className="form-group">
         <Field type="radio" name="useOurTemplate" value={true} /> Use our
         template (recommended)
       </Row>
-    </FormGroup>
+    </ModalBody>
   );
 };
 
