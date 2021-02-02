@@ -1,6 +1,8 @@
 # GravityPlusPlus
 A Graph-based Visualisation Software for Interactive Visualisation Design.
 
+![alt text](./assets/images/data-screenshot.png)
+
 Build the docker container.
 
     docker-compose build
