@@ -100,7 +100,7 @@ class Home extends React.Component {
             setTimeout(() => {
                 this.loadProject(this.state.newProjName);
                 this.setState({messagePending: "", uploadPending: false});
-            }, 1000);
+            }, 500);
         });        
     }
 
