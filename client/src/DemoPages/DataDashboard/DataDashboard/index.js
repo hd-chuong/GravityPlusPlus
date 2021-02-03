@@ -21,7 +21,7 @@ export default class DataDashboard extends Component {
             currentData: null,
             params: {},
             spec: {},
-            currentDataId: null
+            currentDataNodeId: null
         };
         this.updateCurrentData = this.updateCurrentData.bind(this);
         this.deleteNode = this.deleteNode.bind(this);
@@ -74,13 +74,30 @@ export default class DataDashboard extends Component {
 
     updateCurrentData(dataNodeId)
     {
-        this.setState(({currentDataId: dataNodeId}));
+        this.setState(({currentDataNodeId: dataNodeId}));
         calculateDataset(dataNodeId, this.props.datasets.datasets)
         .then(({data, params, spec}) => {
             this.setState({currentData: data, params, spec});
         }).catch(error => {
             toast.error("Unable to view the data: " + error.message, toastOptions);    
         });
+    }
+
+    updateGraphDisplay(id)
+    {
+        const displayedGraph = JSON.parse(JSON.stringify(this.props.datagraph.datagraph));
+
+        displayedGraph.nodes.forEach(node => {
+            if (node.id !== id) node.style = null;
+            else {
+                node.style = {
+                    background: '#FF6F59',
+                    color: '#FFF'
+                };
+            }
+        });
+
+        return displayedGraph;
     }
 
     getCurrentLabel(dataNodeId)
@@ -96,7 +113,7 @@ export default class DataDashboard extends Component {
     updateParams(paramDict)
     {
         this.setState({params: Object.assign(this.state.params, paramDict)}, () => {
-            calculateDataset(this.state.currentDataId, this.props.datasets.datasets, this.state.params)
+            calculateDataset(this.state.currentDataNodeId, this.props.datasets.datasets, this.state.params)
             .then(({data, params, spec}) => {
                 this.setState({currentData: data, params, spec});
             }).catch(error => {
@@ -106,7 +123,7 @@ export default class DataDashboard extends Component {
     }
 
     render() {
-        console.log(Cookie.get());
+        const displayedGraph = this.updateGraphDisplay(this.state.currentDataNodeId);
         return (
             <Fragment>
                 <ReactCSSTransitionGroup
@@ -117,9 +134,6 @@ export default class DataDashboard extends Component {
                     transitionEnter={false}
                     transitionLeave={false}>
                     <Row>
-                        <Alert color="secondary">{Cookie.get("project_name")}</Alert>
-                    </Row>
-                    <Row>
                         <Col md={6}>
                             <ReactCSSTransitionGroup
                             component="div"
@@ -129,7 +143,7 @@ export default class DataDashboard extends Component {
                             transitionEnter={false}
                             transitionLeave={false}>
                                 <DataGraph 
-                                    data={this.props.datagraph.datagraph} 
+                                    data={displayedGraph} 
                                     onElementClick={this.updateCurrentData.bind(this)}
                                     onElementsRemove={this.deleteNode}
                                     onNodeDragStop={this.props.setDataPosition}
@@ -146,7 +160,7 @@ export default class DataDashboard extends Component {
                                 transitionLeave={false}
                             >
                                 <DataTable 
-                                    label={this.getCurrentLabel(this.state.currentDataId)} 
+                                    label={this.getCurrentLabel(this.state.currentDataNodeId)} 
                                     tableData={this.state.currentData}
                                 />
                                 

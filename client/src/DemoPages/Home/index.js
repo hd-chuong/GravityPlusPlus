@@ -15,6 +15,7 @@ import AsyncDataFileHandler from '../../utils/DataFileHandler';
 import ReactFileReader from 'react-file-reader';
 import validator from 'validator';
 import Cookie from 'js-cookie';
+import MUIDataTable from 'mui-datatables';
 class Home extends React.Component {
     constructor(props)
     {
@@ -29,7 +30,7 @@ class Home extends React.Component {
         };
         this.loadProject = this.loadProject.bind(this);
     }
-
+    
     toggle()
     {
         this.setState({newProjModal: !this.state.newProjModal}, () => {
@@ -163,7 +164,37 @@ class Home extends React.Component {
     }
 
     render() {
-        const projects = this.state.projects.map(proj => ({name: proj}))
+        const projects = this.state.projects.map(proj => ({name: proj, panels: proj}))
+        
+        const loadProject = this.loadProject;
+        const headers = [
+            {name: "name", 
+            label: "Name", options: {
+                filter: true, 
+                sort: true,
+                customBodyRender: (value, tableMeta) => {
+                    return (
+                    <p onClick={() => loadProject(value)}style={{cursor: `pointer`}}>{value}</p>
+                );
+                },
+            }},
+            {
+                name: "panels", 
+                label: " ",
+                options: {
+                    customBodyRender: (value, tableMeta) => {
+                        return (
+                        <div className="float-right">
+                            <Button color="info" onClick={() => loadProject(value)}><i className="fa fa-external-link"></i></Button> {" "}
+                            <Button color="danger"><i className="fa fa-trash-o"></i></Button>
+                        </div>
+                    );
+                    },
+                    filter: false, sort: false
+              }
+            },
+        ]
+
         return (
             <div className="app-main">
                 <div className="app-main__outer">
@@ -194,8 +225,8 @@ class Home extends React.Component {
                                     </CardBody>
                                 </Col>    
                                 <Col md={6}>
-                                    <CardTitle>Recent Projects</CardTitle>
-                                    <CardBody>
+                                    {/* <CardTitle>Recent Projects</CardTitle> */}
+                                    {/* <CardBody>
                                         {this.state.projects.map((proj) => (
                                             <div onClick={() => {this.loadProject(proj)}} style={{cursor: `pointer`}}>
                                                 <PageTitle 
@@ -209,8 +240,14 @@ class Home extends React.Component {
                                             // columns={[{Header: "name", accessor: "name"}]}
                                             defaultPageSize={10}
                                             className="-striped -highlight"
-                                        /> */}
-                                    </CardBody>
+                                        />
+                                    </CardBody> */}
+                                    <MUIDataTable 
+                                        title="Recent Projects" 
+                                        data={projects}  
+                                        columns={headers}
+                                        options={options}
+                                    />
                                 </Col>
                             </Row>
                         </ReactCSSTransitionGroup>
@@ -347,6 +384,16 @@ const validateName = (name, projects) => {
     return !projects.includes(name); 
     
 }
+
+const options = {
+    selectableRows: false,
+    filterType: 'multiselect',
+    toolbar: {
+      search: "XXX",
+      viewColumns: false
+    },
+    onRowClick: (e, r) => console.log(e, r)
+  }
 
 export default withRouter(Home);
 
