@@ -67,7 +67,26 @@ export default class VisDashboard extends Component {
     });
   }
   
+  updateGraphDisplay(id)
+  {
+      const displayedGraph = JSON.parse(JSON.stringify(this.props.visgraph));
+
+      displayedGraph.nodes.forEach(node => {
+          if (node.id !== id) node.style = null;
+          else {
+              node.style = {
+                  background: '#00A5CF',
+                  color: '#FFF'
+              };
+          }
+      });
+
+      return displayedGraph;
+  }
   render() {
+
+    const currentVisNodeId = this.state.currentNode ? this.state.currentNode.id : null;
+    const displayedGraph = this.updateGraphDisplay(currentVisNodeId);
     return (
       <Fragment>
         <ReactCSSTransitionGroup
@@ -90,7 +109,7 @@ export default class VisDashboard extends Component {
                   transitionLeave={false}
                 >
                   <VisGraph
-                    data={this.props.visgraph}
+                    data={displayedGraph}
                     onElementClick={this.onElementClick.bind(this)}
                     onElementsRemove={this.deleteVisNode.bind(this)}
                     onNodeDragStop={this.props.setVisPosition}

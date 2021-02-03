@@ -6,12 +6,13 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import HeaderLogo from '../AppLogo';
-
+import Cookie from 'js-cookie';
 // import SearchBox from './Components/SearchBox';
 // import UserBox from './Components/UserBox';
 class Header extends React.Component {
 
   render() {
+    const projectName = Cookie.get("project_name");
     let {
       headerBackgroundColor,
       enableMobileMenuSmall,
@@ -41,6 +42,11 @@ class Header extends React.Component {
           <div className="app-header-left">
           <Navbar dark expand="sm">
             <Nav navbar>
+              <NavItem className="metismenu-item mr-3">
+                <NavLink className="nav-link" to="#">
+                  {projectName && projectName.slice(0, 20)}
+                </NavLink>
+              </NavItem>
               <NavItem className="metismenu-item mr-3">
                 <NavLink className="nav-link" to="/home/">
                   <i className="fa fa-home fa-lg mr-2"></i>Home
@@ -74,8 +80,6 @@ class Header extends React.Component {
                     </div>
                   </NavItem>
                  
-                  
-
                   <NavItem className="metismenu-item mr-1" style={{ cursor: 'pointer' }}>
                     <NavLink className="nav-link" to="/story/">
                       <i style={{color: 'yellow'}} className="fa fa-television fa-md mr-1"></i> Watch your story

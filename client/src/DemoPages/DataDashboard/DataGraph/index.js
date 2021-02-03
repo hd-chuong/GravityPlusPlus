@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {useCallback, useState } from 'react';
+import {Fragment} from 'react';
+import { useEffect } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -6,7 +8,9 @@ import ReactFlow, {
   removeElements,
 } from 'react-flow-renderer';
 import { Card, CardBody, CardHeader, CardTitle } from 'reactstrap';
-
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+import {showMenu} from 'react-contextmenu/modules/actions';
+import { node } from 'prop-types';
 // examples of data to be passed into react flow
 // const elements = [
 //   {
@@ -41,13 +45,30 @@ import { Card, CardBody, CardHeader, CardTitle } from 'reactstrap';
 //   { id: 'e2-3', source: '2', target: '3' },
 // ];
 
-export default class Graph extends Component {
-  constructor(props) {
-    super(props);
-  }
+const Graph = (props) =>  {
 
-  render() {
-    if (this.props.data === null || this.props.data === undefined)
+  const [reactflowInstance, setReactflowInstance] = useState(null);
+
+  const onLoad = useCallback(
+    (rfi) => {
+      if (!reactflowInstance) {
+        setReactflowInstance(rfi);
+      }
+    },
+    [reactflowInstance]
+  );
+
+    // const renderNodes = props.data.nodes.map(node => ({...node, data: {...node.data, label: <ContextMenuTrigger id="okay">{node.data.label}</ContextMenuTrigger>}}))
+    const elements = [...props.data.nodes, ...props.data.edges];
+    
+    useEffect(() => {
+      if (reactflowInstance && elements.length > 0) {
+        reactflowInstance.fitView();
+      }
+    }, [reactflowInstance, elements.length]);
+    
+    if (props.data === null || props.data === undefined)
+    {
       return (
         <Card className="main-card mb-3">
           <CardHeader>Graph view</CardHeader>
@@ -55,31 +76,45 @@ export default class Graph extends Component {
           <CardBody>Create a node to view the graph</CardBody>
         </Card>
       );
-    const elements = [...this.props.data.nodes, ...this.props.data.edges];
+    }
     return (
+      <Fragment>
+      {/* <ContextMenu id="okay" preventHideOnContextMenu>
+        <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+          Item 1
+        </MenuItem>
+        <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+          Item 2
+        </MenuItem>
+        <MenuItem divider />
+        <MenuItem data={{foo: 'bar'}} onClick={handleClick}>
+          ContextMenu Item 3
+        </MenuItem>
+      </ContextMenu> */}
       <Card className="main-card mb-3">
         <CardBody>
         <CardTitle> Graph view </CardTitle>
-        <div style={{ height: this.props.height || 600 }}>
+        <div style={{ height: props.height || 600 }}>
           <ReactFlow
-            // onLoad={onLoad}
+            onLoad={onLoad}
             elements={elements}
+            
             onElementClick={(event, element) => {
-              this.props.onElementClick(element.id);
+              props.onElementClick(element.id);
             }}
+            
             onElementsRemove={elements =>
               elements
                 .map(element => element.id)
-                .forEach(e => this.props.onElementsRemove(e))
+                .forEach(e => props.onElementsRemove(e))
             }
-            onNodeDragStop={(event, node) => {
-              if (!this.props.onNodeDragStop) return;
-              this.props.onNodeDragStop(node.id, node.position.x, node.position.y);
-            }}
-            onSelectionContextMenu={
-              (event, node) => {console.log(" right click at node: ", node)}
-            }
-            // defaultPosition={this.props.defaultPosition}
+            
+            // onNodeContextMenu={(e,els) => {
+            //   e.preventDefault();
+            //   console.log(e.clientX, e.clientY,els);
+            //   showMenu({position: {x: 100, y: 100}, target: null, id: "okay"})
+            // }}
+            // defaultPosition={props.defaultPosition}
           >
             <Controls />
             <Background color="#aaa" gap={16} />
@@ -87,10 +122,15 @@ export default class Graph extends Component {
         </div>
         </CardBody>
       </Card>
+      </Fragment>
     );
   }
+
+function handleClick(e, data) {
+  console.log(data.foo);
 }
 
+export default Graph;
 // const onLoad = (reactFlowInstance) => {
 //   console.log("on load");
 //   reactFlowInstance.fitView();

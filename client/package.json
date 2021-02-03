@@ -84,6 +84,7 @@
     "react-anime": "^2.2.0",
     "react-bootstrap": "^0.32.4",
     "react-chartjs-2": "^2.7.4",
+    "react-contextmenu": "^2.14.0",
     "react-dev-utils": "^4.2.3",
     "react-dom": "^16.7.0",
     "react-file-reader": "^1.1.4",
