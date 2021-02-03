@@ -177,9 +177,9 @@ router.route('/:projectName')
 
   // get the datagraph
   datagraph.useDatabase(projName).then(() => {
-    datagraph.setGraph(dgraph) //.then((dgraph) => {
-      // state.datagraph.datagraph = dgraph;
+    datagraph.setGraph(dgraph).then(() => {
       finished();
+    })
     });
 
   // get visgraph
