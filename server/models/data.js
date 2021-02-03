@@ -65,9 +65,9 @@ module.exports = class DataGraph {
 
     const params = {
       name,
-      type,
+      // type,
       id: id || uuidv4(),
-      source,
+      source: source || "",
       transform: JSON.stringify(transform),
       format: JSON.stringify(format)
     };
@@ -192,7 +192,7 @@ module.exports = class DataGraph {
       source,
       target,
       id,
-      type,
+      type: type || "",
       operation: JSON.stringify(operation)
     };
 
@@ -361,21 +361,44 @@ module.exports = class DataGraph {
   {
     const {nodes, edges} = datagraph;
     // set nodes
-    for (const node of nodes)
-    {
-      const {id, data} = node;
-      const {label, type, source, transform, format} = data;
-      this.addNode(label, type, source, transform, format, id);
-    }
+    const createChain = (() => {
+      let chain = Promise.resolve();
+      for (const node of nodes)
+      {
+          const {id, data} = node;
+          const {label, type, source, transform, format} = data;
+          const callback = (() => this.addNode(label, type, source, transform, format, id)).bind(this);
+          chain = chain.then(callback);
+      }
+      
+      for (let edge of edges)
+      {
+        const {id, source, target, data, type} = edge;
+        // data is stored in operation
+        chain = chain.then(() => this.addEdge(source, target, type, data, id)); 
+      }
+      return chain;
+    }).bind(this);
+    return createChain();
+    // for (const node of nodes)
+    // {
+    //   const {id, data} = node;
+    //   const {label, type, source, transform, format} = data;
+    //   // console.log("data node: ", label, type, source, transform, format, id);
+    //   this.addNode(label, type, source, transform, format, id);
+    // }
 
     // set edges
-    for (const edge of edges)
-    {
-      const {id, source, target, data, type} = edge;
-      // data is stored in operation
-      console.log(id, source, target, data, type);
-      this.addEdge(source, target, type, data, id); 
-    }
+    // console.log("edge length: ", edges.length)
+    // setTimeout(() => {
+    //   for (let edge of edges)
+    //   {
+    //     const {id, source, target, data, type} = edge;
+    //     // data is stored in operation
+    //     console.log("data edge: ", source, target, type);
+    //     this.addEdge(source, target, type, data, id); 
+    //   }
+    // }, 2000);
 
   }
   getSubgraphTo(target) {
@@ -384,16 +407,16 @@ module.exports = class DataGraph {
     }
 
     const cypher = `
-        MATCH (p:DATA_NODE {id: $id})
-        CALL apoc.path.subgraphNodes(p, {
-          relationshipFilter: "DATA_EDGE<",
-            minLevel: 0
-        })
-        yield node
-        with node 
-        OPTIONAL MATCH (node)<-[r]-(x)
-        RETURN node, collect(r) as edge, collect(x.id) as source_id ORDER BY node.createdAt DESC;
-      `;
+      MATCH (p:DATA_NODE {id: $id})
+      CALL apoc.path.subgraphNodes(p, {
+        relationshipFilter: "DATA_EDGE<",
+          minLevel: 0
+      })
+      yield node
+      with node 
+      OPTIONAL MATCH (node)<-[r]-(x)
+      RETURN node, collect(r) as edge, collect(x.id) as source_id ORDER BY node.createdAt DESC;
+    `;
     const session = this.getSession();
 
     return session.readTransaction(tx => tx.run(cypher, params))
