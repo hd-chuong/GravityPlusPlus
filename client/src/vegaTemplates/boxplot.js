@@ -13,7 +13,7 @@ export default function boxplotSchema(tableName, x, y, category, value) {
       extent: 'min-max',
     },
     encoding: {
-      x: { field: x, type: 'nominal' },
+      x: { field: x, type: 'nominal', axis: {labelAngle: 45, labelOverlap: false} },
       color: { field: category, type: 'nominal' },
       y: { field: y, type: 'quantitative', scale: { zero: false } },
     },
