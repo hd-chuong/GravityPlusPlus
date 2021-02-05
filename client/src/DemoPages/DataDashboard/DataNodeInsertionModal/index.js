@@ -269,6 +269,7 @@ class DataNodeInsertionModal extends React.Component {
                         }}
                         placeholder="Select the format"
                       >
+                        <option value="json">CSV</option>
                         <option value="json">json</option>
                         <option value="geojson">geojson</option>
                         <option value="topojson">topojson</option>

@@ -11,6 +11,7 @@ const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
 const IntDashboard = lazy(() => import('../../DemoPages/IntDashboard'));
 const Story = lazy(() => import('../../DemoPages/Story'));
 const Home = lazy(() => import('../../DemoPages/Home'))
+const UserStudy = lazy(() => import('../../DemoPages/UserStudy'));
 const AppMain = ({
   state,
   datasets,
@@ -121,6 +122,9 @@ const AppMain = ({
               />
             </Route>
             
+            <Route exact path="/test">
+              <UserStudy />
+            </Route>
             <Redirect to="/home" />
           </Switch>
           <ToastContainer />

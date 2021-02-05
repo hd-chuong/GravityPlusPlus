@@ -164,6 +164,8 @@ export const setDataPosition = payload => dispatch => {
     dispatch({  
       type: ActionTypes.SET_POSITION,
       payload});
+      // toast.success("Successfully set position node", toastOptions);
+
   })    
   .catch(error => {
     alert('Failed to update new position to database: ' + error.message);

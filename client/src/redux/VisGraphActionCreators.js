@@ -77,7 +77,7 @@ export const removeVisNode = payload => dispatch => {
     toast.success("Successfully delete visualisation node", toastOptions);
   })
   .catch(error => {
-    toast.success(`Failed to delete node ${payload.id} in database: ${error.message}`, toastOptions);
+    toast.error(`Failed to delete node ${payload.id} in database: ${error.message}`, toastOptions);
   });
 };
 

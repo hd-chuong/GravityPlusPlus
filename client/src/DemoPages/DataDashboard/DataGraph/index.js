@@ -109,6 +109,11 @@ const Graph = (props) =>  {
                 .forEach(e => props.onElementsRemove(e))
             }
             
+            onNodeDragStop={(event, node) => {
+              if (!props.onNodeDragStop) return;
+              console.log("dragging");
+              props.onNodeDragStop(node.id, node.position.x, node.position.y);
+            }}
             // onNodeContextMenu={(e,els) => {
             //   e.preventDefault();
             //   console.log(e.clientX, e.clientY,els);

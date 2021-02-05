@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import HeaderLogo from '../AppLogo';
+import UserBox from './Components/UserBox';
 import Cookie from 'js-cookie';
 // import SearchBox from './Components/SearchBox';
 // import UserBox from './Components/UserBox';
@@ -40,36 +41,40 @@ class Header extends React.Component {
                     )}>
                     
           <div className="app-header-left">
-          <Navbar dark expand="sm">
-            <Nav navbar>
-              <NavItem className="metismenu-item mr-3">
-                <NavLink className="nav-link" to="#">
-                  {projectName && projectName.slice(0, 20)}
-                </NavLink>
-              </NavItem>
-              <NavItem className="metismenu-item mr-3">
-                <NavLink className="nav-link" to="/home/">
-                  <i className="fa fa-home fa-lg mr-2"></i>Home
-                </NavLink>
-              </NavItem>
-              <NavItem className="metismenu-item mr-3">
-                <NavLink className="nav-link" to="/data/">
-                  <i className="fa fa-table fa-lg mr-2"></i>Data
-                </NavLink>
-              </NavItem>
-              <NavItem className="metismenu-item mr-3">
-                <NavLink className="nav-link" to="/vis/">
-                  <i className="fa fa-bar-chart fa-lg mr-2"></i>Visualisation
-                </NavLink>
-              </NavItem>
-              <NavItem className="metismenu-item mr-3">
-                <NavLink className="nav-link" to="/int/">
-                  <i className="fa fa-hand-pointer-o fa-lg mr-2"></i>Interaction
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Navbar>
-
+            <Navbar dark expand="sm">
+              <Nav navbar>
+                <NavItem className="metismenu-item mr-3">
+                  <NavLink className="nav-link" to="#">
+                    {projectName && projectName.slice(0, 20)}
+                  </NavLink>
+                </NavItem>
+                <NavItem className="metismenu-item mr-3">
+                  <NavLink className="nav-link" to="/home/">
+                    <i className="fa fa-home fa-lg mr-2"></i>Home
+                  </NavLink>
+                </NavItem>
+                <NavItem className="metismenu-item mr-3">
+                  <NavLink className="nav-link" to="/data/">
+                    <i className="fa fa-table fa-lg mr-2"></i>Data
+                  </NavLink>
+                </NavItem>
+                <NavItem className="metismenu-item mr-3">
+                  <NavLink className="nav-link" to="/vis/">
+                    <i className="fa fa-bar-chart fa-lg mr-2"></i>Visualisation
+                  </NavLink>
+                </NavItem>
+                <NavItem className="metismenu-item mr-3">
+                  <NavLink className="nav-link" to="/int/">
+                    <i className="fa fa-hand-pointer-o fa-lg mr-2"></i>Interaction
+                  </NavLink>
+                </NavItem>
+                <NavItem className="metismenu-item mr-3">
+                  <NavLink className="nav-link" to="/test/">
+                    <i className="fa fa-info-circle fa-lg mr-2"></i>User Study
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </Navbar>
           </div>
             <div className="app-header-right">
               <Navbar dark expand="sm">
@@ -85,9 +90,12 @@ class Header extends React.Component {
                       <i style={{color: 'yellow'}} className="fa fa-television fa-md mr-1"></i> Watch your story
                     </NavLink>
                   </NavItem>
+                  
                 </Nav>
-            </Navbar>
+              </Navbar>
+              <UserBox/>
             </div>
+            
           </div>
         </ReactCSSTransitionGroup>
       </Fragment>
