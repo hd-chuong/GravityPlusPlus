@@ -11,7 +11,7 @@ export default function barChartSchema(name, x, y, value) {
 
     mark: 'bar',
     encoding: {
-      x: { field: x, axis: { labelAngle: 0 } },
+      x: { field: x, axis: {labelAngle: 90, labelOverlap: false} },
       y: { field: y, type: 'quantitative' },
     },
   };

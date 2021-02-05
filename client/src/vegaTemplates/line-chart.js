@@ -15,7 +15,7 @@ export default function lineChartSchema(tableName, x, y, category, value) {
       },
     },
     encoding: {
-      x: { field: x },
+      x: { field: x, axis: {labelAngle: 45, labelOverlap: false} },
       y: { field: y, type: 'quantitative' },
       color: { field: category, type: 'nominal' },
     },
