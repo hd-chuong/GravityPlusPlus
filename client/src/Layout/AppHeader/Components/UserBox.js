@@ -6,10 +6,11 @@ import {
   Nav,
   Button,
   NavItem,
-  NavLink,
   UncontrolledTooltip,
   UncontrolledButtonDropdown,
 } from 'reactstrap';
+
+import { NavLink } from 'react-router-dom';
 
 import { toast, Bounce } from 'react-toastify';
 
@@ -27,17 +28,17 @@ class UserBox extends React.Component {
     };
   }
 
-  notify2 = () =>
-    (this.toastId = toast(
-      "You don't have any new items in your calendar for today! Go out and play!",
-      {
-        transition: Bounce,
-        closeButton: true,
-        autoClose: 5000,
-        position: 'bottom-center',
-        type: 'success',
-      },
-    ));
+  // notify2 = () =>
+  //   (this.toastId = toast(
+  //     "You don't have any new items in your calendar for today! Go out and play!",
+  //     {
+  //       transition: Bounce,
+  //       closeButton: true,
+  //       autoClose: 5000,
+  //       position: 'bottom-center',
+  //       type: 'success',
+  //     },
+  //   ));
 
   render() {
     return (
@@ -48,12 +49,6 @@ class UserBox extends React.Component {
               <div className="widget-content-left">
                 <UncontrolledButtonDropdown>
                   <DropdownToggle color="link" className="p-0">
-                    <img
-                      width={42}
-                      className="rounded-circle"
-                      src={avatar1}
-                      alt=""
-                    />
                     <FontAwesomeIcon
                       className="ml-2 opacity-8"
                       icon={faAngleDown}
@@ -63,44 +58,16 @@ class UserBox extends React.Component {
                     <Nav vertical>
                       <NavItem className="nav-item-header">Activity</NavItem>
                       <NavItem>
-                        <NavLink href="javascript:void(0);">
-                          Chat
-                          <div className="ml-auto badge badge-pill badge-info">
-                            8
-                          </div>
+                        <NavLink className="nav-link" to="/test/">
+                          Video tutorials
                         </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink href="javascript:void(0);">
-                          Recover Password
-                        </NavLink>
-                      </NavItem>
-                      <NavItem className="nav-item-header">My Account</NavItem>
-                      <NavItem>
-                        <NavLink href="javascript:void(0);">
-                          Settings
-                          <div className="ml-auto badge badge-success">New</div>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink href="javascript:void(0);">
-                          Messages
-                          <div className="ml-auto badge badge-warning">512</div>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink href="javascript:void(0);">Logs</NavLink>
                       </NavItem>
                     </Nav>
                   </DropdownMenu>
                 </UncontrolledButtonDropdown>
               </div>
-              <div className="widget-content-left  ml-3 header-user-info">
-                <div className="widget-heading">Alina Mclourd</div>
-                <div className="widget-subheading">VP People Manager</div>
-              </div>
 
-              <div className="widget-content-right header-user-info ml-3">
+              {/* <div className="widget-content-right header-user-info ml-3">
                 <Button
                   className="btn-shadow p-1"
                   size="sm"
@@ -110,10 +77,7 @@ class UserBox extends React.Component {
                 >
                   <FontAwesomeIcon className="mr-2 ml-2" icon={faCalendarAlt} />
                 </Button>
-                <UncontrolledTooltip placement="bottom" target={'Tooltip-1'}>
-                  Click for Toastify Notifications!
-                </UncontrolledTooltip>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

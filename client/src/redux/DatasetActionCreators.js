@@ -1,6 +1,10 @@
 import axios from 'axios';
 import * as ActionTypes from './DatasetActionTypes';
+import {toast} from 'react-toastify';
+import toastOptions from '../DemoPages/config/toastOptions';
+
 export const addDataset = ({ name, dataset }) => dispatch => {
+  toast.info(`Adding dataset ${name}`, toastOptions);
   return axios({
     url: 'http://localhost:7473/dataset',
     withCredentials: true,
@@ -13,7 +17,11 @@ export const addDataset = ({ name, dataset }) => dispatch => {
         name,
         dataset,
       }
-  })});
+    })
+    toast.success(`Successfully added dataset ${name}`, toastOptions);
+  }).catch((e) => {
+    toast.error(`Failed to add dataset ${name}`, toastOptions);
+  });
 };
 
 export const removeDataset = ({ name }) => ({

@@ -8,6 +8,7 @@ import {
     Label, ModalHeader, 
     Alert, Button
 } from 'reactstrap';
+
 import PageTitle from '../../Layout/AppMain/PageTitle';
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
@@ -143,6 +144,7 @@ class Home extends React.Component {
         {
             return;
         }
+        
         return axios({
             url: 'http://localhost:7473/app',
             withCredentials: true,
@@ -151,11 +153,11 @@ class Home extends React.Component {
         })
         .then(data => {
             const {name, error} = data.data;
-            setTimeout(() => {
-                this.loadProject(this.state.newProjName);
+            
+            return setTimeout(() => {
                 this.setState({uploadPending: false});
                 this.setState({messagePending: ""});
-
+                this.loadProject(this.state.newProjName);
             }, 1000);
         })
         .catch(err => {
@@ -190,7 +192,8 @@ class Home extends React.Component {
                         </div>
                     );
                     },
-                    filter: false, sort: false
+                    filter: false, 
+                    sort: false
               }
             },
         ]
@@ -225,23 +228,6 @@ class Home extends React.Component {
                                     </CardBody>
                                 </Col>    
                                 <Col md={6}>
-                                    {/* <CardTitle>Recent Projects</CardTitle> */}
-                                    {/* <CardBody>
-                                        {this.state.projects.map((proj) => (
-                                            <div onClick={() => {this.loadProject(proj)}} style={{cursor: `pointer`}}>
-                                                <PageTitle 
-                                                    heading={proj}
-                                                    icon="pe-7s-cloud icon-gradient bg-mean-fruit"
-                                                />
-                                            </div>
-                                        ))}
-                                        {/* <ReactTable 
-                                            data={projects}
-                                            // columns={[{Header: "name", accessor: "name"}]}
-                                            defaultPageSize={10}
-                                            className="-striped -highlight"
-                                        />
-                                    </CardBody> */}
                                     <MUIDataTable 
                                         title="Recent Projects" 
                                         data={projects}  
