@@ -107,26 +107,35 @@ class DataNodeInsertionModal extends React.Component {
     this.props.toggle();
   }
 
-  async handleSubmitTransform() {
-    if (this.sourceNode.value === '') {
-      toast.warn('You must provide a node name', toastOptions);
+  handleSubmitTransform() {
+    var sourceNode = this.sourceNode.value;
+    var spec = this.state.spec;
+    var name = this.transformNodeName.value;
+
+    if (!sourceNode || sourceNode === '') {
+      toast.warn('You must provide the source node.', toastOptions);
       return;
     }
-    var spec = this.state.spec;
-
-    var sourceNode = this.sourceNode.value;
-
-    let newNodeId = await this.props.addDataNode(
-      this.transformNodeName.value,
+    
+    if (name == '' || !name)
+    {
+      toast.warn('You must provide a node name.', toastOptions);
+      return;
+    }
+    this.props.addDataNode(
+      name,
       'TRANSFORMED',
-    );
-    this.props.addDataEdge(
-      sourceNode,
-      newNodeId,
-      'TRANSFORM',
-      spec
-    );
-    this.props.toggle();
+    ).then(newNodeId => {
+      this.props.addDataEdge(
+        sourceNode,
+        newNodeId,
+        'TRANSFORM',
+        spec
+      );
+      this.props.toggle();
+    });
+    
+    
   }
 
   render() {
@@ -336,7 +345,7 @@ class DataNodeInsertionModal extends React.Component {
                           this.props.updateCurrentData(event.target.value);
                         }}
                       >
-                        <option key={0} value={null}>
+                        <option key={0} value={""}>
                           Select a node
                         </option>
                         {this.props.datagraph.datagraph.nodes.map(dataset => (
