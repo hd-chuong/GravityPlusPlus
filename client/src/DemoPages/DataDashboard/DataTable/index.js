@@ -66,7 +66,7 @@ export default class DataTable extends Component {
 // }
 
 const options = {
-  selectableRows: false,
+  selectableRows: 'none',
   filterType: 'multiselect',
   toolbar: {
     search: "Search",

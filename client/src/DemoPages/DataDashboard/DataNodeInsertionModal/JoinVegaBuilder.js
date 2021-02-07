@@ -4,7 +4,8 @@ import Select from 'react-select';
 import Creatable from 'react-select/creatable';
 import { JoinTypes } from '../../../utils/VegaSpecsBuilder';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
-
+import { toast } from 'react-toastify';
+import toastOptions from '../../config/toastOptions';
 class JoinVegaBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +21,73 @@ class JoinVegaBuilder extends React.Component {
       attribute1: null,
       attribute2: null,
     };
+  }
+
+  handleSubmitJoin() 
+  {
+    const name = this.joinNodeName.value;
+    const type = this.state.joinType;
+
+    const chosenDataset1 = this.props.datasets.filter(
+      dataset => dataset.id === this.state.dataset1,
+    );
+    
+    const chosenDataset2 = this.props.datasets.filter(
+      dataset => dataset.id === this.state.dataset2,
+    );
+    
+    if (chosenDataset1.length === 0)
+    {
+      toast.warn("You must select a left dataset.", toastOptions);
+      return;
+    }
+
+    if (chosenDataset2.length === 0)
+    {
+      toast.warn("You must select a right dataset.", toastOptions);
+      return;
+    }
+
+    if (!type) 
+    {
+      toast.warn("You must provide a joining type", toastOptions);
+      return;
+    }
+    
+    if (!name)
+    {
+      toast.warn('You must provide a node name', toastOptions);
+      return;
+    }
+
+    if (!this.state.attribute1 || !this.state.attribute2)
+    {
+      toast.warn('You must provide attribute name for both datasets', toastOptions);
+      return;
+    }
+
+    const leftNode = {
+      id: this.state.dataset1,
+      attribute: this.state.attribute1,
+      headers: this.state.headers1,
+      name: chosenDataset1[0].data.label,
+    };
+
+    const rightNode = {
+      id: this.state.dataset2,
+      attribute: this.state.attribute2,
+      headers: this.state.headers2,
+      name: this.props.datasets.filter(
+        dataset => dataset.id === this.state.dataset2,
+      )[0].data.label,
+    };
+
+    this.props.handleSubmit(
+      name,
+      leftNode,
+      rightNode,
+      type
+    )
   }
 
   render() {
@@ -129,28 +197,7 @@ class JoinVegaBuilder extends React.Component {
             <Button
               color="primary"
               className="float-right"
-              onClick={() =>
-                this.props.handleSubmit(
-                  this.joinNodeName.value,
-                  {
-                    id: this.state.dataset1,
-                    attribute: this.state.attribute1,
-                    headers: this.state.headers1,
-                    name: this.props.datasets.filter(
-                      dataset => dataset.id === this.state.dataset1,
-                    )[0].data.label,
-                  },
-                  {
-                    id: this.state.dataset2,
-                    attribute: this.state.attribute2,
-                    headers: this.state.headers2,
-                    name: this.props.datasets.filter(
-                      dataset => dataset.id === this.state.dataset2,
-                    )[0].data.label,
-                  },
-                  this.state.joinType,
-                )
-              }
+              onClick={this.handleSubmitJoin.bind(this)}
             >
               Add Node
             </Button>{' '}

@@ -10,14 +10,14 @@ import {
   TabContent,
   TabPane,
 } from 'reactstrap';
+import {toast} from 'react-toastify';
+import classnames from 'classnames';
 import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import VegaBuilder from './TransformVegaBuilder';
 import JoinVegaBuilder from './JoinVegaBuilder';
 import { JoinSpecsBuilder } from '../../../utils/VegaSpecsBuilder';
-import classnames from 'classnames';
 import calculateDataset from '../../../utils/dataGeneration';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
-import {toast} from 'react-toastify';
 import toastOptions from '../../config/toastOptions';
 class DataNodeInsertionModal extends React.Component {
   constructor(props) {
@@ -88,31 +88,15 @@ class DataNodeInsertionModal extends React.Component {
 
   handleSubmitJoin(joinNodeName, leftNode, rightNode, joinType) {
     const {
-      id: id1,
-      attribute: leftAttribute,
-      headers: leftHeaders,
-      name: leftDatasetName,
+      id: id1
     } = leftNode;
     const {
-      id: id2,
-      attribute: rightAttribute,
-      headers: rightHeaders,
-      name: rightDatasetName,
+      id: id2
     } = rightNode;
-
-    if (joinNodeName === '') {
-      toast.warn('You must provide a node name', toastOptions);
-      return;
-    }
 
     const transform = JoinSpecsBuilder(leftNode, rightNode, joinType);
 
-    var source;
-    if (joinType === 'RIGHT JOIN') {
-      source = id2;
-    } else {
-      source = id1;
-    }
+    var source = joinType === 'RIGHT JOIN' ? id2 : id1;
 
     this.props
       .addDataNode(joinNodeName, 'JOINED', source, transform)
@@ -151,6 +135,7 @@ class DataNodeInsertionModal extends React.Component {
         <Modal
           isOpen={this.props.isOpen}
           toggle={this.props.toggle}
+          // backdrop={false}
           className="modal-lg"
         >
           <CardHeader className="card-header-tab">
