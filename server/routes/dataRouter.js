@@ -26,14 +26,14 @@ driver = neo4j.driver(
 var datagraph = new Datagraph();
 datagraph.useDriver(driver);
 
-const addHeader = async (req, res, next) => {
+const addHeader = (req, res, next) => {
   console.log("session name: ", req.session.name, "session id: ", req.sessionID);
   res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   if (req.session.name)
   {
-    const result = await datagraph.useDatabase(req.session.name); 
+    datagraph.useDatabase(req.session.name); 
     next();
   }
   else 

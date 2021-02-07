@@ -8,10 +8,11 @@ var glob = require('glob');
 var Datagraph = require('../models/data');
 var Visgraph = require('../models/visualisation');
 var Intgraph = require('../models/interaction');
-
+var {removeDir} = require('../utils/fileSystem');
 const {after} = require('underscore');
 // neo4j driver
 var neo4j = require('neo4j-driver');
+const { finished } = require('stream');
 
 // inside a docker container, please use
 driver = neo4j.driver(
@@ -74,19 +75,18 @@ router.route('/')
     session.writeTransaction(tx => {
       tx.run(`CREATE DATABASE $name`, {name});    
     })
-    .then(res => {
+    .then(result => {
+      console.log(`Successfully created database name ${name}`);
     })
     .catch(e => {
       console.log(e);
     })
-    .finally(() => {
-      console.log("close in app control"); 
+    .finally(() => { 
       session.close();
+      req.session.name = name;
+      res.json(req.session);
     });
     
-    req.session.name = name;
-    res.json(req.session);
-  
   }
   else {
     res.json({error: "Name already exists"}); 
@@ -120,27 +120,24 @@ router.route('/:projectName')
   const finished = after(4, () => res.json({...req.session, ...state}));
 
   // get the datagraph
-  datagraph.useDatabase(projName).then(() => {
-    datagraph.getGraph().then((dgraph) => {
-      state.datagraph.datagraph = dgraph;
-      finished();
-    });
+  datagraph.useDatabase(projName);
+  datagraph.getGraph().then((dgraph) => {
+    state.datagraph.datagraph = dgraph;
+    finished();
   });
 
   // get visgraph
-  visgraph.useDatabase(projName).then(() => {
-    visgraph.getGraph().then((vgraph) => {
-      state.visgraph.visgraph = vgraph;
-      finished();
-    })
+  visgraph.useDatabase(projName);
+  visgraph.getGraph().then((vgraph) => {
+    state.visgraph.visgraph = vgraph;
+    finished();
   });
 
   // get intgraph
-  intgraph.useDatabase(projName).then(() => {
-    intgraph.getGraph().then((igraph) => {
-      state.intgraph.intgraph = igraph;
-      finished();
-    })
+  intgraph.useDatabase(projName);
+  intgraph.getGraph().then((igraph) => {
+    state.intgraph.intgraph = igraph;
+    finished();
   });
   
   glob(__dirname + `/../data/${req.params.projectName}/data/*.json`, function(err, files) { // read the folder or folders if you want: example json/**/*.json
@@ -176,26 +173,40 @@ router.route('/:projectName')
   const finished = after(3, () => res.json(req.session));
 
   // get the datagraph
-  datagraph.useDatabase(projName).then(() => {
-    datagraph.setGraph(dgraph).then(() => {
-      finished();
-    })
-    });
+  datagraph.useDatabase(projName);
+  datagraph.setGraph(dgraph).then(() => finished());
 
   // get visgraph
-  visgraph.useDatabase(projName).then(() => {
-    visgraph.setGraph(vgraph) //.then((vgraph) => {
-      // state.visgraph.visgraph = vgraph;
-    finished();
-    //})
-  });
+  visgraph.useDatabase(projName);
+  visgraph.setGraph(vgraph).then(() => finished());
 
   // get intgraph
-  intgraph.useDatabase(projName).then(() => {
-    intgraph.setGraph(igraph) //.then((igraph) => {
-      finished();
-    // })
+  intgraph.useDatabase(projName);
+  intgraph.setGraph(igraph).then(() => finished());
+})
+
+
+.delete(cors.corsWithOptions, addHeader, (req, res, next) => {
+  const name = req.params.projectName;
+  const session = driver.session();
+  const finished = after(2, () => res.json(req.session));
+  session.writeTransaction(tx => {
+    tx.run(`DROP DATABASE $name`, {name});    
+  })
+  .then(res => {
+    console.log(`Successfully delete database ${name}.`);
+  })
+  .catch(e => {
+    console.log(e);
+  })
+  .finally(() => { 
+    session.close();
+    finished();
   });
-});
+
+  const dir = __dirname + `/../data/${name}`;
+  removeDir(dir);
+  finished();  
+})
 
 module.exports = router;
