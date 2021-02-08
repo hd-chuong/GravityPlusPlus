@@ -12,7 +12,9 @@ Run the Node server and Neo4J database.
     docker-compose up
     
 To run the client, 
+    
     cd client
+    
     npm start
 
 Access the client side from a browser:
