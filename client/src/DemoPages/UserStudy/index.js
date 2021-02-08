@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     Row, Col, 
@@ -15,8 +15,7 @@ import {Link, withRouter} from 'react-router-dom';
 import { Steps } from 'rsuite';
 import { Button, IconButton, ButtonGroup, ButtonToolbar, Icon } from 'rsuite';
 import 'rsuite/dist/styles/rsuite-default.css';
-import ReactPlayer from 'react-player';
-
+import moment from 'moment'; 
 const UserSteps = ({step, onPrevious, onNext}) => {
 
     const styles = {
@@ -142,17 +141,55 @@ const RenderWatchVideos = () => (                                <Card>
     </CardBody>
 </Card>);
 
-const RenderStartTasks = () => (<Card>
-    <CardBody>
-        <CardTitle>Work on tasks</CardTitle>
-        <IconButton icon={<Icon icon="play" />} placement="left">
-            Start
-        </IconButton>
-        <IconButton icon={<Icon icon="stop" />} placement="left">
-            Stop
-        </IconButton>
-    </CardBody>
-</Card>);
+
+const RenderStartTasks = () => {
+    const [showPause, setPause] = useState(false);
+    const [isStart, setStart] = useState(false);
+    
+    const onStart = (time) => {
+        sessionStorage.setItem('startTime', parseInt(time));
+        sessionStorage.setItem('elapsed', 0);
+        setPause(true);
+        setStart(true);
+    }
+
+    const onPause = (time) => {
+        setPause(false);
+        const elapsed = sessionStorage.getItem('elapsed');
+        sessionStorage.setItem('elapsed', parseInt(elapsed) + parseInt((time - sessionStorage.getItem('startTime'))));
+    }
+
+    const onResume = (time) => {
+        setPause(true);
+        sessionStorage.setItem('startTime', parseInt(time));
+    }
+
+    const onStop = (time) => {
+        setPause(false);
+        setStart(false);
+        const elapsed = sessionStorage.getItem('elapsed');
+        if (!showPause) sessionStorage.setItem('elapsed', parseInt(elapsed) + parseInt((time - sessionStorage.getItem('startTime'))));
+    }
+    return (
+    <Card>
+        <CardBody>
+            <CardTitle>Work on tasks</CardTitle>
+            {!showPause && <IconButton icon={<Icon icon="play" />} placement="left" onClick={() => !isStart? onStart(parseInt(Date.now())) : onResume(parseInt(Date.now())) }>
+                Start
+            </IconButton>}
+
+            {showPause && <IconButton icon={<Icon icon="pause" />} placement="left" onClick={() => onPause(parseInt(Date.now()))}>
+                Pause
+            </IconButton>}
+
+            <IconButton icon={<Icon icon="stop" />} placement="left" onClick={() => onStop(parseInt(Date.now()))}>
+                Stop
+            </IconButton>
+
+            {!showPause && <p>Time elapsed: {Math.round(sessionStorage.getItem('elapsed') / 60000)} mins</p>}
+        </CardBody>
+    </Card>) 
+};
 
 const RenderSurvey = () => (<Col md={8}>                  
     <Card>

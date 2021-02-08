@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import {toast} from 'react-toastify';
 import classnames from 'classnames';
-import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
+import { Form, Label, Input, Row, Col } from 'reactstrap';
 import VegaBuilder from './TransformVegaBuilder';
 import JoinVegaBuilder from './JoinVegaBuilder';
 import { JoinSpecsBuilder } from '../../../utils/VegaSpecsBuilder';

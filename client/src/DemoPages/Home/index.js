@@ -2,11 +2,14 @@ import React, { Fragment } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {
     Row, Col, 
-    CardBody, CardTitle, 
-    Modal, ModalBody, 
+    CardBody, 
+    Modal, 
+    ModalBody, 
     Input, 
-    Label, ModalHeader, 
-    Alert, Button
+    Label, 
+    ModalHeader, 
+    Alert, 
+    Button
 } from 'reactstrap';
 
 import PageTitle from '../../Layout/AppMain/PageTitle';
@@ -17,6 +20,8 @@ import ReactFileReader from 'react-file-reader';
 import validator from 'validator';
 import Cookie from 'js-cookie';
 import MUIDataTable from 'mui-datatables';
+import { toast } from 'react-toastify';
+import toastOptions from '../config/toastOptions';
 class Home extends React.Component {
     constructor(props)
     {
@@ -30,6 +35,7 @@ class Home extends React.Component {
             messagePending: ""
         };
         this.loadProject = this.loadProject.bind(this);
+        this.deleteProject = this.deleteProject.bind(this);
     }
     
     toggle()
@@ -101,12 +107,21 @@ class Home extends React.Component {
             setTimeout(() => {
                 this.loadProject(this.state.newProjName);
                 this.setState({messagePending: "", uploadPending: false});
+                document.title = `Gravity++ | ${this.state.newProjName}`;
             }, 500);
         });        
     }
 
     componentDidMount()
     {
+        this.setState({
+            newProjModal: false,
+            uploadProjModal: false,
+            uploadPending: false,
+            newProjName: "",
+            messagePending: ""
+        });
+
         axios({
             url: 'http://localhost:7473/app',
             withCredentials: true,
@@ -119,7 +134,10 @@ class Home extends React.Component {
 
     loadProject(name)
     {
-        this.setState({uploadPending: true, messagePending: `Loading project ${name}...`});
+        this.setState({
+            uploadPending: true, 
+            messagePending: `Loading project ${name}...`
+        });
 
         return axios({
             url: `http://localhost:7473/app/${name}`,
@@ -165,10 +183,26 @@ class Home extends React.Component {
         }); 
     }
 
+    
+    deleteProject(projectName)
+    {
+        return axios({
+            url: `http://localhost:7473/app/${projectName}`,
+            withCredentials: true,
+            method: 'delete'
+        }).then(() => {
+            this.setState(({projects}) => ({projects: projects.filter(project => project !== projectName)}));
+            toast.success(`Successfully deleted ${projectName}.`, toastOptions);
+        }, () => {
+            toast.error(`Failed to delete ${projectName}`, toastOptions);
+        })
+    }
+
     render() {
         const projects = this.state.projects.map(proj => ({name: proj, panels: proj}))
         
         const loadProject = this.loadProject;
+        const deleteProject = this.deleteProject;
         const headers = [
             {name: "name", 
             label: "Name", options: {
@@ -184,11 +218,11 @@ class Home extends React.Component {
                 name: "panels", 
                 label: " ",
                 options: {
-                    customBodyRender: (value, tableMeta) => {
+                    customBodyRender: (value) => {
                         return (
                         <div className="float-right">
                             <Button color="info" onClick={() => loadProject(value)}><i className="fa fa-external-link"></i></Button> {" "}
-                            <Button color="danger"><i className="fa fa-trash-o"></i></Button>
+                            <Button color="danger" onClick={() => deleteProject(value)}><i className="fa fa-trash-o"></i></Button>
                         </div>
                     );
                     },
@@ -372,10 +406,9 @@ const validateName = (name, projects) => {
 }
 
 const options = {
-    selectableRows: false,
+    selectableRows: 'none',
     filterType: 'multiselect',
     toolbar: {
-      search: "XXX",
       viewColumns: false
     },
     onRowClick: (e, r) => console.log(e, r)
