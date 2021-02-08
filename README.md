@@ -7,6 +7,12 @@ Build the docker container.
 
     docker-compose build
     
+Build the client
+    
+    cd client
+    
+    npm install 
+    
 Run the Node server and Neo4J database.
 
     docker-compose up
