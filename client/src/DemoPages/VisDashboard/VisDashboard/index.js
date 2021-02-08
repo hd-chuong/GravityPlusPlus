@@ -84,7 +84,6 @@ export default class VisDashboard extends Component {
       return displayedGraph;
   }
   render() {
-
     const currentVisNodeId = this.state.currentNode ? this.state.currentNode.id : null;
     const displayedGraph = this.updateGraphDisplay(currentVisNodeId);
     return (

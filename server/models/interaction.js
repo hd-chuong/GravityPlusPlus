@@ -18,30 +18,7 @@ module.exports = class IntGraph {
 
     useDatabase(name)
     {
-      //
-      // should close the new session
-      //    
-      const newSession = this.neo4jDriver.session();
-      
-      return newSession
-        .readTransaction(tx => tx.run(`SHOW DATABASES`))
-        .then(res => {
-          const dbLists = res.records.map(record => record._fields[0]);     
-          
-          if (dbLists.includes(name)) 
-          {
-            this.dbName = name;
-          }
-          else 
-          {
-            throw new Error("Can not find the database");
-          }
-  
-        }).catch(e => {
-          console.log(e);
-        }).finally(() => {
-          newSession.close();
-        });
+      this.dbName = name;
     }
   
     getSession()
@@ -49,14 +26,15 @@ module.exports = class IntGraph {
       return this.neo4jDriver.session({database: this.dbName});
     }
   
-    addNode(name, source, id) {
+    addNode(name, source, id, clientX, clientY) {
       const session = this.getSession();
       const cypher = `
               CREATE 
                   (node:INT_NODE { id: $id, 
                                           name: $name, 
-                                          source: $source
-                                          }) 
+                                          source: $source,
+                                          x: $x,
+                                          y: $y}) 
               RETURN 
                   node
           `;
@@ -64,6 +42,8 @@ module.exports = class IntGraph {
         id: id || uuidv4(),
         name,
         source: JSON.stringify(source),
+        x: clientX || Math.random() * 100,
+        y: clientY || Math.random() * 100,
       };
   
       return session
@@ -231,7 +211,6 @@ module.exports = class IntGraph {
               source: record[1],
               target: record[2],
             }
-            console.log(result);
             return result;
           }
         })
@@ -352,19 +331,26 @@ module.exports = class IntGraph {
     {
       const {nodes, edges} = intgraph;
 
-      for (const node of nodes)
-      {
-        const {id, data} = node;
-        const {label, source} = data;
-        this.addNode(label, source, id);
-      }
+      const createChain = (() => {
+        let chain = Promise.resolve();
+        
+        for (const node of nodes)
+        {
+          const {id, data, position} = node;
+          const {label, source} = data;
+          const {x, y} = position;
+          chain = chain.then(() => this.addNode(label, source, id, x, y));
+        }
 
-      for (const edge of edges)
-      {
-        const {id, source, target, data, label} = edge;
-        const {signal, binding, } = data; 
-        this.addEdge(source, target, signal, binding, label, id);
-      }
+        for (const edge of edges)
+        {
+          const {id, source, target, data, label} = edge;
+          const {signal, binding} = data; 
+          chain = chain.then(() => this.addEdge(source, target, signal, binding, label, id));
+        }
+        return chain;
+      }).bind(this);
+      return createChain();
     }
 
     setNodeProperty(nodeId, property)

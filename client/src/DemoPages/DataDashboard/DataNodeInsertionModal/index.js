@@ -10,14 +10,14 @@ import {
   TabContent,
   TabPane,
 } from 'reactstrap';
-import { Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
+import {toast} from 'react-toastify';
+import classnames from 'classnames';
+import { Form, Label, Input, Row, Col } from 'reactstrap';
 import VegaBuilder from './TransformVegaBuilder';
 import JoinVegaBuilder from './JoinVegaBuilder';
 import { JoinSpecsBuilder } from '../../../utils/VegaSpecsBuilder';
-import classnames from 'classnames';
 import calculateDataset from '../../../utils/dataGeneration';
 import AttributeExtractor from '../../../utils/AttributeExtractor';
-import {toast} from 'react-toastify';
 import toastOptions from '../../config/toastOptions';
 class DataNodeInsertionModal extends React.Component {
   constructor(props) {
@@ -88,31 +88,15 @@ class DataNodeInsertionModal extends React.Component {
 
   handleSubmitJoin(joinNodeName, leftNode, rightNode, joinType) {
     const {
-      id: id1,
-      attribute: leftAttribute,
-      headers: leftHeaders,
-      name: leftDatasetName,
+      id: id1
     } = leftNode;
     const {
-      id: id2,
-      attribute: rightAttribute,
-      headers: rightHeaders,
-      name: rightDatasetName,
+      id: id2
     } = rightNode;
-
-    if (joinNodeName === '') {
-      toast.warn('You must provide a node name', toastOptions);
-      return;
-    }
 
     const transform = JoinSpecsBuilder(leftNode, rightNode, joinType);
 
-    var source;
-    if (joinType === 'RIGHT JOIN') {
-      source = id2;
-    } else {
-      source = id1;
-    }
+    var source = joinType === 'RIGHT JOIN' ? id2 : id1;
 
     this.props
       .addDataNode(joinNodeName, 'JOINED', source, transform)
@@ -123,26 +107,35 @@ class DataNodeInsertionModal extends React.Component {
     this.props.toggle();
   }
 
-  async handleSubmitTransform() {
-    if (this.sourceNode.value === '') {
-      toast.warn('You must provide a node name', toastOptions);
+  handleSubmitTransform() {
+    var sourceNode = this.sourceNode.value;
+    var spec = this.state.spec;
+    var name = this.transformNodeName.value;
+
+    if (!sourceNode || sourceNode === '') {
+      toast.warn('You must provide the source node.', toastOptions);
       return;
     }
-    var spec = this.state.spec;
-
-    var sourceNode = this.sourceNode.value;
-
-    let newNodeId = await this.props.addDataNode(
-      this.transformNodeName.value,
+    
+    if (name == '' || !name)
+    {
+      toast.warn('You must provide a node name.', toastOptions);
+      return;
+    }
+    this.props.addDataNode(
+      name,
       'TRANSFORMED',
-    );
-    this.props.addDataEdge(
-      sourceNode,
-      newNodeId,
-      'TRANSFORM',
-      spec
-    );
-    this.props.toggle();
+    ).then(newNodeId => {
+      this.props.addDataEdge(
+        sourceNode,
+        newNodeId,
+        'TRANSFORM',
+        spec
+      );
+      this.props.toggle();
+    });
+    
+    
   }
 
   render() {
@@ -151,6 +144,7 @@ class DataNodeInsertionModal extends React.Component {
         <Modal
           isOpen={this.props.isOpen}
           toggle={this.props.toggle}
+          // backdrop={false}
           className="modal-lg"
         >
           <CardHeader className="card-header-tab">
@@ -351,7 +345,7 @@ class DataNodeInsertionModal extends React.Component {
                           this.props.updateCurrentData(event.target.value);
                         }}
                       >
-                        <option key={0} value={null}>
+                        <option key={0} value={""}>
                           Select a node
                         </option>
                         {this.props.datagraph.datagraph.nodes.map(dataset => (

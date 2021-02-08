@@ -18,30 +18,7 @@ module.exports = class DataGraph {
 
   useDatabase(name)
   {
-    //
-    // should close the new session
-    //    
-    const newSession = this.neo4jDriver.session();
-    
-    return newSession
-      .readTransaction(tx => tx.run(`SHOW DATABASES`))
-      .then(res => {
-        const dbLists = res.records.map(record => record._fields[0]);     
-        
-        if (dbLists.includes(name)) 
-        {
-          this.dbName = name;
-        }
-        else 
-        {
-          throw new Error("Can not find the database");
-        }
-
-      }).catch(e => {
-        console.log(e);
-      }).finally(() => {
-        newSession.close();
-      });
+    this.dbName = name;
   }
 
   getSession()
@@ -49,7 +26,7 @@ module.exports = class DataGraph {
     return this.neo4jDriver.session({database: this.dbName});
   }
 
-  addNode(name, type, source, transform, format, id) {
+  addNode(name, type, source, transform, format, id, clientX, clientY) {
     const session = this.getSession();
     
     const cypher = `
@@ -58,7 +35,9 @@ module.exports = class DataGraph {
                                         source: $source, 
                                         transform: $transform, 
                                         createdAt: datetime(),
-                                        format: $format }) 
+                                        format: $format,
+                                        x: $x,
+                                        y: $y }) 
             RETURN 
               node
         `;
@@ -69,7 +48,9 @@ module.exports = class DataGraph {
       id: id || uuidv4(),
       source: source || "",
       transform: JSON.stringify(transform),
-      format: JSON.stringify(format)
+      format: JSON.stringify(format),
+      x: clientX || Math.random() * 100,
+      y: clientY || Math.random() * 100
     };
 
     return session
@@ -167,7 +148,7 @@ module.exports = class DataGraph {
             MATCH 
                 (n:DATA_NODE)  
             RETURN 
-                n
+                n ORDER BY n.createdAt ASC
         `;
     return session.readTransaction(tx => tx.run(cypher))
       .then(res => {
@@ -361,14 +342,15 @@ module.exports = class DataGraph {
   {
     const {nodes, edges} = datagraph;
     // set nodes
+
     const createChain = (() => {
       let chain = Promise.resolve();
       for (const node of nodes)
       {
-          const {id, data} = node;
+          const {id, data, position} = node;
           const {label, type, source, transform, format} = data;
-          const callback = (() => this.addNode(label, type, source, transform, format, id)).bind(this);
-          chain = chain.then(callback);
+          const {x, y} = position;
+          chain = chain.then(() => this.addNode(label, type, source, transform, format, id, x, y));
       }
       
       for (let edge of edges)

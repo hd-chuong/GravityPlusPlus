@@ -36,7 +36,6 @@ app.use(express.urlencoded({ extended: true, limit: '150mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.use(bodyParser.json({limit: '50mb'}));
 
 // app.use((req, res, next) => {

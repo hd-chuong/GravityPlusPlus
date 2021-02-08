@@ -23,27 +23,7 @@ module.exports = class VisGraph {
       //
       // should close the new session
       //    
-      const newSession = this.neo4jDriver.session();
-      
-      return newSession
-        .readTransaction(tx => tx.run(`SHOW DATABASES`))
-        .then(res => {
-          const dbLists = res.records.map(record => record._fields[0]);     
-          
-          if (dbLists.includes(name)) 
-          {
-            this.dbName = name;
-          }
-          else 
-          {
-            throw new Error("Can not find the database");
-          }
-  
-        }).catch(e => {
-          console.log(e);
-        }).finally(() => {
-          newSession.close();
-        });
+      this.dbName = name;
     }
   
     getSession()
@@ -51,14 +31,16 @@ module.exports = class VisGraph {
       return this.neo4jDriver.session({database: this.dbName});
     }
   
-    addNode(name, dataSource, spec, id) {
+    addNode(name, dataSource, spec, id, clientx, clienty) {
       const session = this.getSession();
       const cypher = `
               CREATE 
                   (node:VIS_NODE { id: $id, 
                                           name: $name, 
                                           dataSource: $dataSource, 
-                                          spec: $spec 
+                                          spec: $spec,
+                                          x: $x,
+                                          y: $y 
                                         }) 
               RETURN 
                   node
@@ -67,7 +49,9 @@ module.exports = class VisGraph {
         id: id || uuidv4(),
         name,
         dataSource,
-        spec: JSON.stringify(spec)
+        spec: JSON.stringify(spec),
+        x: clientx || Math.random() * 100,
+        y: clienty || Math.random() * 100
       };
       
       return session
@@ -322,15 +306,21 @@ module.exports = class VisGraph {
     setGraph(visgraph) {
       const {nodes, edges} = visgraph;
 
-      for (const node of nodes)
-      {
-        const {id, data} = node;
-        const {label: name, dataSource, spec} = data;
-        this.addNode(name, dataSource, spec, id);
-      }
-
-      // there is no edge for visgraph
+      const createChain = (() => {
+        let chain = Promise.resolve();
+        
+        for (const node of nodes)
+        {
+          const {id, data, position} = node;
+          const {label: name, dataSource, spec} = data;
+          const {x, y} = position;
+          chain = chain.then(() => this.addNode(name, dataSource, spec, id, x, y));
+        }
+        return chain;
+      }).bind(this);
+      return createChain();
     }
+
     getAllEdges()
     {
       return [];

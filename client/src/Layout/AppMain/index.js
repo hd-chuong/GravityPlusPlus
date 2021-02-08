@@ -5,6 +5,8 @@ import AppHeader from '../AppHeader';
 import { ToastContainer } from 'react-toastify';
 import { Switch, withRouter } from 'react-router-dom';
 import {AsyncJSONDownloadHandler} from "../../utils/DataFileHandler";
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const DataDashboard = lazy(() => import('../../DemoPages/DataDashboard'));
 const VisDashboard = lazy(() => import('../../DemoPages/VisDashboard'));
@@ -59,8 +61,7 @@ const AppMain = ({
         
         <Router>
           <AppHeader 
-            save={() => AsyncJSONDownloadHandler("three-graph.gpp", state)}
-            load={loadState}
+            save={downloadProject}
           />
           <Switch>
             <Route exact path="/home">
@@ -133,5 +134,18 @@ const AppMain = ({
     </Fragment>
   );
 };
+
+const downloadProject = () => {
+  const name = Cookies.get("project_name");
+  return axios({
+    url: `http://localhost:7473/app/${name}`,
+    withCredentials: true,
+    method: 'get'
+}).then(response => {
+    const {datasets, datagraph, intgraph, visgraph} = response.data;
+    AsyncJSONDownloadHandler("three-graph.gpp", {datasets, datagraph, intgraph, visgraph});
+    return;
+});
+}
 
 export default withRouter(AppMain);

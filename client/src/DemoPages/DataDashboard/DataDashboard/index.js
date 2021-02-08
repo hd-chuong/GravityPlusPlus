@@ -1,18 +1,15 @@
 import Axios from 'axios';
 import React, { Component, Fragment } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Row, Col, Card, CardHeader, Input, CardBody, Alert } from 'reactstrap';
+import { Row, Col, Card, CardHeader, Input, CardBody, Alert, Button } from 'reactstrap';
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
 import {toast} from 'react-toastify';
-import Cookie from 'js-cookie';
-
+import Drawer from '@material-ui/core/Drawer';
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 import calculateDataset from '../../../utils/dataGeneration';
-import {describeParams} from "../../../utils/describeParams";
 import toastOptions from '../../config/toastOptions';
-
 export default class DataDashboard extends Component {
     constructor(props) 
     {
@@ -21,13 +18,21 @@ export default class DataDashboard extends Component {
             currentData: null,
             params: {},
             spec: {},
-            currentDataNodeId: null
+            currentDataNodeId: null,
+            // testing purpose only
+            testOn: false
         };
         this.updateCurrentData = this.updateCurrentData.bind(this);
         this.deleteNode = this.deleteNode.bind(this);
         this.updateParams = this.updateParams.bind(this);
+        this.toggleDrawer = this.toggleDrawer.bind(this);
     }
 
+    toggleDrawer(val)
+    {
+
+        this.setState({testOn: val});
+    }
     deleteNode(dataNodeId)
     {
         Axios({
@@ -204,9 +209,8 @@ export default class DataDashboard extends Component {
                         updateCurrentData={this.updateCurrentData}
                         currentData={this.state.currentData}              
                     />
-
-                    
                 </ReactCSSTransitionGroup>
+                                
             </Fragment>
         )
     }
