@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import MetisMenu from 'react-metismenu';
-import ReactFileReader from 'react-file-reader';
+// import ReactFileReader from 'react-file-reader';
 
 import path from 'path';
 import AsyncDataFileHandler from '../../utils/DataFileHandler';

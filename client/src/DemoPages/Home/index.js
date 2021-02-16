@@ -22,6 +22,7 @@ import Cookie from 'js-cookie';
 import MUIDataTable from 'mui-datatables';
 import { toast } from 'react-toastify';
 import toastOptions from '../config/toastOptions';
+
 class Home extends React.Component {
     constructor(props)
     {

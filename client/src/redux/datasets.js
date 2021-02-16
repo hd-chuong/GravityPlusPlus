@@ -1,10 +1,12 @@
 import * as ActionTypes from './DatasetActionTypes';
 
 export const Datasets = (state = { errMess: null, datasets: [] }, action) => {
+  var dataset;
+  var datasetName;
   switch (action.type) {
     case ActionTypes.ADD_DATASET:
-      var dataset = action.payload;
-      var datasetName = action.payload.name;
+      dataset = action.payload;
+      datasetName = action.payload.name;
 
       if (
         state.datasets.filter(dataset => dataset.name === datasetName).length >
@@ -16,7 +18,7 @@ export const Datasets = (state = { errMess: null, datasets: [] }, action) => {
       return { ...state, datasets: state.datasets.concat(dataset) };
 
     case ActionTypes.REMOVE_DATASET:
-      var datasetName = action.payload.name;
+      datasetName = action.payload.name;
       return {
         ...state,
         datasets: state.datasets.filter(
