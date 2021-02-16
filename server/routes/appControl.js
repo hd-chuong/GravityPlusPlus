@@ -70,7 +70,8 @@ router.route('/')
     const {
       name
     } = req.body;
-    const dir = __dirname + `/../data/${name}`;
+    // convert to lowercase due to names saved in neo4j is always lowercase.
+    const dir = __dirname + `/../data/${name.toLowerCase()}`;
 
     if (!fs.existsSync(dir)) {
       // create the directory

@@ -16,7 +16,6 @@ import PageTitle from '../../Layout/AppMain/PageTitle';
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
 import AsyncDataFileHandler from '../../utils/DataFileHandler';
-import ReactFileReader from 'react-file-reader';
 import validator from 'validator';
 import Cookie from 'js-cookie';
 import MUIDataTable from 'mui-datatables';
@@ -57,8 +56,9 @@ class Home extends React.Component {
         });
     }
     
-    handleUpload(files) {
+    handleUpload(event) {
         // asking for name
+        const files = event.target.files;
         const file = files[0];
 
         // step one, create a empty database
@@ -324,12 +324,13 @@ class Home extends React.Component {
 
                                 {validateName(this.state.newProjName, this.state.projects) && <Row className="form-group">
                                     <Col>
-                                        <ReactFileReader
+                                        {/* <ReactFileReader
                                                 handleFiles={this.handleUpload.bind(this)}
                                                 fileTypes={['.gpp']}
-                                        >
-                                        <Button color="primary" className="float-right">Upload file</Button>
-                                        </ReactFileReader>
+                                        > */}
+                                        <Input type='file' accept='.gpp' onChange={this.handleUpload.bind(this)} />
+                                        {/* <Button color="primary" className="float-right">Upload file</Button> */}
+                                        {/* </ReactFileReader> */}
                                     </Col>
                                 </Row>}
                             </ModalBody>
