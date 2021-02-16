@@ -8,11 +8,17 @@ var glob = require('glob');
 var Datagraph = require('../models/data');
 var Visgraph = require('../models/visualisation');
 var Intgraph = require('../models/interaction');
-var {removeDir} = require('../utils/fileSystem');
-const {after} = require('underscore');
+var {
+  removeDir
+} = require('../utils/fileSystem');
+const {
+  after
+} = require('underscore');
 // neo4j driver
 var neo4j = require('neo4j-driver');
-const { finished } = require('stream');
+const {
+  finished
+} = require('stream');
 
 // inside a docker container, please use
 driver = neo4j.driver(
@@ -45,168 +51,185 @@ const addHeader = async (req, res, next) => {
 }
 
 router.route('/')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get((req, res, next) => {
-  const newSession = driver.session();
-  newSession.readTransaction(tx => tx.run(`SHOW DATABASES`))
-    .then(result => {
-      const dbLists = result.records.map(record => record._fields[0])
-                                    .filter(name => !["neo4j", "system"].includes(name));     
-      res.json(dbLists);
-      console.log("Successfully retrieve all project details");
-    }).catch(e => {
-      console.error(`Failed to retrieve all project details ${e}`);
-    }).finally(() => {
-      newSession.close();
-  });
-})  
-.post((req, res, next) => {
-  const {name} = req.body;
-  const dir = __dirname + `/../data/${name}`;
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get((req, res, next) => {
+    const newSession = driver.session();
+    newSession.readTransaction(tx => tx.run(`SHOW DATABASES`))
+      .then(result => {
+        const dbLists = result.records.map(record => record._fields[0])
+          .filter(name => !["neo4j", "system"].includes(name));
+        res.json(dbLists);
+        console.log("Successfully retrieve all project details");
+      }).catch(e => {
+        console.error(`Failed to retrieve all project details ${e}`);
+      }).finally(() => {
+        newSession.close();
+      });
+  })
+  .post((req, res, next) => {
+    const {
+      name
+    } = req.body;
+    const dir = __dirname + `/../data/${name}`;
 
-  if (!fs.existsSync(dir))
-  {
-    // create the directory
-    fs.mkdirSync(dir);
-    fs.mkdirSync(dir + "/data/");
-    
-    const session = driver.session();
+    if (!fs.existsSync(dir)) {
+      // create the directory
+      fs.mkdirSync(dir);
+      fs.mkdirSync(dir + "/data/");
 
-    session.writeTransaction(tx => {
-      tx.run(`CREATE DATABASE $name`, {name});    
-    })
-    .then(result => {
-      console.log(`Successfully created database name ${name}`);
-    })
-    .catch(e => {
-      console.log(e);
-    })
-    .finally(() => { 
-      session.close();
-      req.session.name = name;
-      res.json(req.session);
-    });
-    
-  }
-  else {
-    res.json({error: "Name already exists"}); 
-  }
-})
+      const session = driver.session();
+
+      session.writeTransaction(tx => {
+          tx.run(`CREATE DATABASE $name`, {
+            name
+          });
+        })
+        .then(result => {
+          console.log(`Successfully created database name ${name}`);
+        })
+        .catch(e => {
+          console.log(e);
+        })
+        .finally(() => {
+          session.close();
+          req.session.name = name;
+          res.json(req.session);
+        });
+
+    } else {
+      res.json({
+        error: "Name already exists"
+      });
+    }
+  })
 
 router.route('/:projectName')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, addHeader, (req, res, next) => {
-  const state = {
-    datasets: {
-      datasets: [],
-      errMess: null
-    },
-    datagraph: {
-      datagraph: {},
-      errMess: null
-    },
-    visgraph: {
-      visgraph: {},
-      errMess: null
-    },
-    intgraph: {
-      intgraph: {},
-      errMess: null
-    }
-  };
-  const {projectName: projName} = req.params;
-  
-  req.session.name = projName;
-  const finished = after(4, () => res.json({...req.session, ...state}));
+  .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+  .get(cors.cors, addHeader, (req, res, next) => {
+    const state = {
+      datasets: {
+        datasets: [],
+        errMess: null
+      },
+      datagraph: {
+        datagraph: {},
+        errMess: null
+      },
+      visgraph: {
+        visgraph: {},
+        errMess: null
+      },
+      intgraph: {
+        intgraph: {},
+        errMess: null
+      }
+    };
+    const {
+      projectName: projName
+    } = req.params;
 
-  // get the datagraph
-  datagraph.useDatabase(projName);
-  datagraph.getGraph().then((dgraph) => {
-    state.datagraph.datagraph = dgraph;
-    finished();
-  });
+    req.session.name = projName;
+    const finished = after(4, () => res.json({
+      ...req.session,
+      ...state
+    }));
 
-  // get visgraph
-  visgraph.useDatabase(projName);
-  visgraph.getGraph().then((vgraph) => {
-    state.visgraph.visgraph = vgraph;
-    finished();
-  });
-
-  // get intgraph
-  intgraph.useDatabase(projName);
-  intgraph.getGraph().then((igraph) => {
-    state.intgraph.intgraph = igraph;
-    finished();
-  });
-  
-  glob(__dirname + `/../data/${req.params.projectName}/data/*.json`, function(err, files) { // read the folder or folders if you want: example json/**/*.json
-    if(err) {
-      console.log("cannot read the folder, something goes wrong with glob", err);
-    }
-    
-    // note: when after argument === 0, it does not automatically invoke finished.
-    // have to place a conditional check
-    
-    if (files.length === 0) finished();
-    const readAllJSONFiles = after(files.length, () => finished());
-    files.forEach(function(file) {
-      fs.readFile(file, 'utf8', function (err, data) { // Read each file
-        if (err) {
-          console.error(`Can not read ${file}.json`);
-        }
-        console.log(JSON.parse(data).name);
-        state.datasets.datasets.push(JSON.parse(data));
-        readAllJSONFiles();
-      });
+    // get the datagraph
+    datagraph.useDatabase(projName);
+    datagraph.getGraph().then((dgraph) => {
+      state.datagraph.datagraph = dgraph;
+      finished();
     });
-    
-  });
-})
-.post(cors.corsWithOptions, addHeader, (req, res, next) => {
 
-  const {datagraph: dgraph, visgraph: vgraph, intgraph: igraph} = req.body;
-  const {projectName: projName} = req.params;
-  
-  req.session.name = projName;
+    // get visgraph
+    visgraph.useDatabase(projName);
+    visgraph.getGraph().then((vgraph) => {
+      state.visgraph.visgraph = vgraph;
+      finished();
+    });
 
-  const finished = after(3, () => res.json(req.session));
+    // get intgraph
+    intgraph.useDatabase(projName);
+    intgraph.getGraph().then((igraph) => {
+      state.intgraph.intgraph = igraph;
+      finished();
+    });
 
-  // get the datagraph
-  datagraph.useDatabase(projName);
-  datagraph.setGraph(dgraph).then(() => finished());
+    glob(__dirname + `/../data/${req.params.projectName}/data/*.json`, function(err, files) { // read the folder or folders if you want: example json/**/*.json
+      if (err) {
+        console.log("cannot read the folder, something goes wrong with glob", err);
+      }
 
-  // get visgraph
-  visgraph.useDatabase(projName);
-  visgraph.setGraph(vgraph).then(() => finished());
+      // note: when after argument === 0, it does not automatically invoke finished.
+      // have to place a conditional check
 
-  // get intgraph
-  intgraph.useDatabase(projName);
-  intgraph.setGraph(igraph).then(() => finished());
-})
+      if (files.length === 0) finished();
+      const readAllJSONFiles = after(files.length, () => finished());
+      files.forEach(function(file) {
+        fs.readFile(file, 'utf8', function(err, data) { // Read each file
+          if (err) {
+            console.error(`Can not read ${file}.json`);
+          }
+          console.log(JSON.parse(data).name);
+          state.datasets.datasets.push(JSON.parse(data));
+          readAllJSONFiles();
+        });
+      });
 
-
-.delete(cors.corsWithOptions, addHeader, (req, res, next) => {
-  const name = req.params.projectName;
-  const session = driver.session();
-  const finished = after(2, () => res.json(req.session));
-  session.writeTransaction(tx => {
-    tx.run(`DROP DATABASE $name`, {name});    
+    });
   })
-  .then(res => {
-    console.log(`Successfully delete database ${name}.`);
+  .post(cors.corsWithOptions, addHeader, (req, res, next) => {
+
+    const {
+      datagraph: dgraph,
+      visgraph: vgraph,
+      intgraph: igraph
+    } = req.body;
+    const {
+      projectName: projName
+    } = req.params;
+
+    req.session.name = projName;
+
+    const finished = after(3, () => res.json(req.session));
+
+    // get the datagraph
+    datagraph.useDatabase(projName);
+    datagraph.setGraph(dgraph).then(() => finished());
+
+    // get visgraph
+    visgraph.useDatabase(projName);
+    visgraph.setGraph(vgraph).then(() => finished());
+
+    // get intgraph
+    intgraph.useDatabase(projName);
+    intgraph.setGraph(igraph).then(() => finished());
   })
-  .catch(e => {
-    console.log(e);
-  })
-  .finally(() => { 
-    session.close();
+
+
+  .delete(cors.corsWithOptions, addHeader, (req, res, next) => {
+    const name = req.params.projectName;
+    const session = driver.session();
+    const finished = after(2, () => res.json(req.session));
+    session.writeTransaction(tx => {
+        tx.run(`DROP DATABASE $name`, {
+          name
+        });
+      })
+      .then(res => {
+        console.log(`Successfully delete database ${name}.`);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+      .finally(() => {
+        session.close();
+        finished();
+      });
+
+    const dir = __dirname + `/../data/${name}`;
+    removeDir(dir);
     finished();
-  });
-
-  const dir = __dirname + `/../data/${name}`;
-  removeDir(dir);
-  finished();  
-})
+  })
 
 module.exports = router;

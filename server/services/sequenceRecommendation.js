@@ -12,18 +12,24 @@ async function RecommendSequence(charts, options = {
     const solve = gs.sequence(cleanedCharts, options);
     console.log("Found paths");
     let sequences = solve.slice(0, 10).map(seq => {
-      const { sequence, sequenceCost} = seq; 
-      return {sequence, cost: sequenceCost};
+      const {
+        sequence,
+        sequenceCost
+      } = seq;
+      return {
+        sequence,
+        cost: sequenceCost
+      };
     });
-  
+
     sequences = sequences.map(seq => ({
-      cost: seq.cost, 
-      sequence: seq.sequence.filter(order => order !== 0).map(order => order - 1) 
+      cost: seq.cost,
+      sequence: seq.sequence.filter(order => order !== 0).map(order => order - 1)
     }));
 
     return sequences.map(sequence => ({
-      cost: sequence.cost, 
-      sequence: sequence.sequence.reduce((currentSeq, nextValue) => currentSeq.concat(IDs[nextValue]), []) 
+      cost: sequence.cost,
+      sequence: sequence.sequence.reduce((currentSeq, nextValue) => currentSeq.concat(IDs[nextValue]), [])
     }));
 
     // var bestSequence = solve[0].sequence;
