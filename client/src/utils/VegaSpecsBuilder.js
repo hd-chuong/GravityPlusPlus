@@ -1,6 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
 import {compile} from 'vega-lite';
-import nanoid from './nanoid';
 
 export const AggregationMethods = [
   'count',

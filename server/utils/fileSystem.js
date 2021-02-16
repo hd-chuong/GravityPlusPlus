@@ -2,26 +2,26 @@ const fs = require("fs")
 const path = require("path")
 
 const removeDir = function(path) {
-    console.log(path);
-    if (fs.existsSync(path)) {
-        const files = fs.readdirSync(path)
-        if (files.length > 0) {
-        files.forEach(function(filename) {
-            if (fs.statSync(path + "/" + filename).isDirectory()) {
-            removeDir(path + "/" + filename)
-            } else {
-            fs.unlinkSync(path + "/" + filename)
-            }
-        })
-        fs.rmdirSync(path)
+  console.log(path);
+  if (fs.existsSync(path)) {
+    const files = fs.readdirSync(path)
+    if (files.length > 0) {
+      files.forEach(function(filename) {
+        if (fs.statSync(path + "/" + filename).isDirectory()) {
+          removeDir(path + "/" + filename)
         } else {
-        fs.rmdirSync(path)
+          fs.unlinkSync(path + "/" + filename)
         }
+      })
+      fs.rmdirSync(path)
+    } else {
+      fs.rmdirSync(path)
+    }
   } else {
-    console.log("Directory path not found");    
+    console.log("Directory path not found");
   }
 }
 
 module.exports = {
-    removeDir   
+  removeDir
 }

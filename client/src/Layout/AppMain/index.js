@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import {Route, Redirect } from 'react-router-dom';
 import React, { Suspense, lazy, Fragment } from 'react';
 
 import AppHeader from '../AppHeader';
@@ -57,19 +57,22 @@ const AppMain = ({
             </div>
           </div>
         }
-      >
-        
-        <Router>
-          <AppHeader 
-            save={downloadProject}
-          />
-          <Switch>
-            <Route exact path="/home">
-                <Home
-                  load={loadState}
-                />
-            </Route>
-            
+      >    
+        <Route exact path="/home">
+            <AppHeader 
+              save={downloadProject}
+            />
+            <Home
+              load={loadState}
+            />
+        </Route>
+        </Suspense>
+        <Suspense
+          fallback={() => <RenderLoading/>}
+        >
+            <AppHeader 
+                save={downloadProject}
+            />
             <Route exact path="/data">
               <DataDashboard
                 datasets={datasets}
@@ -84,7 +87,11 @@ const AppMain = ({
                 setDataPosition={setDataPosition}
               />
             </Route>
-
+        </Suspense>
+        <Suspense fallback={<RenderLoading/>}>
+            <AppHeader 
+                save={downloadProject}
+            />
             <Route exact path="/vis">
               <VisDashboard
                 datasets={datasets}
@@ -98,7 +105,11 @@ const AppMain = ({
                 setVisPosition={setVisPosition}
               />
             </Route>
-
+            </Suspense>
+        <Suspense fallback={() => <RenderLoading/>}>
+            <AppHeader 
+                save={downloadProject}
+            />
             <Route exact path="/int">
               <IntDashboard
                 datasets={datasets}
@@ -113,7 +124,11 @@ const AppMain = ({
                 setIntNode={setIntNode}
               />
             </Route>
-
+        </Suspense>
+        <Suspense>
+            <AppHeader 
+                save={downloadProject}
+            />
             <Route exact path="/story">
               <Story
                 datasets={datasets}
@@ -122,14 +137,17 @@ const AppMain = ({
                 intgraph={intgraph.intgraph}
               />
             </Route>
-            
+            </Suspense>
+        <Suspense fallback={() => <RenderLoading/>}>
+            <AppHeader 
+                save={downloadProject}
+            />    
             <Route exact path="/test">
               <UserStudy />
             </Route>
             <Redirect to="/home" />
-          </Switch>
+          
           <ToastContainer />
-        </Router>
       </Suspense>
     </Fragment>
   );
@@ -147,5 +165,14 @@ const downloadProject = () => {
     return;
 });
 }
+
+const RenderLoading = () => (<div className="loader-container">
+  <div className="loader-container-inner">
+      <h6 className="mt-5">
+          Please wait while we load all the Components examples
+          <small>Because this is a demonstration we load at once all the Components examples. This wouldn't happen in a real live app!</small>
+      </h6>
+  </div>
+</div>);
 
 export default withRouter(AppMain);

@@ -34,14 +34,11 @@ const addHeader = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:7472');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  
-  if (req.session.name)
-  {
-    visgraph.useDatabase(req.session.name); 
+
+  if (req.session.name) {
+    visgraph.useDatabase(req.session.name);
     next();
-  }
-  else 
-  {
+  } else {
     console.log("Unknown dataname");
     next(new Error("Unknown database name"));
   }
@@ -58,7 +55,11 @@ router.route('/nodes')
       .catch(err => next(err));
   })
   .post(cors.corsWithOptions, addHeader, (req, res, next) => {
-    const {name, dataSource, spec} = req.body;
+    const {
+      name,
+      dataSource,
+      spec
+    } = req.body;
     visgraph
       .addNode(name, dataSource, spec)
       .then(result => {
@@ -92,7 +93,7 @@ router.route('/nodes/:nodeID')
       .catch(err => next(err));
   })
 
-  // sequence recommendation services
+// sequence recommendation services
 router.route('/sequenceRecommend')
   .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
   .post(cors.cors, addHeader, (req, res, next) => {

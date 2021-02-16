@@ -16,19 +16,19 @@ module.exports = class DataGraph {
     this.neo4jDriver = neo4jDriver;
   }
 
-  useDatabase(name)
-  {
+  useDatabase(name) {
     this.dbName = name;
   }
 
-  getSession()
-  {
-    return this.neo4jDriver.session({database: this.dbName});
+  getSession() {
+    return this.neo4jDriver.session({
+      database: this.dbName
+    });
   }
 
   addNode(name, type, source, transform, format, id, clientX, clientY) {
     const session = this.getSession();
-    
+
     const cypher = `
             CREATE (node:DATA_NODE:${type} { id: $id, 
                                         name: $name, 
@@ -287,77 +287,115 @@ module.exports = class DataGraph {
     }
 
     return this.getAllNodes().then(res => {
-      
-      graph.nodes = res.map(node => {
-        let {id, types, props} = node;
-        let {transform, name, format, source, x, y} = props;
-        
-        
-        transform = JSON.parse(transform);
-        format = JSON.parse(format);
-        x = parseInt(x) || Math.random() * 100;
-        y = parseInt(y) || Math.random() * 100;
-        
 
-        return { 
-          id: id,
-          type: types.includes("RAW") ? "input" : "default",
-          data: {
-            label: name,
-            type: types.filter(type => type !== "DATA_NODE"),
-            source,
+        graph.nodes = res.map(node => {
+          let {
+            id,
+            types,
+            props
+          } = node;
+          let {
             transform,
-            format
-          },
-          position: {
-            x, 
+            name,
+            format,
+            source,
+            x,
             y
-          }
-        } 
-      });
-      return this.getAllEdges();
-    })
-    .then(res => {
-      graph.edges = res.map(edge => {
-        const {source, target, id, props} = edge;
-        let {type, operation} = props;
-        operation = JSON.parse(operation);
+          } = props;
 
-        return {
-          source,
-          target,
-          id,
-          arrowHeadType: "arrowclosed",
-          data: {
-            type: type,
-            ...operation
+
+          transform = JSON.parse(transform);
+          format = JSON.parse(format);
+          x = parseInt(x) || Math.random() * 100;
+          y = parseInt(y) || Math.random() * 100;
+
+
+          return {
+            id: id,
+            type: types.includes("RAW") ? "input" : "default",
+            data: {
+              label: name,
+              type: types.filter(type => type !== "DATA_NODE"),
+              source,
+              transform,
+              format
+            },
+            position: {
+              x,
+              y
+            }
           }
-        }
+        });
+        return this.getAllEdges();
+      })
+      .then(res => {
+        graph.edges = res.map(edge => {
+          const {
+            source,
+            target,
+            id,
+            props
+          } = edge;
+          let {
+            type,
+            operation
+          } = props;
+          operation = JSON.parse(operation);
+
+          return {
+            source,
+            target,
+            id,
+            arrowHeadType: "arrowclosed",
+            data: {
+              type: type,
+              ...operation
+            }
+          }
+        });
+        return graph;
       });
-      return graph;
-    });
   }
 
-  setGraph(datagraph)
-  {
-    const {nodes, edges} = datagraph;
+  setGraph(datagraph) {
+    const {
+      nodes,
+      edges
+    } = datagraph;
     // set nodes
 
     const createChain = (() => {
       let chain = Promise.resolve();
-      for (const node of nodes)
-      {
-          const {id, data, position} = node;
-          const {label, type, source, transform, format} = data;
-          const {x, y} = position;
-          chain = chain.then(() => this.addNode(label, type, source, transform, format, id, x, y));
+      for (const node of nodes) {
+        const {
+          id,
+          data,
+          position
+        } = node;
+        const {
+          label,
+          type,
+          source,
+          transform,
+          format
+        } = data;
+        const {
+          x,
+          y
+        } = position;
+        chain = chain.then(() => this.addNode(label, type, source, transform, format, id, x, y));
       }
-      
-      for (let edge of edges)
-      {
-        const {id, source, target, data, type} = edge;
+
+      for (let edge of edges) {
+        const {
+          id,
+          source,
+          target,
+          data,
+          type
+        } = edge;
         // data is stored in operation
-        chain = chain.then(() => this.addEdge(source, target, type, data, id)); 
+        chain = chain.then(() => this.addEdge(source, target, type, data, id));
       }
       return chain;
     }).bind(this);
@@ -492,8 +530,7 @@ module.exports = class DataGraph {
       });
   }
 
-  setNodeProperty(nodeId, property)
-  {
+  setNodeProperty(nodeId, property) {
     const params = {
       id: nodeId,
       // property: SetQueryBuilder("node", property)
