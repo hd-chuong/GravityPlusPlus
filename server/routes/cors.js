@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const whitelist = [
-  "http://localhost:7472",
+  "https://gravity2020.netlify.app/",
 ]
 
 var corsOptionsDelegate = (req, callback) => {
