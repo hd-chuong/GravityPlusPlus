@@ -1,8 +1,11 @@
 import * as ActionTypes from './DataGraphActionTypes';
 import Axios from 'axios';
-import nanoid from '../utils/nanoid';
+// import {nanoid} from '../utils/nanoid';
 import {toast} from 'react-toastify';
 import toastOptions from '../DemoPages/config/toastOptions';
+import {nanoid} from 'nanoid';
+// const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 20);
+
 export const saveDataNode = payload => ({
   type: ActionTypes.ADD_DATA_NODE,
   payload,

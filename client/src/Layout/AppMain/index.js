@@ -125,7 +125,7 @@ const AppMain = ({
               />
             </Route>
         </Suspense>
-        <Suspense>
+        <Suspense fallback={() => <RenderLoading/>}>
             <AppHeader 
                 save={downloadProject}
             />
