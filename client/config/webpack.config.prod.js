@@ -150,9 +150,12 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-
+              presets: ["es2015", "react"],
               compact: true,
             },
+            query: {
+              presets: ["es2015", "react"]
+            }
           },
           // The notation here is somewhat confusing.
           // "postcss" loader applies autoprefixer to our CSS.
