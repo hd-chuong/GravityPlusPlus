@@ -47,15 +47,7 @@ const AppMain = ({
     <Fragment>
       <Suspense
         fallback={
-          <div className="loader-container">
-            <div className="loader-container-inner">
-              <i
-                className="fa fa-spin fa-cog fa-5x"
-                aria-hidden="true"
-              ></i>
-              <h4 className="mt-3">Loading ...</h4>
-            </div>
-          </div>
+          () => <RenderLoading/>
         }
       >    
         <Route exact path="/home">
@@ -156,7 +148,7 @@ const AppMain = ({
 const downloadProject = () => {
   const name = Cookies.get("project_name");
   return axios({
-    url: `http://localhost:7473/app/${name}`,
+    url: `http://165.227.106.53:7473/app/${name}`,
     withCredentials: true,
     method: 'get'
 }).then(response => {
@@ -167,12 +159,13 @@ const downloadProject = () => {
 }
 
 const RenderLoading = () => (<div className="loader-container">
-  <div className="loader-container-inner">
-      <h6 className="mt-5">
-          Please wait while we load all the Components examples
-          <small>Because this is a demonstration we load at once all the Components examples. This wouldn't happen in a real live app!</small>
-      </h6>
-  </div>
+<div className="loader-container-inner">
+  <i
+    className="fa fa-spin fa-cog fa-5x"
+    aria-hidden="true"
+  ></i>
+  <h4 className="mt-3">Loading ...</h4>
+</div>
 </div>);
 
 export default withRouter(AppMain);
