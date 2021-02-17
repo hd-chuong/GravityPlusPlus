@@ -11,13 +11,18 @@ import Vega from "../../DemoPages/Vega";
 import {EventTypes, ExtractMarkTypes, GetCompiledVegaSpec, SignalBuilder} from '../../utils/VegaSpecsBuilder';
 import calculateDataset from "../../utils/dataGeneration";
 import {describeParams} from "../../utils/describeParams";
-import nanoid from "../../utils/nanoid";
+// import {nanoid} from "../../utils/nanoid";
+
 import ParamTable from "../Components/ParamTable";
 import AttributeExtractor from '../../utils/AttributeExtractor';
 import {GetNodeById} from '../../utils/graphUtil';
 import Creatable from 'react-select/creatable';
 
+import {customAlphabet} from 'nanoid';
+const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 20);
+
 const IntEdgeInsertionModal = (props) => {
+  console.log(nanoid());
   const [source, setSource] = useState(null);
   const [target, setTarget] = useState(null);
   const [eventType, setEventType] = useState(null);

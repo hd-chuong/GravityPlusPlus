@@ -1,4 +1,2 @@
-import { customAlphabet } from 'nanoid';
-
-const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 20);
-export default nanoid;
+import {customAlphabet} from 'nanoid';
+export const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 20);
