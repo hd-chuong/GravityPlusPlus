@@ -25,7 +25,7 @@ To run the client,
 
 Access the client side from a browser:
 
-    http://localhost:7472/
+    http://localhost:7473//
 
 API Server
 
