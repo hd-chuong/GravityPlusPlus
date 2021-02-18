@@ -46,9 +46,7 @@ const AppMain = ({
   return (
     <Fragment>
       <Suspense
-        fallback={
-          () => <RenderLoading/>
-        }
+        fallback={<RenderLoading/>}
       >    
         <Route exact path="/home">
             <AppHeader 
@@ -60,7 +58,7 @@ const AppMain = ({
         </Route>
         </Suspense>
         <Suspense
-          fallback={() => <RenderLoading/>}
+          fallback={<RenderLoading/>}
         >
             <AppHeader 
                 save={downloadProject}
@@ -80,7 +78,7 @@ const AppMain = ({
               />
             </Route>
         </Suspense>
-        <Suspense fallback={() => <RenderLoading/>}>
+        <Suspense fallback={<RenderLoading/>}>
             <AppHeader 
                 save={downloadProject}
             />
@@ -98,7 +96,7 @@ const AppMain = ({
               />
             </Route>
             </Suspense>
-        <Suspense fallback={() => <RenderLoading/>}>
+        <Suspense fallback={<RenderLoading/>}>
             <AppHeader 
                 save={downloadProject}
             />
@@ -117,7 +115,7 @@ const AppMain = ({
               />
             </Route>
         </Suspense>
-        <Suspense fallback={() => <RenderLoading/>}>
+        <Suspense fallback={<RenderLoading/>}>
             <AppHeader 
                 save={downloadProject}
             />
@@ -130,7 +128,7 @@ const AppMain = ({
               />
             </Route>
             </Suspense>
-        <Suspense fallback={() => <RenderLoading/>}>
+        <Suspense fallback={<RenderLoading/>}>
             <AppHeader 
                 save={downloadProject}
             />    
