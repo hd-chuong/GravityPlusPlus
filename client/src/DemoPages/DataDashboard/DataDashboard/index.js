@@ -104,12 +104,15 @@ export default class DataDashboard extends Component {
 
         displayedGraph.edges = displayedGraph.edges.map(edge => {
             var label = "";
-            console.log(edge.type)
-            if (edge.data.type === "JOIN") label = "join";
+            
+            const type = edge.data.type;
+            if (!type) return edge;
 
-            if (edge.data.type === "aggregate") label = `aggr. on ${edge.data.fields}`;
+            if (type === "JOIN") label = "join";
 
-            if (edge.data.type === "filter") 
+            if (type === "aggregate") label = `aggr. on ${edge.data.fields}`;
+
+            if (type === "filter") 
             {
                 const {field, operand, threshold} = edge.data;
                 label = `${field} ${operand} ${threshold.length <= 5 ? threshold : threshold.slice(0, 10)}`;
