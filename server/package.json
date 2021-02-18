@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www --watch routes --watch models --watch app.js --watch ./utils --watch services"
+    "dev": "nodemon ./bin/www --watch routes --watch models --watch app.js --watch ./utils --watch services"
+    "start": "pm2 ./bin/www --watch routes --watch models --watch app.js --watch ./utils --watch services"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -19,6 +20,7 @@
     "neode": "^0.4.6",
     "node-neo4j": "^2.0.3",
     "nodemon": "^2.0.6",
+    "pm2": "^4.5.4",
     "underscore": "^1.12.0",
     "uuid": "^8.3.1"
   }
