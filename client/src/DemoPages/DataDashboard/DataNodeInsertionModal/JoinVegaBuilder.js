@@ -60,6 +60,11 @@ class JoinVegaBuilder extends React.Component {
       return;
     }
 
+    if (!/^[a-zA-Z_0-9]+$/.test(name)) {
+      toast.warn('Data node name should only contain A-Z, a-z, 0-9 and _ characters.', toastOptions);
+      return;
+    }
+
     if (!this.state.attribute1 || !this.state.attribute2)
     {
       toast.warn('You must provide attribute name for both datasets', toastOptions);

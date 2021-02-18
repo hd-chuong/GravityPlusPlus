@@ -170,7 +170,8 @@ const tutorial_videos = [
     },
 ]
 
-const RenderWatchVideos = () => (                                <Card>
+const RenderWatchVideos = () => (                                
+    <Card>
     <CardBody>
         <CardTitle>Tutorial demos</CardTitle>
         {tutorial_videos.map(({link, description, title, thumbnail}) => (

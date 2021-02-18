@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input } from 'reactstrap';
+import { Row, Col, Input, Label } from 'reactstrap';
 export default function PieChartForm({
   xFieldChange,
   yFieldChange,
@@ -9,6 +9,7 @@ export default function PieChartForm({
     <Fragment>
       <Row className="form-group">
         <Col>
+          <Label>Select color (categorical) field</Label>
           <Input
             type="select"
             onChange={xFieldChange}
@@ -26,6 +27,7 @@ export default function PieChartForm({
           </Input>
         </Col>
         <Col>
+          <Label>Select angle (quantitative) field</Label>
           <Input
             type="select"
             onChange={yFieldChange}

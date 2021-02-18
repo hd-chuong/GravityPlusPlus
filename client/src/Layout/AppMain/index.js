@@ -146,7 +146,7 @@ const AppMain = ({
 const downloadProject = () => {
   const name = Cookies.get("project_name");
   return axios({
-    url: `http://165.227.106.53:7473/app/${name}`,
+    url: `http://localhost:7473/app/${name}`,
     withCredentials: true,
     method: 'get'
 }).then(response => {

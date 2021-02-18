@@ -11,7 +11,7 @@ export const addVisNode = ({ name, dataSource, spec }) => dispatch => {
   const newNode = { name, dataSource, spec};
   return Axios({
     method: 'post',
-    url: 'http://165.227.106.53:7473/vis/nodes',
+    url: 'http://localhost:7473/vis/nodes',
     data: newNode,
     withCredentials: true,
   })
@@ -54,7 +54,7 @@ export const removeAllVisEdgesByType = payload => ({
 export const removeVisNode = payload => dispatch => {
   return Axios({
     method: 'delete',
-    url: `http://165.227.106.53:7473/vis/nodes/${payload.id}`,
+    url: `http://localhost:7473/vis/nodes/${payload.id}`,
     data: payload,
     withCredentials: true,
   })
@@ -90,7 +90,7 @@ export const setVisNode = payload => dispatch => {
   const {id, params} = payload;
   return Axios({
     method: 'put',
-    url: `http://165.227.106.53:7473/vis/nodes/${id}`,
+    url: `http://localhost:7473/vis/nodes/${id}`,
     data: params,
     withCredentials: true,
   })
@@ -110,7 +110,7 @@ export const setVisPosition = payload => dispatch => {
   const {x, y, id} = payload;
   return Axios({
     method: 'put',
-    url: `http://165.227.106.53:7473/vis/nodes/${id}`,
+    url: `http://localhost:7473/vis/nodes/${id}`,
     data: {x, y},
     withCredentials: true,
   })

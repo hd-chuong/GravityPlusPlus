@@ -11,6 +11,7 @@ export default function ScatterplotForm({
     <Fragment>
       <Row className="form-group">
         <Col>
+          <Label>Select x field</Label>
           <Input
             type="select"
             onChange={xFieldChange}
@@ -28,6 +29,7 @@ export default function ScatterplotForm({
           </Input>
         </Col>
         <Col>
+          <Label>Select y field</Label>
           <Input
             type="select"
             onChange={yFieldChange}
@@ -46,6 +48,7 @@ export default function ScatterplotForm({
         </Col>
 
         <Col>
+        <Label>Select color (categorical) field</Label>
           <Input
             type="select"
             onChange={categoryFieldChange}
@@ -64,14 +67,15 @@ export default function ScatterplotForm({
         </Col>
 
         <Col>
+        <Label>Select shape (categorical) field</Label>
           <Input
             type="select"
             onChange={shapeFieldChange}
             name="shapeField"
-            placeholder="Select shape field"
+            placeholder="Select shape (categorical) field"
           >
             <option key={-1} value={''}>
-              Select shape attribute
+              Select color attribute
             </option>
             {attributeList.map(header => (
               <option key={header} value={header}>

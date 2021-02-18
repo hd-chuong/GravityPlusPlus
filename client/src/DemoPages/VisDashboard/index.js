@@ -157,7 +157,7 @@ class Dashboard extends Component {
           this.setState({ loadRecommendedSequence: true });
           Axios({
             method: 'post',
-            url: `http://165.227.106.53:7473/vis/sequenceRecommend`,
+            url: `http://localhost:7473/vis/sequenceRecommend`,
             data: {
               charts: this.props.visgraph.nodes.map(node => ({
                 ...node.data.spec,

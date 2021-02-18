@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input } from 'reactstrap';
+import { Row, Col, Input, Label } from 'reactstrap';
 export default function BarChartForm({
   xFieldChange,
   yFieldChange,
@@ -9,6 +9,7 @@ export default function BarChartForm({
     <Fragment>
       <Row className="form-group">
         <Col>
+          <Label>Select x axis field</Label>
           <Input
             type="select"
             onChange={xFieldChange}
@@ -26,6 +27,7 @@ export default function BarChartForm({
           </Input>
         </Col>
         <Col>
+          <Label>Select y axis field</Label>
           <Input
             type="select"
             onChange={yFieldChange}

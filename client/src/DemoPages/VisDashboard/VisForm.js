@@ -28,6 +28,8 @@ import Boxplot from '../../vegaTemplates/boxplot';
 import NormalizedAreaChart from '../../vegaTemplates/normalized-area-chart';
 import StackedBarChart from '../../vegaTemplates/stacked-bar-chart';
 import Scatterplot from '../../vegaTemplates/scatterplot';
+import { toast } from 'react-toastify';
+import toastOptions from '../config/toastOptions';
 
 const BarChartForm = lazy(() => import('./BarChartForm'));
 const PieChartForm = lazy(() => import('./PieChartForm'));
@@ -70,14 +72,34 @@ const VisForm = props => {
     if (step.props.onSubmit) {
       await step.props.onSubmit(values, bag);
     }
-    if (isLastStep) {
-      props.addVisNode(values.title, values.dataNode, values.spec);
-      props.toggle();
-      // return onSubmit(values, bag);
-    } else {
+    if (!isLastStep) 
+    {
       bag.setTouched({});
       next(values);
     }
+
+    if (!values.title)
+    {
+      toast.warn("Please provide a node title", toastOptions);
+      return;
+    }
+
+    if (!values.dataNode)
+    {
+      toast.warn("Please provide a data node", toastOptions);
+      return;
+    }
+
+    if (!values.spec)
+    {
+      toast.warn("Insufficient specification", toastOptions);
+      return;
+    }
+
+    props.addVisNode(values.title, values.dataNode, values.spec);
+    props.toggle();
+     
+   
   };
 
   return (

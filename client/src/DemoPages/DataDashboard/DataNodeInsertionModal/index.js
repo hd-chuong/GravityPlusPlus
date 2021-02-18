@@ -45,6 +45,10 @@ class DataNodeInsertionModal extends React.Component {
       return;
     }
 
+    if (!/^[a-zA-Z_0-9]+$/.test(this.rawNodeName.value)) {
+      toast.warn('Data node name should only contain A-Z, a-z, 0-9 and _ characters.', toastOptions);
+      return;
+    }
     if (this.rawDataset.value === '') {
       toast.warn('You must select a dataset', toastOptions);
       return;
@@ -122,6 +126,12 @@ class DataNodeInsertionModal extends React.Component {
       toast.warn('You must provide a node name.', toastOptions);
       return;
     }
+
+    if (!/^[a-zA-Z_0-9]+$/.test(name)) {
+      toast.warn('Data node name should only contain A-Z, a-z, 0-9 and _ characters.', toastOptions);
+      return;
+    }
+
     this.props.addDataNode(
       name,
       'TRANSFORMED',

@@ -68,7 +68,7 @@ class Home extends React.Component {
         this.setState({messagePending: "Create blank database"});
         
         return axios({
-            url: 'http://165.227.106.53:7473/app',
+            url: 'http://localhost:7473/app',
             withCredentials: true,
             method: 'post',
             data: {name: this.state.newProjName, isNewProject: true}
@@ -83,7 +83,7 @@ class Home extends React.Component {
             const {datasets} = data.datasets;
             readData = data;
             return axios({
-                url: 'http://165.227.106.53:7473/dataset',
+                url: 'http://localhost:7473/dataset',
                 withCredentials: true,
                 method: 'post',
                 data: datasets,
@@ -94,7 +94,7 @@ class Home extends React.Component {
             const {datagraph, intgraph, visgraph} = readData;
         
             return axios({
-                url: `http://165.227.106.53:7473/app/${this.state.newProjName}`,
+                url: `http://localhost:7473/app/${this.state.newProjName}`,
                 withCredentials: true,
                 method: 'post',
                 data: {
@@ -124,7 +124,7 @@ class Home extends React.Component {
         });
 
         axios({
-            url: 'http://165.227.106.53:7473/app',
+            url: 'http://localhost:7473/app',
             withCredentials: true,
             method: 'get'
         })
@@ -141,7 +141,7 @@ class Home extends React.Component {
         });
 
         return axios({
-            url: `http://165.227.106.53:7473/app/${name}`,
+            url: `http://localhost:7473/app/${name}`,
             withCredentials: true,
             method: 'get'
         }).then(response => {
@@ -165,7 +165,7 @@ class Home extends React.Component {
         }
         
         return axios({
-            url: 'http://165.227.106.53:7473/app',
+            url: 'http://localhost:7473/app',
             withCredentials: true,
             method: 'post',
             data: {name: this.state.newProjName, isNewProject: true}
@@ -188,7 +188,7 @@ class Home extends React.Component {
     deleteProject(projectName)
     {
         return axios({
-            url: `http://165.227.106.53:7473/app/${projectName}`,
+            url: `http://localhost:7473/app/${projectName}`,
             withCredentials: true,
             method: 'delete'
         }).then(() => {
