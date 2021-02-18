@@ -370,9 +370,9 @@ const RenderNewProjMessage = ({name, projects}) => {
     {
         return <Alert color="warning">Project name must not be neo4j or system.</Alert>;
     }
-    if (!validator.isAlpha(name))
+    if (!validator.isAlpha(name) || name.toLowerCase() !== name)
     {
-        return <Alert color="warning">Project name should contain only A-Z and a-z characters.</Alert>
+        return <Alert color="warning">Project name should only contain a-z characters.</Alert>
     }
 
     const isDuplicatedName = projects.includes(name); 
@@ -392,7 +392,7 @@ const validateName = (name, projects) => {
         // toast.error("Project name must have at least three characters.", toastOptions);
         return false;
     }
-    if (!validator.isAlpha(name))
+    if (!validator.isAlpha(name) || name.toLowerCase() !== name)
     {
         // toast.error("Project name should only contain a-z and A-Z characters.", toastOptions);
         return false;

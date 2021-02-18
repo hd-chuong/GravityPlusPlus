@@ -67,7 +67,7 @@ class Nav extends Component {
         />
 
         <h5 className="app-sidebar__heading">Toolbox</h5>
-        <div className="metismenu vertical-nav-menu" active>
+        <div className="metismenu vertical-nav-menu">
           <ul className="metismenu-container">
             <li
               className="metismenu-item"

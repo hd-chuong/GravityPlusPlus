@@ -80,7 +80,7 @@ const AppMain = ({
               />
             </Route>
         </Suspense>
-        <Suspense fallback={<RenderLoading/>}>
+        <Suspense fallback={() => <RenderLoading/>}>
             <AppHeader 
                 save={downloadProject}
             />
