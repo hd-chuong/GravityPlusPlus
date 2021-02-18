@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www --watch routes --watch models --watch app.js --watch ./utils --watch services",
-    "start": "pm2 start ./bin/www --watch routes --watch models --watch app.js --watch ./utils --watch services"
+    "start": "pm2 start pm2-process.json"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",

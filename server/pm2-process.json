@@ -1,0 +1,10 @@
+{
+    "script": "bin/www",
+    "watch": true,
+    "ignore_watch": ["node_modules", "data"],
+    "watch_options": {
+        "followSymlinks": false
+    },
+    "no-daemon": true,
+    "name": "main_daemon"
+}
