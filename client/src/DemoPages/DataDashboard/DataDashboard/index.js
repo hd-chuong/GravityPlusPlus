@@ -110,7 +110,7 @@ export default class DataDashboard extends Component {
 
             if (type === "JOIN") label = "join";
 
-            if (type === "aggregate") label = `aggr. on ${edge.data.fields}`;
+            if (type === "aggregate") label = `${edge.data.ops} on ${edge.data.fields}`;
 
             if (type === "filter") 
             {
