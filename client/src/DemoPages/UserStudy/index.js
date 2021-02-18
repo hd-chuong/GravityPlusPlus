@@ -7,39 +7,92 @@ import {
     Input, 
     Label, ModalHeader, Card, CardImg, CardText, 
     NavLink,
-    CardSubtitle
+    CardSubtitle,
+    Button
     // Alert, Button
 } from 'reactstrap';
 
 import {Link, withRouter} from 'react-router-dom';
-import { Steps } from 'rsuite';
-import { Button, IconButton, ButtonGroup, ButtonToolbar, Icon } from 'rsuite';
-import 'rsuite/dist/styles/rsuite-default.css';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+// import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import moment from 'moment'; 
+
+const steps = [
+    "Watch Gravity tutorials",
+    "Work on tasks",
+    "Complete survey",
+    "Check-out"
+];
+
+const stepContent = [
+    "We are glad to show you the most prominent features of Gravity.",
+    "You will use Gravity to complete the tasks given by the researcher. Feel free to ask any questions during your evaluation.",
+    "Your feedback is valued as it helps us improve in the next version of Gravity.",
+    "Thank you for joining the usability study."
+]
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+    },
+    button: {
+      marginTop: theme.spacing(1),
+      marginRight: theme.spacing(1),
+    },
+    actionsContainer: {
+      marginBottom: theme.spacing(2),
+    },
+    resetContainer: {
+      padding: theme.spacing(3),
+    },
+  }));
+
+
 const UserSteps = ({step, onPrevious, onNext}) => {
-
-    const styles = {
-        display: 'inline-table',
-        verticalAlign: 'top'
-      };
-
+    const classes = useStyles(); 
     return (
     <Card>
         <CardBody>
-            <Steps current={step} vertical style={styles} >
-                <Steps.Item title="Watch Gravity tutorials" description="We are glad to show you the most prominent features of Gravity." />
-                <Steps.Item title="Work on tasks" description="You will use Gravity to complete the tasks given by the researcher. Feel free to ask any questions during your evaluation." />
-                <Steps.Item title="Complete survey" description="Your feedback is valued as it helps us improve in the next version of Gravity." />
-                <Steps.Item title="Check-out" description="Thank you for joining the usability study." />
-            </Steps>
-            <ButtonToolbar>
-            <IconButton icon={<Icon icon="arrow-left" />} onClick={onPrevious} placement="left">
+        <Stepper activeStep={step} orientation="vertical">
+        {steps.map((label, index) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+            <StepContent>
+              <Typography>{stepContent[index]}</Typography>
+              <div className={classes.actionsContainer}>
+              </div>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+      <Row className="form-group">
+          <Col md={6}>
+            <Button 
+                onClick={onPrevious} 
+                color="primary"
+                className="float-left"
+            >
                 Previous
-            </IconButton>
-            <IconButton icon={<Icon icon="arrow-right" />} onClick={onNext} placement="right">
+            </Button>
+            </Col>
+            <Col md={6}>
+            <Button 
+                onClick={onNext} 
+                color="primary"
+                className="float-right"
+            >
                 Next
-            </IconButton>
-            </ButtonToolbar>
+            </Button>
+            </Col>
+        </Row>
         </CardBody>
     </Card>
 )};
@@ -174,17 +227,17 @@ const RenderStartTasks = () => {
     <Card>
         <CardBody>
             <CardTitle>Work on tasks</CardTitle>
-            {!showPause && <IconButton icon={<Icon icon="play" />} placement="left" onClick={() => !isStart? onStart(parseInt(Date.now())) : onResume(parseInt(Date.now())) }>
+            {!showPause && <Button color="info" onClick={() => !isStart? onStart(parseInt(Date.now())) : onResume(parseInt(Date.now())) }>
                 Start
-            </IconButton>}
+            </Button>}
 
-            {showPause && <IconButton icon={<Icon icon="pause" />} placement="left" onClick={() => onPause(parseInt(Date.now()))}>
+            {showPause && <Button color="info" onClick={() => onPause(parseInt(Date.now()))}>
                 Pause
-            </IconButton>}
+            </Button>}
 
-            <IconButton icon={<Icon icon="stop" />} placement="left" onClick={() => onStop(parseInt(Date.now()))}>
+            <Button color="info" onClick={() => onStop(parseInt(Date.now()))}>
                 Stop
-            </IconButton>
+            </Button>
 
             {!showPause && <p>Time elapsed: {Math.round(sessionStorage.getItem('elapsed') / 60000)} mins</p>}
         </CardBody>
