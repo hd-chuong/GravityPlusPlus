@@ -10,9 +10,8 @@ export default function normalizedAreaSchema(tableName, x, y, category, value) {
     mark: 'area',
     encoding: {
       x: {
-        timeUnit: 'yearmonth',
         field: x,
-        axis: { domain: false, format: '%Y' },
+        axis: { domain: false},
       },
       y: {
         aggregate: 'sum',
