@@ -1,4 +1,4 @@
-import path from 'path';
+import path, { resolve } from 'path';
 import {saveAs} from 'file-saver';
 import {parse} from 'papaparse';
 async function AsyncJSONUploadHandler(file) {
@@ -19,18 +19,21 @@ async function AsyncJSONUploadHandler(file) {
 }
 
 async function AsyncCSVUploadHandler(file) {  
-  result = parse(
-    file, {
-      header: true,
-      complete: (results) => {
-        console.log(results);
-        resolve(results);
-      },
-      error: (err) => {
-        console.log(err);
-        reject(err);
-      } 
-  });
+  return new Promise((resolve, reject) => {
+    result = parse(
+      file, {
+        header: true,
+        complete: (results) => {
+          console.log(results);
+          resolve(results);
+        },
+        error: (err) => {
+          console.log(err);
+          reject(err);
+        } 
+    });
+  })
+  
 };
 
 
