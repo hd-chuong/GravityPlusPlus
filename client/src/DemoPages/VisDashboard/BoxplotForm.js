@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input } from 'reactstrap';
+import { Row, Col, Input, Label } from 'reactstrap';
 export default function BoxplotForm({
   xFieldChange,
   yFieldChange,
