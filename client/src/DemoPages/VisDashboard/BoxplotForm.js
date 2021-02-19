@@ -10,6 +10,7 @@ export default function BoxplotForm({
     <Fragment>
       <Row className="form-group">
         <Col>
+          <Label>Select x (categorical field)</Label>
           <Input
             type="select"
             onChange={xFieldChange}
@@ -26,6 +27,7 @@ export default function BoxplotForm({
             ))}
           </Input>
         </Col>
+        <Label>Select y (quantitative field)</Label>
         <Col>
           <Input
             type="select"
@@ -43,7 +45,8 @@ export default function BoxplotForm({
             ))}
           </Input>
         </Col>
-
+        
+        <Label>Select color (categorical field)</Label>
         <Col>
           <Input
             type="select"
