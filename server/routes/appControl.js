@@ -44,7 +44,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 const addHeader = async (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://165.227.106.53:7472');
+  res.header('Access-Control-Allow-Origin', 'http://118.138.246.151:7472');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();

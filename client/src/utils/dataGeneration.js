@@ -6,7 +6,7 @@ async function calculateDataset(dataNodeId, datasets, params = {})
 {
     return Axios({
         method: "get",
-        url: `http://165.227.106.53:7473/data/subgraph/${dataNodeId}`,
+        url: `http://118.138.246.151:7473/data/subgraph/${dataNodeId}`,
         withCredentials: true
     }).then(response => {
         if (response.statusText !== "OK")

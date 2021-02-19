@@ -280,7 +280,7 @@ export default class Story extends Component{
                                                 <Card className="mb-2">
                                                     <CardBody>
                                                         <CardTitle>Presentation Control</CardTitle>
-                                                        <p>Video recording <span onClick={this.startRecord.bind(this)}><i className="fa fa-video-camera" aria-hidden="true"></i> <small> Record</small>{' '}</span> <span onClick={this.stopRecord.bind(this)}><i className="fa fa-stop" aria-hidden="true"></i>  <small> Stop</small></span> </p>
+                                                        {/* <p>Video recording <span onClick={this.startRecord.bind(this)}><i className="fa fa-video-camera" aria-hidden="true"></i> <small> Record</small>{' '}</span> <span onClick={this.stopRecord.bind(this)}><i className="fa fa-stop" aria-hidden="true"></i>  <small> Stop</small></span> </p> */}
                                                         <p>Publish <span onClick={this.publishPDF.bind(this)}><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Save as PDF</span></p>
                                                     </CardBody>
                                                 </Card>

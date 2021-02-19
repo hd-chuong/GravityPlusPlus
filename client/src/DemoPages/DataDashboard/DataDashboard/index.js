@@ -5,7 +5,6 @@ import { Row, Col, Card, CardHeader, Input, CardBody, Alert, Button } from 'reac
 import DataTable from '../DataTable';
 import DataGraph from '../DataGraph';
 import {toast} from 'react-toastify';
-import Drawer from '@material-ui/core/Drawer';
 // MODALS
 import DataNodeInsertionModal from '../DataNodeInsertionModal';
 import calculateDataset from '../../../utils/dataGeneration';
@@ -37,7 +36,7 @@ export default class DataDashboard extends Component {
     {
         Axios({
             method: "get",
-            url: `http://165.227.106.53:7473/data/nodes/${dataNodeId}/children`,
+            url: `http://118.138.246.151:7473/data/nodes/${dataNodeId}/children`,
             withCredentials: true,
         })
         .then(response => 

@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const whitelist = [
-  "http://165.227.106.53:7472",
+  "http://118.138.246.151:7472",
 ]
 
 var corsOptionsDelegate = (req, callback) => {
