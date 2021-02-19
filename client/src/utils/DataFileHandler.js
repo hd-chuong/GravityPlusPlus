@@ -18,25 +18,21 @@ async function AsyncJSONUploadHandler(file) {
   });
 }
 
-async function AsyncCSVUploadHandler(file) {
-  const temporaryFileReader = new FileReader();
-
-  return new Promise((resolve, reject) => {
-    temporaryFileReader.onerror = () => {
-      temporaryFileReader.abort();
-      reject(new DOMException('Problem parsing CSV file.'));
-    };
-
-    temporaryFileReader.onload = e => {
-      var csv = temporaryFileReader.result;
-      result = parse(csv, {header: true});
-      console.log(result);
-      resolve(result);
-    };
-
-    temporaryFileReader.readAsText(file);
+async function AsyncCSVUploadHandler(file) {  
+  result = parse(
+    file, {
+      header: true,
+      complete: (results) => {
+        console.log(result);
+        resolve(result);
+      },
+      error: (err) => {
+        console.log(err);
+        reject(err);
+      } 
   });
-}
+};
+
 
 export default async function AsyncDataFileHandler(file) {
   var data = null;
