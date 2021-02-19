@@ -23,8 +23,8 @@ async function AsyncCSVUploadHandler(file) {
     file, {
       header: true,
       complete: (results) => {
-        console.log(result);
-        resolve(result);
+        console.log(results);
+        resolve(results);
       },
       error: (err) => {
         console.log(err);
