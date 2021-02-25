@@ -20,7 +20,7 @@ async function AsyncJSONUploadHandler(file) {
 
 async function AsyncCSVUploadHandler(file) {  
   return new Promise((resolve, reject) => {
-    result = parse(
+    var result = parse(
       file, {
         header: true,
         complete: (results) => {
