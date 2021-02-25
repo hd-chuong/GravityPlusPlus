@@ -27,6 +27,8 @@ services:
       - ./server/data:/srv/app/server/data
       - ./server/app.js:/srv/app/server/app.js
       - ./server/utils:/srv/app/server/utils
+      - ./server/bin:/srv/app/server/bin
+      - ./server/cert:/srv/app/server/cert
     networks:
       - db-server
       - client-server
