@@ -6,7 +6,7 @@ import toastOptions from '../DemoPages/config/toastOptions';
 export const saveIntNode = ({name, source}) => dispatch => {
     return axios({
       method: 'post',
-      url: `http://165.227.106.53:7473/int/nodes`,
+      url: `http://139.59.103.42:7473/int/nodes`,
       data: {source, name},
       withCredentials: true,
     })
@@ -42,7 +42,7 @@ export const saveIntEdge = payload => ({
 export const addIntEdge = ({source, target, signal, binding, label}) => dispatch => {
     return axios({
         method: 'post',
-        url: `http://165.227.106.53:7473/int/edges`,
+        url: `http://139.59.103.42:7473/int/edges`,
         data: {source, target, signal, binding, label},
         withCredentials: true,
     }) 
@@ -71,7 +71,7 @@ export const addIntEdge = ({source, target, signal, binding, label}) => dispatch
 export const removeIntNode = ({id}) => dispatch => {
     return axios({
         method: 'delete',
-        url: `http://165.227.106.53:7473/int/nodes/${id}`,
+        url: `http://139.59.103.42:7473/int/nodes/${id}`,
         data: {id},
         withCredentials: true,
     }).then(response => {
@@ -97,7 +97,7 @@ export const removeIntEdge = ({id}) => dispatch =>
 {
     return axios({
         method: 'delete',
-        url: `http://165.227.106.53:7473/int/edges/${id}`,
+        url: `http://139.59.103.42:7473/int/edges/${id}`,
         data: {id},
         withCredentials: true,
     }).then(response => {
@@ -120,7 +120,7 @@ export const setIntPosition = payload => dispatch => {
     const {x, y, id} = payload;
     return axios({
       method: 'put',
-      url: `http://165.227.106.53:7473/int/nodes/${id}`,
+      url: `http://139.59.103.42:7473/int/nodes/${id}`,
       data: {x, y},
       withCredentials: true,
     })
@@ -138,7 +138,7 @@ export const setIntPosition = payload => dispatch => {
     const {id, params} = payload;
     return axios({
       method: 'put',
-      url: `http://165.227.106.53:7473/int/nodes/${id}`,
+      url: `http://139.59.103.42:7473/int/nodes/${id}`,
       data: params,
       withCredentials: true,
     })

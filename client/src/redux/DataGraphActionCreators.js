@@ -24,7 +24,7 @@ export const addDataNode = ({
   const newNode = { name, type, source, transform, format};
   return Axios({
     method: 'post',
-    url: 'http://165.227.106.53:7473/data/nodes',
+    url: 'http://139.59.103.42:7473/data/nodes',
     data: newNode,
     withCredentials: true
   })
@@ -85,7 +85,7 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
 
     return Axios({
         method: "post",
-        url: "http://165.227.106.53:7473/data/edges",
+        url: "http://139.59.103.42:7473/data/edges",
         data: newEdge,
         withCredentials: true
     }).then(response => {
@@ -117,7 +117,7 @@ export const addDataEdge = ({source, target, type, data}) => (dispatch) => {
 export const removeDataNode = ({ id }) => dispatch => {
   return Axios({
     method: 'delete',
-    url: `http://165.227.106.53:7473/data/nodes/${id}`,
+    url: `http://139.59.103.42:7473/data/nodes/${id}`,
     withCredentials: true,
   })
     .then(response => {
@@ -160,7 +160,7 @@ export const setDataPosition = payload => dispatch => {
   const {x, y, id} = payload;
   return Axios({
     method: 'put',
-    url: `http://165.227.106.53:7473/data/nodes/${id}`,
+    url: `http://139.59.103.42:7473/data/nodes/${id}`,
     data: {x, y},
     withCredentials: true,
   }).then((response) => {

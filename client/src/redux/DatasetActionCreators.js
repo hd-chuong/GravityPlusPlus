@@ -6,7 +6,7 @@ import toastOptions from '../DemoPages/config/toastOptions';
 export const addDataset = ({ name, dataset }) => dispatch => {
   toast.info(`Adding dataset ${name}`, toastOptions);
   return axios({
-    url: 'http://165.227.106.53:7473/dataset',
+    url: 'http://139.59.103.42:7473/dataset',
     withCredentials: true,
     method: 'post',
     data: [{name, dataset}]

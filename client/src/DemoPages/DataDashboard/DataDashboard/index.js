@@ -37,7 +37,7 @@ export default class DataDashboard extends Component {
     {
         Axios({
             method: "get",
-            url: `http://165.227.106.53:7473/data/nodes/${dataNodeId}/children`,
+            url: `http://139.59.103.42:7473/data/nodes/${dataNodeId}/children`,
             withCredentials: true,
         })
         .then(response => 

@@ -28,7 +28,7 @@ datagraph.useDriver(driver);
 
 const addHeader = (req, res, next) => {
   console.log("session name: ", req.session.name, "session id: ", req.sessionID);
-  res.header('Access-Control-Allow-Origin', 'http://165.227.106.53:7472');
+  res.header('Access-Control-Allow-Origin', 'http://139.59.103.42:7472');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   if (req.session.name) {
