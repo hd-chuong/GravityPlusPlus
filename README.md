@@ -1,6 +1,8 @@
 # GravityPlusPlus
 A Graph-based Visualisation Software for Interactive Visualisation Design.
 
+[Working demo](http://139.59.103.42:7472/#/home)
+
 ![alt text](./assets/images/data-screenshot.png)
 
 Build the docker container.
