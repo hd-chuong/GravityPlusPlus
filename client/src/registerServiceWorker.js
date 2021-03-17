@@ -32,7 +32,7 @@ export default function register() {
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
-      if (!is139.59.103.42) {
+      if (!islocalhost) {
         // Is not local host. Just register service worker
         registerValidSW(swUrl);
       } else {
