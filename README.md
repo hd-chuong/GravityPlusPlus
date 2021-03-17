@@ -25,13 +25,13 @@ To run the client,
 
 Access the client side from a browser:
 
-    http://localhost:7472/
+    http://139.59.103.42:7472/
 
 API Server
 
-    http://localhost:7473/
+    http://139.59.103.42:7473/
 
 Neo4J Browser access
 
-    http://localhost:7474/
+    http://139.59.103.42:7474/
 

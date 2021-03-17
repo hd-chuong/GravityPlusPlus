@@ -228,6 +228,16 @@ const RenderStartTasks = () => {
     <Card>
         <CardBody>
             <CardTitle>Work on tasks</CardTitle>
+            Download 
+
+            <NavLink target="_blank" href={process.env.PUBLIC_URL + "/datasets/task1.zip"}>
+                Dataset for Task 1
+            </NavLink><NavLink target="_blank" href={process.env.PUBLIC_URL + "/datasets/task2.zip"}>
+                Dataset for Task 2
+            </NavLink>
+
+
+
             {!showPause && <Button color="info" onClick={() => !isStart? onStart(parseInt(Date.now())) : onResume(parseInt(Date.now())) }>
                 Start
             </Button>}
