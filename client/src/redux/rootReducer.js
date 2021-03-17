@@ -19,7 +19,6 @@ const rootReducer = (state, action) => {
     {
         case ActionTypes.LOAD_STATE:
             const { state: loadedState } = action.payload;
-            console.log(loadedState);
             return graphReducer(loadedState, action);
         
         default:

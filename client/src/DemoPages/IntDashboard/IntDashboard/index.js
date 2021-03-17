@@ -82,7 +82,7 @@ export default class IntDashboard extends Component {
         );
         
         // update the editor note
-        const intNode = GetNodeById(this.props.intgraph, this.state.intNodeId);
+        const intNode = GetNodeById(this.props.intgraph, id);
         if (intNode)
         {
             this.editorChange(intNode.data.note || '' );   
@@ -106,7 +106,7 @@ export default class IntDashboard extends Component {
     render() {
         const displayedGraph = this.updateGraphDisplay(this.state.intNodeId);
         const currentNode = GetNodeById(this.props.intgraph, this.state.intNodeId);
-
+        console.log(currentNode)
         return (
             <Fragment>
                 <ReactCSSTransitionGroup

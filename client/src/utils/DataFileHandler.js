@@ -50,7 +50,6 @@ async function AsyncCSVUploadHandler(file) {
 export default async function AsyncDataFileHandler(file) {
   var data = null;
   var [extension] = path.basename(file.name).split('.').splice(-1);
-  console.log(extension);
   try {
     switch (extension) {
       case 'csv':
