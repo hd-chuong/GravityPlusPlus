@@ -105,7 +105,10 @@ export default class DataDashboard extends Component {
         displayedGraph.edges = displayedGraph.edges.map(edge => {
             var label = "";
             
+            if (!edge.data) return ({...edge, label: ""});
+            
             const type = edge.data.type;
+            
             if (!type) return edge;
 
             if (type === "JOIN") label = "join";
